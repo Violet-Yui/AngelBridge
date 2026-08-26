@@ -1,0 +1,18 @@
+{
+  "matchId": "match:persona-a:persona-b",
+  "viewerId": "persona-a",
+  "candidateId": "persona-b",
+  "status": "candidate",
+  "valueToViewer": ["对方可提供网页原型开发，回应你的网页开发需求"],
+  "valueToCandidate": ["你可提供产品策划，回应对方的产品梳理需求"],
+  "satisfiedConstraints": ["价值置换方式：skill_swap", "地点：线上", "时间：周末"],
+  "conflicts": [],
+  "unknowns": ["具体交付范围与时间需双方确认"],
+  "evidence": [
+    { "nodeId": "node-a-offer-product", "summary": "产品策划" },
+    { "nodeId": "node-a-need-web", "summary": "网页原型开发" }
+  ],
+  "generatedAt": "2026-08-26T12:00:00.000Z",
+  "isSynthetic": true,
+  "datasetVersion": "v1"
+}

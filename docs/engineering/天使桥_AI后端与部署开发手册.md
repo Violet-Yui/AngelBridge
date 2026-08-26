@@ -1,9 +1,9 @@
 # 天使桥｜AI、后端与部署从零开发手册
 
-> 版本：v1.1  
+> 版本：v1.2
 > 日期：2026-08-26  
 > 适用角色：R1｜后端 / AI 开发  
-> 产品范围依据：[黑客松 MVP PRD](天使桥_黑客松MVP_PRD.md)  
+> 产品范围依据：[黑客松 MVP PRD](../product/天使桥_黑客松MVP_PRD.md)
 > 项目阶段：从空仓库到可部署 Demo  
 > 数据边界：只使用虚构角色与合成数据，不接入真实用户、房源或交易数据
 
@@ -22,7 +22,7 @@
 → A/B 分别 Consent
 → Bridge Pact
 → Outcome 写回生命树
-→ 部署到七牛云云主机 + Supabase，并使用七牛云 Coding Plan 调用模型
+→ 后续接入单一 OpenAI-compatible 中文模型、Supabase 与云端部署
 ```
 
 你交付的不是一个聊天接口，而是以下六个可运行能力：
@@ -34,7 +34,15 @@
 5. **前端 API：** 提供稳定、可 Mock、可联调的接口；
 6. **线上环境：** Preview 和 Production 能重复创建、运行和重置 Demo。
 
-### 完成标准
+### 当前里程碑（已可独立完成）
+
+- 三份 Zod Schema 与合成 Fixture 可校验；
+- Hard Gate、双向价值判断、稳定排序和 Match Proof 可在内存中运行；
+- Consent 与桥约状态机有自动测试，单方同意不能激活桥约；
+- 不依赖 R3–R5 页面、Supabase 或在线 AI；
+- `npm run verify` 可一次完成类型、测试与 Fixture 校验。
+
+### 完整 Demo 完成标准
 
 - 三个合成案例共用同一数据结构和匹配接口；
 - 主案例可以从空 Session 跑到 Outcome；
@@ -42,7 +50,7 @@
 - AI 输出必须通过 Zod；
 - 匹配页展示证据、冲突和未知项，不展示虚假百分比；
 - 本地 `npm run build` 通过；
-- 七牛云共享环境与 Supabase 云端数据库可运行；
+- 选定的共享云环境与 Supabase 云端数据库可运行；
 - 你能用 2 分钟向评委解释 AI 与确定性代码各自负责什么。
 
 ---
@@ -57,12 +65,12 @@
 | 后端形态 | Next.js Route Handlers，单仓单体 |
 | 数据库 | Supabase PostgreSQL |
 | 向量检索 | pgvector；合成小数据集使用精确余弦距离 |
-| 模型接入 | 七牛云 Coding Plan，OpenAI-compatible API，服务端调用 |
+| 模型接入 | 只接一个 OpenAI-compatible 中文模型；取得可用 Key 后再冻结供应方与模型 ID |
 | 结构化输出 | JSON Schema + Zod 二次校验 |
 | 双端同步 | P0 先 2 秒轮询；稳定后再接 Supabase Realtime |
 | 用户系统 | 不做真实 Auth；以独立 Demo Session 隔离状态 |
 | 数据 | 三个合成案例，所有实体 `is_synthetic = true` |
-| 部署 | 七牛云云主机运行 Next.js；Supabase 托管数据库；Vercel 仅作未领到云主机时的备选 |
+| 部署 | 当前不执行；后续可用七牛云云主机运行 Next.js，Supabase 托管数据库 |
 
 ### 为什么 P0 先不用 Realtime
 
@@ -192,12 +200,12 @@ type BridgePact = {
 
 R1 不需要等待高保真页面或视觉框架。按以下顺序推进：
 
-1. **工程与环境基线：** 检查 Node.js、npm、Git 和 GitHub CLI；建立仓库、`.gitignore`、`.env.example` 和构建命令；提前注册并实名七牛云账号，准备云主机、Coding Plan、Supabase 与单一模型配置，但不提交密钥；
+1. **工程与环境基线：** 检查 Node.js、npm、Git 和 GitHub CLI；建立仓库、`.gitignore`、`.env.example` 和构建命令；AI 变量保持为空，七牛云账号与资源领取作为后续准备，不阻塞本地领域开发；
 2. **契约草案：** 根据 PRD 写出 `ParseResult`、`MatchProof`、`BridgePact` 的 Zod Schema 与 JSON Fixture v0，标记为待 R2、R3、R5 确认；
 3. **合成数据：** 固定空间 × 摄影服务主案例和两个扩展案例，所有实体使用 `is_synthetic = true`；
 4. **纯匹配引擎：** 先以内存数组实现 Hard Gate、双向 Offer/Need 检查、稳定排序和 Match Proof 事实组装，不依赖页面、数据库、向量检索或 LLM；
 5. **状态机：** 用纯函数和测试覆盖 `candidate → A 接受 → B 接受/拒绝 → Pact → Outcome`，保证任何单方同意都不能激活桥约；
-6. **外部能力冒烟测试：** 分别验证 Supabase 连接和模型结构化 JSON 输出。失败必须显式报错，演示预置结果走独立入口；
+6. **外部能力冒烟测试：** 取得对应凭据后，分别验证 Supabase 连接和模型结构化 JSON 输出；当前没有 Key 时不发起假调用，演示数据明确走 Fixture；
 7. **数据库草案：** 根据核心实体编写首个 Migration，但在 Schema 与 Fixture 确认前不推送不可逆的字段命名。
 
 匹配逻辑可以现在开始，而且应早于页面开发。P0 的优先级是：
@@ -227,17 +235,17 @@ embedding 只负责后续召回优化；几十条合成数据直接遍历即可�
 - Node.js 20 LTS 或更新版本；
 - Git；
 - VS Code 或其他编辑器；
-- 一个已完成实名认证的七牛云账号；
-- 一份赛事七牛云 Coding Plan 兑换权益，以及控制台生成的 AI API Key；
-- 一台赛事七牛云云主机；若尚未分配，先完成本地构建，不阻塞纯逻辑开发；
-- 一个 Supabase 云项目；
-- 一个支持结构化 JSON 输出的七牛云模型。P0 不要求 embedding API。
+- Node.js、npm、Git 和可访问本仓库的开发环境；
+- 当前阶段不需要 Supabase、云主机或 AI API Key；
+- 后续联调再准备一个 Supabase 云项目；
+- 后续只选择一个支持中文与结构化 JSON 输出的 OpenAI-compatible 模型。P0 不要求 embedding API；
+- 七牛云账号、云主机和 Coding Plan 可提前领取，但在 Key 未获取前不写成已接入能力。
 
 Supabase CLI 通过 npm/npx 运行时要求 Node.js 20 或更高版本。
 
 ### 3.2 创建 Next.js 项目
 
-如果 R2 已经创建 Next.js 骨架，不要重复初始化；直接在同一仓库建立后端分支。仓库只有文档、尚无工程骨架时，R1 与 R2 共同确认包管理器和根目录，由一人执行：
+当前 `backend` 分支已经包含纯 TypeScript 领域内核，不要重复初始化。R2 冻结 Web 框架和目录后，再由 R1、R2 共同决定是在仓库根目录接入 Next.js，还是把领域内核作为独立包保留。以下命令仅是尚未初始化 Web 壳时的候选步骤：
 
 ```powershell
 npx create-next-app@latest angelbridge --ts --tailwind --eslint --app --src-dir --import-alias "@/*"
@@ -346,6 +354,7 @@ Route Handler 只做四件事：读取请求、用 Zod 校验、调用 service�
 SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 
+AI_MODE=fixture
 AI_BASE_URL=
 AI_API_KEY=
 AI_MODEL=
@@ -379,7 +388,9 @@ export const supabaseAdmin = createClient(
 
 `SERVICE_ROLE_KEY` 只能出现在服务端环境变量中，不能传给浏览器。
 
-### 4.3 模型客户端
+### 4.3 模型客户端（取得 Key 后再实现）
+
+当前固定 `AI_MODE=fixture`，不创建在线客户端，也不把某一家供应商写成默认值。取得可用 Key 后，先选定一个 OpenAI-compatible 中文模型，再新增以下客户端：
 
 `src/lib/ai/client.ts`：
 
@@ -402,7 +413,7 @@ export const embeddingModel = process.env.EMBEDDING_MODEL!
 3. 中文输入；
 4. 预期的超时与额度。
 
-七牛云 Coding Plan 的 OpenAI-compatible Base URL 使用 `https://api.qnaigc.com/v1`。兑换后先通过 `GET /v1/models` 获取当前账号实际可用的模型 ID，再冻结 `AI_MODEL`；页面展示名不能直接当作模型 ID。赛事指南列出的候选包括 Kimi、GLM、DeepSeek 和 MiniMax，P0 只选择其中一个。
+若团队最终选用七牛云 Coding Plan，再按其 OpenAI-compatible 文档填写 Base URL，通过 `/models` 获取账号实际可用的模型 ID；在此之前 `AI_BASE_URL`、`AI_API_KEY`、`AI_MODEL` 均保持为空。无论选择哪家供应商，P0 都只接一个模型，页面展示名不能直接当作模型 ID。
 
 `EMBEDDING_MODEL` 与 `EMBEDDING_DIM` 属于 P1。只有确认 Coding Plan 中存在可用 embedding 模型并决定启用向量召回后再填写，向量列维度必须与实际输出一致。
 
@@ -1212,7 +1223,9 @@ npm run build
 
 ---
 
-## 15. 部署到七牛云与 Supabase
+## 15. 后续部署候选：七牛云与 Supabase
+
+> 当前尚未取得七牛云 AI API Key，也未开始云部署。本节是拿到资源后的执行说明，不代表仓库已经接入七牛云。
 
 赛事资源分为两类，不能混为一谈：
 
@@ -1241,7 +1254,7 @@ npx tsx scripts/seed-demo.ts
 npx tsx scripts/seed-embeddings.ts
 ```
 
-### 15.2 七牛云 Coding Plan 接入
+### 15.2 七牛云 Coding Plan 接入（待 Key）
 
 七牛云 AI 推理服务兼容 OpenAI Chat Completions。先在本地或服务器验证：
 
@@ -1315,7 +1328,7 @@ npm run start -- -H 127.0.0.1 -p 3000
 Preview 验收：
 
 - 能创建 Session；
-- `/api/ai/parse` 可以访问七牛云模型；
+- `/api/ai/parse` 可以访问届时选定的单一模型；
 - 数据写入正确 Supabase 项目；
 - A/B 轮询状态一致；
 - 重置后可重复演示。
@@ -1330,7 +1343,7 @@ Preview 验收：
 4. 新建全新 Session 跑一次完整 Demo；
 5. 将 Production URL 交给 R2、R3、R4、R5 做联调、验收、截图和视频。
 
-如果比赛开始后仍未分配七牛云云主机，才使用 Vercel 作为临时备选；数据库与七牛云 Coding Plan 接入保持不变。任何新增或修改的服务器环境变量都需要重启应用进程才会生效。
+如果比赛开始后仍未分配七牛云云主机，可使用 Vercel 作为临时备选；数据库与模型供应商彼此独立。任何新增或修改的服务器环境变量都需要重启应用进程才会生效。
 
 ---
 
@@ -1339,7 +1352,7 @@ Preview 验收：
 | 时间 | 你的主任务 | 交付物 | 与谁联合 |
 |---|---|---|---|
 | 0–6h | 环境基线；联合冻结 Schema、Fixture、模型与数据库方案 | 三份 Fixture、实体表、接口清单 | R2、R3、R5，R4 确认展示状态 |
-| 6–12h | Supabase、Next 后端骨架、七牛云环境变量 | Migration、DB Client、Preview 骨架 | R2 |
+| 6–12h | Supabase、Next 后端骨架、通用 AI 环境变量 | Migration、DB Client、Preview 骨架 | R2 |
 | 12–20h | Seed、Session、节点与 Intent | 合成数据、Session API、节点 API | R2、R5 |
 | 20–28h | AI 结构化抽取 | Parse Schema、Prompt、Parse API、测试 | R2、R5 |
 | 28–40h | 第一次联调 | Session → Intent 可运行 | R2、R3、R5 |
@@ -1407,19 +1420,20 @@ feat/deployment
 
 ## 19. 开发顺序总清单
 
-- [ ] 与团队冻结三份 Fixture；
-- [ ] 完成七牛云注册与实名认证，领取云主机和 Coding Plan；
+- [x] 建立三份 Fixture 草案，等待团队冻结；
+- [x] 完成纯 TypeScript 领域工程、双向匹配与状态机测试；
+- [ ] 后续需要时完成七牛云注册与实名认证，领取云主机和 Coding Plan；
 - [ ] 初始化 Next.js、Supabase 和环境变量；
-- [ ] 使用七牛云 `/models` 和 `/chat/completions` 完成模型冒烟测试；
+- [ ] 取得 Key 后，使用所选供应商的 `/models` 和 `/chat/completions` 完成模型冒烟测试；
 - [ ] 创建 migration 并推送云端；
 - [ ] 写入三套合成 Seed；
 - [ ] P1 启用向量召回时再生成合成节点 embedding；
 - [ ] 实现 Session 创建与重置；
 - [ ] 实现 Zod Schema 和 Parse API；
 - [ ] 实现节点保存与 Intent 激活；
-- [ ] 实现 Hard Gate 和双向召回；
-- [ ] 实现内部排序与 Match Proof；
-- [ ] 实现 Consent 状态推导；
+- [x] 实现内存版 Hard Gate 和双向价值判断；
+- [x] 实现内部排序与 Match Proof 事实组装；
+- [x] 实现 Consent 与桥约状态推导；
 - [ ] 实现 Pact 和 Outcome；
 - [ ] 实现 Inbox 轮询和 Tree API；
 - [ ] 完成三轮前后端联调；

@@ -3,7 +3,7 @@
 > 版本：v0.1  
 > 日期：2026-08-26  
 > 用途：SheNicest 2026 软件应用赛道对外路演  
-> 依据：[《天使桥 Idea 打磨与产品方案》](天使桥_Idea打磨与产品方案.md)与团队会议纪要  
+> 依据：[《天使桥 Idea 打磨与产品方案》](../product/天使桥_Idea打磨与产品方案.md)与团队会议纪要
 > 建议规模：核心 Deck 12 页，约 5 分钟；附录 5 页用于评委追问
 
 ---
@@ -644,7 +644,7 @@ ReciprocalUtility = harmonic_mean(ValueToA, ValueToB)
 
 # 资料来源
 
-- [天使桥 Idea 打磨与产品方案](天使桥_Idea打磨与产品方案.md)
+- [天使桥 Idea 打磨与产品方案](../product/天使桥_Idea打磨与产品方案.md)
 - [She Nicest 2026 北京夏季烈变千人黑客松完全指南](https://ocn0g60ffqrb.feishu.cn/docx/X45LdyOSyoqRSgxwEshcGm6KnAb)
 - [Google Agent2Agent Protocol](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/)
 - [Model Context Protocol](https://blog.modelcontextprotocol.io/posts/welcome-to-mcp-blog/)

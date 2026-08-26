@@ -1,0 +1,25 @@
+{
+  "pactId": "pact-demo-001",
+  "matchId": "match:persona-a:persona-b",
+  "partyIds": ["persona-a", "persona-b"],
+  "title": "产品策划与网页原型技能互换",
+  "status": "draft",
+  "exchangeModes": ["skill_swap"],
+  "commitments": [
+    {
+      "partyId": "persona-a",
+      "deliverable": "提交一份 MVP 产品方案"
+    },
+    {
+      "partyId": "persona-b",
+      "deliverable": "提交一个可演示的网页原型"
+    }
+  ],
+  "confirmations": {
+    "persona-a": false,
+    "persona-b": false
+  },
+  "createdAt": "2026-08-26T12:00:00.000Z",
+  "isSynthetic": true,
+  "datasetVersion": "v1"
+}

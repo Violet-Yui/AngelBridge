@@ -89,7 +89,7 @@ export const MatchProofSchema = z.object({
 export const BridgePactSchema = z.object({
   pactId: z.string().min(1),
   matchId: z.string().min(1),
-  partyIds: z.array(z.string().min(1)).length(2),
+  partyIds: z.tuple([z.string().min(1), z.string().min(1)]),
   title: z.string().min(1),
   status: z.enum(["draft", "active", "completed", "exited"]),
   exchangeModes: z.array(ExchangeModeSchema).min(1),
@@ -109,6 +109,19 @@ export const BridgePactSchema = z.object({
   datasetVersion: z.string().min(1),
 });
 
+export const OutcomeSchema = z.object({
+  outcomeId: z.string().min(1),
+  sessionId: z.string().min(1),
+  pactId: z.string().min(1),
+  personaId: z.string().min(1),
+  status: z.enum(["completed", "exited"]),
+  summary: z.string().min(1),
+  treeChange: z.string().min(1),
+  createdAt: z.string().datetime(),
+  isSynthetic: z.literal(true),
+  datasetVersion: z.string().min(1),
+});
+
 export const MatchingProfileSchema = z.object({
   personaId: z.string().min(1),
   displayName: z.string().min(1),
@@ -121,4 +134,6 @@ export type ValueNode = z.infer<typeof ValueNodeSchema>;
 export type ParseResult = z.infer<typeof ParseResultSchema>;
 export type MatchProof = z.infer<typeof MatchProofSchema>;
 export type BridgePact = z.infer<typeof BridgePactSchema>;
+export type Outcome = z.infer<typeof OutcomeSchema>;
 export type MatchingProfile = z.infer<typeof MatchingProfileSchema>;
+export type ExchangeMode = z.infer<typeof ExchangeModeSchema>;

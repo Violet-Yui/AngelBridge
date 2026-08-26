@@ -26,7 +26,7 @@ MVP 只使用虚构角色与合成数据，不接入真实用户、房源、招�
 - 服务端：Next.js Route Handlers；
 - 数据库：Supabase PostgreSQL；
 - AI：只接一个 OpenAI-compatible 中文模型，供应方待取得可用 Key 后冻结；当前使用合成 Fixture，不发起在线调用；
-- 部署：七牛云云主机是后续候选资源，当前不执行云部署。
+- 部署：保留七牛云 QVM 与 Vercel 两种选项，待资源可用性和 Web 框架确认后选择；当前不执行云部署。
 
 ## 已完成的后端基础
 
@@ -34,6 +34,8 @@ MVP 只使用虚构角色与合成数据，不接入真实用户、房源、招�
 - Hard Gate、双向 Offer/Need 成立检查、证据完整度与新鲜度排序；
 - 不暴露内部百分比的 Match Proof；
 - Consent 与桥约状态机：双方分别同意前不能激活桥约；
+- 三个合成案例与内存 Demo Session 闭环；
+- GitHub Actions 后端验证工作流（推送后生效）；
 - 类型检查、领域测试和 Fixture 校验。
 
 本地验证：
@@ -41,6 +43,10 @@ MVP 只使用虚构角色与合成数据，不接入真实用户、房源、招�
 ```powershell
 npm install
 npm run verify
+npm run demo
+# 或运行另外两个案例
+npm run demo -- product-web
+npm run demo -- rural-content
 ```
 
 ## 五个角色席位

@@ -70,7 +70,7 @@
 | 双端同步 | P0 先 2 秒轮询；稳定后再接 Supabase Realtime |
 | 用户系统 | 不做真实 Auth；以独立 Demo Session 隔离状态 |
 | 数据 | 三个合成案例，所有实体 `is_synthetic = true` |
-| 部署 | 当前不执行；后续可用七牛云云主机运行 Next.js，Supabase 托管数据库 |
+| 部署 | 当前不执行；保留七牛云 QVM 与 Vercel 两种选项，Supabase 独立托管数据库 |
 
 ### 为什么 P0 先不用 Realtime
 
@@ -1223,9 +1223,9 @@ npm run build
 
 ---
 
-## 15. 后续部署候选：七牛云与 Supabase
+## 15. 后续部署候选：七牛云、Vercel 与 Supabase
 
-> 当前尚未取得七牛云 AI API Key，也未开始云部署。本节是拿到资源后的执行说明，不代表仓库已经接入七牛云。
+> 当前尚未开始云部署。本节是拿到资源后的执行说明，不代表仓库已经接入七牛云；如果 QVM 权益、网络或实例不可用，Web/API 可部署到 Vercel，Supabase 与模型供应商保持独立。
 
 赛事资源分为两类，不能混为一谈：
 
@@ -1422,22 +1422,22 @@ feat/deployment
 
 - [x] 建立三份 Fixture 草案，等待团队冻结；
 - [x] 完成纯 TypeScript 领域工程、双向匹配与状态机测试；
-- [ ] 后续需要时完成七牛云注册与实名认证，领取云主机和 Coding Plan；
+- [x] 已兑换七牛云赛事权益；QVM 实例可用性仍待确认，Vercel 保留为备选；
 - [ ] 初始化 Next.js、Supabase 和环境变量；
 - [ ] 取得 Key 后，使用所选供应商的 `/models` 和 `/chat/completions` 完成模型冒烟测试；
 - [ ] 创建 migration 并推送云端；
-- [ ] 写入三套合成 Seed；
+- [x] 建立三套合成内存案例；Supabase 确认后再写数据库 Seed；
 - [ ] P1 启用向量召回时再生成合成节点 embedding；
-- [ ] 实现 Session 创建与重置；
+- [x] 实现内存 Session 创建、隔离与重置；HTTP API 待 Web 框架确认；
 - [ ] 实现 Zod Schema 和 Parse API；
 - [ ] 实现节点保存与 Intent 激活；
 - [x] 实现内存版 Hard Gate 和双向价值判断；
 - [x] 实现内部排序与 Match Proof 事实组装；
 - [x] 实现 Consent 与桥约状态推导；
-- [ ] 实现 Pact 和 Outcome；
-- [ ] 实现 Inbox 轮询和 Tree API；
+- [x] 实现内存 Pact、Outcome 与生命树查询；HTTP API 和持久化待后续接入；
+- [ ] 实现 Inbox 轮询和 Tree HTTP API；
 - [ ] 完成三轮前后端联调；
-- [ ] 三类自动测试通过；
+- [x] 当前合同、匹配、状态机、案例与 Session 自动测试通过；
 - [ ] Preview 完整跑通；
 - [ ] Production 完整跑通；
 - [ ] 主演示连续五次无阻断；

@@ -1,6 +1,7 @@
 {
   "personaId": "persona-a",
   "sourceText": "我可以提供产品策划，希望找到能开发网页原型的伙伴，接受技能互换。",
+  "source": "fixture",
   "nodes": [
     {
       "id": "node-a-offer-product",
@@ -36,6 +37,7 @@
   "intent": {
     "offerNodeIds": ["node-a-offer-product"],
     "needNodeIds": ["node-a-need-web"],
+    "goalNodeIds": [],
     "acceptedExchangeModes": ["skill_swap", "collaboration"],
     "constraints": {
       "locations": ["线上"],

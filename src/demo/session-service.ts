@@ -112,12 +112,16 @@ export class InMemoryDemoService {
         needNodeIds: profile.nodes
           .filter((node) => node.direction === "need")
           .map((node) => node.id),
+        goalNodeIds: profile.nodes
+          .filter((node) => node.direction === "goal")
+          .map((node) => node.id),
         acceptedExchangeModes: clone(profile.acceptedExchangeModes),
         constraints: clone(profile.constraints),
         status: session.activeIntentPersonaIds.includes(personaId)
           ? "active"
           : "draft",
       },
+      source: "fixture",
       isSynthetic: true,
       datasetVersion: profile.nodes[0].datasetVersion,
     };

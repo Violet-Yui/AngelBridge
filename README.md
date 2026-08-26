@@ -36,6 +36,10 @@ MVP 只使用虚构角色与合成数据，不接入真实用户、房源、招�
 - Consent 与桥约状态机：双方分别同意前不能激活桥约；
 - 三个合成案例与内存 Demo Session 闭环；
 - GitHub Actions 后端验证工作流（推送后生效）；
+- 灵宠语音 Turn 领域契约与内存闭环；
+- 可替换的 ASR、语言理解和 TTS Provider；
+- 豆包极速 ASR、方舟 Function Calling、Seed-TTS 2.0 适配器骨架；
+- Fixture 语音模式与真实 AI 模式显式隔离；
 - 类型检查、领域测试和 Fixture 校验。
 
 本地验证：

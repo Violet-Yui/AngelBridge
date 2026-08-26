@@ -3,3 +3,8 @@ export * from "./domain/matching";
 export * from "./domain/workflow";
 export * from "./demo/scenarios";
 export * from "./demo/session-service";
+export * from "./voice/contracts";
+export * from "./voice/providers";
+export * from "./voice/fixture-providers";
+export * from "./voice/voice-turn-service";
+export * from "./voice/doubao";

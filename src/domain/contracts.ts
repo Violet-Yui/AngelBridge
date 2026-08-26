@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const DirectionSchema = z.enum(["offer", "need", "goal"]);
+export const DataSourceSchema = z.enum(["fixture", "live_ai"]);
 export const DomainSchema = z.enum([
   "space",
   "item",
@@ -34,7 +35,7 @@ export const ValueNodeSchema = z.object({
   visibility: VisibilitySchema,
   evidenceCompleteness: z.number().min(0).max(1),
   updatedAt: z.string().datetime(),
-  isSynthetic: z.literal(true),
+  isSynthetic: z.boolean(),
   datasetVersion: z.string().min(1),
 });
 
@@ -44,21 +45,81 @@ export const MatchConstraintsSchema = z.object({
 });
 
 export const IntentSchema = z.object({
-  offerNodeIds: z.array(z.string().min(1)).min(1),
-  needNodeIds: z.array(z.string().min(1)).min(1),
+  offerNodeIds: z.array(z.string().min(1)),
+  needNodeIds: z.array(z.string().min(1)),
+  goalNodeIds: z.array(z.string().min(1)),
   acceptedExchangeModes: z.array(ExchangeModeSchema).min(1),
   constraints: MatchConstraintsSchema,
   status: z.enum(["draft", "active"]),
 });
 
-export const ParseResultSchema = z.object({
-  personaId: z.string().min(1),
-  sourceText: z.string().min(1),
-  nodes: z.array(ValueNodeSchema).min(2),
-  intent: IntentSchema,
-  isSynthetic: z.literal(true),
-  datasetVersion: z.string().min(1),
-});
+export const ParseResultSchema = z
+  .object({
+    personaId: z.string().min(1),
+    sourceText: z.string().min(1),
+    source: DataSourceSchema,
+    nodes: z.array(ValueNodeSchema).min(1),
+    intent: IntentSchema,
+    isSynthetic: z.boolean(),
+    datasetVersion: z.string().min(1),
+  })
+  .superRefine((result, context) => {
+    const expectedSynthetic = result.source === "fixture";
+    if (result.isSynthetic !== expectedSynthetic) {
+      context.addIssue({
+        code: "custom",
+        path: ["isSynthetic"],
+        message: "source and isSynthetic must describe the same data mode",
+      });
+    }
+
+    const idsByDirection = {
+      offer: new Set(
+        result.nodes
+          .filter((node) => node.direction === "offer")
+          .map((node) => node.id),
+      ),
+      need: new Set(
+        result.nodes
+          .filter((node) => node.direction === "need")
+          .map((node) => node.id),
+      ),
+      goal: new Set(
+        result.nodes
+          .filter((node) => node.direction === "goal")
+          .map((node) => node.id),
+      ),
+    };
+    const intentIds = [
+      ...result.intent.offerNodeIds,
+      ...result.intent.needNodeIds,
+      ...result.intent.goalNodeIds,
+    ];
+    if (intentIds.length === 0) {
+      context.addIssue({
+        code: "custom",
+        path: ["intent"],
+        message: "intent must reference at least one value node",
+      });
+    }
+
+    const references = [
+      ["offerNodeIds", result.intent.offerNodeIds, idsByDirection.offer],
+      ["needNodeIds", result.intent.needNodeIds, idsByDirection.need],
+      ["goalNodeIds", result.intent.goalNodeIds, idsByDirection.goal],
+    ] as const;
+    for (const [field, ids, validIds] of references) {
+      for (const id of ids) {
+        if (!validIds.has(id)) {
+          context.addIssue({
+            code: "custom",
+            path: ["intent", field],
+            message: `${id} does not reference a ${field.replace("NodeIds", "")} node`,
+          });
+        }
+      }
+    }
+  });
 
 export const MatchProofSchema = z.object({
   matchId: z.string().min(1),

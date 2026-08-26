@@ -1,0 +1,25 @@
+# Dependencies and builds
+node_modules/
+.next/
+out/
+coverage/
+
+# Environment and deployment credentials
+.env
+.env.*
+!.env.example
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local Codex planning and temporary files
+.planning/
+.codex-tmp/

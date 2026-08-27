@@ -30,6 +30,17 @@ test('bottom navigation keeps five labeled destinations', async () => {
   for (const label of ['天使桥', '消息', '创建', '桥约', '我']) assert.match(source, new RegExp(label));
 });
 
+test('bottom navigation preserves the original icon arrangement', async () => {
+  const css = await readFile(new URL('../ardot.css', import.meta.url), 'utf8');
+  const views = await readFile(new URL('../src/views.js', import.meta.url), 'utf8');
+  assert.match(css, /\.nav-btn\.home-nav\{[^}]*flex-direction:column-reverse/);
+  assert.match(css, /\.home-symbol,\.messages-symbol,\.bridge-symbol,\.profile-symbol\{width:22px;height:22px\}/);
+  assert.match(views, /home-symbol[^<]*<circle/);
+  assert.match(views, /messages-symbol[^<]*<path/);
+  assert.match(views, /bridge-symbol[^<]*<path/);
+  assert.match(views, /profile-symbol[^<]*<circle[^>]*\/><path/);
+});
+
 test('primary screens follow the eight Ardot frames without an invented home hero', async () => {
   const source = `${await readFile(new URL('../src/views.js', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/data.js', import.meta.url), 'utf8')}`;
   for (const screen of ['热门', '视频', '经验', '闲置', '找工作', '找物', '人生树', '找人']) {

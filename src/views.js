@@ -7,11 +7,20 @@ const itemFor = (state, id) => [...state.createdItems, ...FEED_ITEMS].find(item 
 function statusBar() { return `<div class="statusbar"><b>9:41</b><div class="apple-status" aria-label="蜂窝网络、无线网络和电池状态"><span class="cellular-icon"><i></i><i></i><i></i><i></i></span><span class="wifi-icon"><i></i></span><span class="battery-icon"><i></i></span></div></div>`; }
 function topBar(title = '此刻', back = false) { return `<header class="topbar">${back ? '<button class="icon-btn" data-action="back" aria-label="返回"><span class="back-icon"></span></button>' : '<button class="icon-btn" data-action="search" aria-label="搜索"><span class="search-icon"></span></button>'}<div class="mode"><span>关注</span><b>${escape(title)}</b></div><span class="top-spacer" aria-hidden="true"></span></header>`; }
 
-function navIcon(id) { return id === 'create' ? '<span class="nav-symbol create-symbol"></span>' : `<span class="nav-symbol ${id}-symbol"></span>`; }
+function navIcon(id) {
+  if (id === 'create') return '<span class="nav-symbol create-symbol"></span>';
+  const icons = {
+    home:'<svg class="nav-symbol home-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/></svg>',
+    messages:'<svg class="nav-symbol messages-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h14a2.5 2.5 0 0 1 2.5 2.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-5 3v-12A2.5 2.5 0 0 1 6.5 4.5Z"/></svg>',
+    bridge:'<svg class="nav-symbol bridge-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 5.8a5.4 5.4 0 0 0-7.7 0L12 6.9l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7L12 22l8.8-8.5a5.4 5.4 0 0 0 0-7.7Z"/></svg>',
+    profile:'<svg class="nav-symbol profile-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4.5"/><path d="M4.5 21v-1.8a7.5 7.5 0 0 1 15 0V21"/></svg>'
+  };
+  return icons[id];
+}
 
 export function renderBottomNav(activeTab) {
   const nav = [['home','天使桥'],['messages','消息'],['create','创建'],['bridge','桥约'],['profile','我']];
-  return `<nav class="bottom-nav" aria-label="主导航">${nav.map(([id,label]) => `<button class="nav-btn ${activeTab === id ? 'is-active' : ''} ${id === 'create' ? 'is-create' : ''}" data-tab="${id}" aria-label="${label}">${navIcon(id)}<small>${label}</small></button>`).join('')}</nav>`;
+  return `<nav class="bottom-nav" aria-label="主导航">${nav.map(([id,label]) => `<button class="nav-btn ${id}-nav ${activeTab === id ? 'is-active' : ''} ${id === 'create' ? 'is-create' : ''}" data-tab="${id}" aria-label="${label}">${navIcon(id)}<small>${label}</small></button>`).join('')}</nav>`;
 }
 
 function channels(active) { return `<div class="channels" role="tablist">${CHANNELS.map(name => `<button role="tab" aria-selected="${name===active}" class="chip ${name===active?'active':''}" data-channel="${name}">${name}</button>`).join('')}</div>`; }

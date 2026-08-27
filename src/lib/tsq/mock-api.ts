@@ -1,4 +1,5 @@
-import { CONVERSATIONS, DISCOVER_CARDS, INVITES, ME } from "./data";
+import { CONVERSATIONS, DISCOVER_CARDS, HOME_MATCHES, HOME_TODOS, INVITES, ME } from "./data";
+import type { Conversation } from "./data";
 import type {
   CreatePostPayload,
   CreatePostResult,
@@ -11,6 +12,7 @@ import type {
   ResourceDetail, NeedDetail, Settings, NotificationItem,
   SendXiaotianMessagePayload, SendXiaotianMessageResult,
   XiaotianTask, XiaotianTaskStep,
+  HomeOverview,
 } from "./types";
 import { TsqApiError } from "./types";
 
@@ -23,6 +25,28 @@ const messagesByThread: Record<string, ThreadMessages["messages"]> = {
     { id: "msg-c1-1", senderId: "c1", body: "我为你新匹配到 3 个换物机会，要看看吗？", createdAt: "刚刚", status: "sent" },
   ],
 };
+
+export async function getHome(): Promise<HomeOverview> {
+  return {
+    profile: {
+      id: "me",
+      name: ME.name,
+      handle: ME.handle,
+      stage: ME.stage,
+      growth: ME.growth,
+      growthDelta: ME.growthDelta,
+      level: ME.level,
+      luck: ME.luck,
+      mood: ME.mood,
+    },
+    matches: HOME_MATCHES,
+    todos: HOME_TODOS,
+  };
+}
+
+export async function getMessageList(): Promise<Conversation[]> {
+  return CONVERSATIONS;
+}
 
 function getCard(id: string) {
   const card = DISCOVER_CARDS.find((item) => item.id === id);

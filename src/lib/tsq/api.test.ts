@@ -1,5 +1,18 @@
 import { expect, test } from "bun:test";
-import { tsqApi } from "./api";
+import { getHome, getMessageList, tsqApi } from "./api";
+
+test("home overview returns profile, matches, and pending todos", async () => {
+  const home = await getHome();
+  expect(home.profile.name).toBe("林一叶");
+  expect(home.matches.length).toBeGreaterThan(0);
+  expect(home.todos.every((todo) => todo.id.length > 0)).toBe(true);
+});
+
+test("message list returns addressable conversations", async () => {
+  const conversations = await getMessageList();
+  expect(conversations.length).toBeGreaterThan(0);
+  expect(conversations.every((thread) => thread.id && thread.name)).toBe(true);
+});
 
 test("discover detail returns a card-shaped record", async () => {
   const detail = await tsqApi.getDiscoverDetail("p1");

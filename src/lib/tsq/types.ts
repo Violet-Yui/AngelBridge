@@ -1,4 +1,4 @@
-import type { Kind, PersonCard, Conversation } from "./data";
+import type { Conversation, Kind, Match, PersonCard, Todo } from "./data";
 
 export type ResourceKind = Kind;
 
@@ -75,6 +75,11 @@ export type CreatePostPayload = {
 
 export type CreatePostResult = { postId: string };
 export type UserProfile = { id: string; name: string; handle: string; avatarUrl?: string; stage: string; location?: string; bio?: string; growth: number; growthDelta: number; level: number; luck: number; mood: string };
+export type HomeOverview = {
+  profile: UserProfile;
+  matches: Match[];
+  todos: Todo[];
+};
 export type TreeOverview = { growth: number; level: number; nextLevelGrowth: number; stage: string; milestones: Array<{ id: string; title: string; date: string; delta: number }> };
 export type ResourceDetail = { id: string; label: string; value: string; kind: ResourceKind; description: string; visibility: "public" | "matches" | "private" };
 export type NeedDetail = { id: string; title: string; description: string; status: "open" | "matched" | "closed"; matchCount: number };

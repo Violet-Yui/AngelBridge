@@ -71,6 +71,13 @@ test('new posts use standard hot-list cards without replacing the featured topic
   assert.match(html, /匹配 88%/);
 });
 
+test('create sheet accepts an image and exposes an accessible preview', async () => {
+  const source = await readFile(new URL('../src/views.js', import.meta.url), 'utf8');
+  assert.match(source, /id="post-image"[^>]*type="file"[^>]*accept="image\//);
+  assert.match(source, /id="post-image-preview"/);
+  assert.match(source, /照片可选/);
+});
+
 test('idle screen contains the complete four-card layout from the Ardot frame', () => {
   assert.equal(FEED_ITEMS.filter(item => item.channel === '闲置').length, 4);
 });

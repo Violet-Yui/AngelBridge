@@ -12,7 +12,12 @@ const POST_IMAGES = {
 const enhanceCreatedItem = item => {
   const type = item.type || item.tags?.[0] || '内容';
   const score = 86 + ([...String(item.title || '')].reduce((sum,char) => sum + char.codePointAt(0), 0) % 10);
-  return { ...item, match:item.match || score, image:item.image || POST_IMAGES[type] || POST_IMAGES.内容, tags:item.tags?.length ? item.tags : [type,'我的发布'] };
+  const fallbackImage = POST_IMAGES[type] || POST_IMAGES.内容;
+  const isFallback = !item.image || Object.values(POST_IMAGES).includes(item.image);
+  const imageSource = item.imageSource || (isFallback ? 'matched-placeholder' : 'user-upload');
+  return { ...item, match:item.match || score, image:item.image || fallbackImage, imageSource,
+    imageStatus:item.imageStatus || (imageSource === 'matched-placeholder' ? 'pending-generation' : 'ready'),
+    tags:item.tags?.length ? item.tags : [type,'我的发布'] };
 };
 
 export function createStore(storage = globalThis.localStorage) {

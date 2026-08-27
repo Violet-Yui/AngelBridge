@@ -33,4 +33,14 @@ test('created item requires a title and description', () => {
   assert.equal(store.getState().createdItems.length, 1);
   assert.ok(store.getState().createdItems[0].match >= 80);
   assert.ok(store.getState().createdItems[0].image);
+  assert.equal(store.getState().createdItems[0].imageStatus, 'pending-generation');
+});
+
+test('user image becomes the published card image', () => {
+  const store = createStore(memoryStorage());
+  store.dispatch({type:'CREATE_ITEM',payload:{type:'需求',title:'摄影搭档',description:'周末拍摄',image:'data:image/jpeg;base64,abc',imageSource:'user-upload'}});
+  const item=store.getState().createdItems[0];
+  assert.equal(item.image,'data:image/jpeg;base64,abc');
+  assert.equal(item.imageSource,'user-upload');
+  assert.equal(item.imageStatus,'ready');
 });

@@ -52,6 +52,12 @@ test('primary screens follow the eight Ardot frames without an invented home her
   assert.doesNotMatch(source, /home-intro/);
 });
 
+test('profile life-tree entry opens the channel layout with the global header', async () => {
+  const source = await readFile(new URL('../app.js', import.meta.url), 'utf8');
+  assert.match(source, /action === 'tree'[^\n]*SET_CHANNEL[^\n]*channel:'人生树'/);
+  assert.doesNotMatch(source, /action === 'tree'[^\n]*SET_TAB[^\n]*tab:'tree'/);
+});
+
 test('idle screen contains the complete four-card layout from the Ardot frame', () => {
   assert.equal(FEED_ITEMS.filter(item => item.channel === '闲置').length, 4);
 });

@@ -3,11 +3,12 @@ name: Backend CI
 on:
   push:
     branches:
-      - backend
+      - main
+      - hackathon
   pull_request:
     branches:
       - main
-      - backend
+      - hackathon
   workflow_dispatch:
 
 permissions:

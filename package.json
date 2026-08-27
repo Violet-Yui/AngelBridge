@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "demo": "tsx scripts/run-demo.ts",
+    "demo:hybrid": "tsx scripts/run-hybrid-demo.ts",
+    "api:dev": "tsx scripts/run-api.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

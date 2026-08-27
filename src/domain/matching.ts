@@ -80,7 +80,7 @@ const freshness = (nodes: ValueNode[], now: Date): number => {
   return 1 / (1 + ageInDays / 30);
 };
 
-const hardGateReasons = (
+export const getHardGateReasons = (
   viewer: MatchingProfile,
   candidate: MatchingProfile,
 ): string[] => {
@@ -117,7 +117,7 @@ export const evaluateMatch = (
   candidate: MatchingProfile,
   now: Date,
 ): MatchEvaluation => {
-  const reasons = hardGateReasons(viewer, candidate);
+  const reasons = getHardGateReasons(viewer, candidate);
   if (reasons.length > 0) {
     return {
       eligible: false,

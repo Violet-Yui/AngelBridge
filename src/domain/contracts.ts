@@ -53,6 +53,12 @@ export const IntentSchema = z.object({
   status: z.enum(["draft", "active"]),
 });
 
+export const DisclosurePolicySchema = z.object({
+  matchLocationPrecision: z.enum(["hidden", "region"]),
+  contactDisclosure: z.literal("after_mutual_consent"),
+  exactLocationDisclosure: z.literal("after_pact_active"),
+});
+
 export const ParseResultSchema = z
   .object({
     personaId: z.string().min(1),
@@ -162,6 +168,12 @@ export const BridgePactSchema = z.object({
     }),
   ).min(2),
   confirmations: z.record(z.string(), z.boolean()),
+  timeWindow: z.string().min(1).nullable().optional(),
+  locationSummary: z.string().min(1).nullable().optional(),
+  costOrDifference: z.string().min(1).nullable().optional(),
+  firstAction: z.string().min(1).optional(),
+  completionCriteria: z.array(z.string().min(1)).optional(),
+  exitRule: z.string().min(1).optional(),
   createdAt: z.string().datetime(),
   activatedAt: z.string().datetime().optional(),
   completedAt: z.string().datetime().optional(),
@@ -192,6 +204,8 @@ export const MatchingProfileSchema = z.object({
 });
 
 export type ValueNode = z.infer<typeof ValueNodeSchema>;
+export type Intent = z.infer<typeof IntentSchema>;
+export type DisclosurePolicy = z.infer<typeof DisclosurePolicySchema>;
 export type ParseResult = z.infer<typeof ParseResultSchema>;
 export type MatchProof = z.infer<typeof MatchProofSchema>;
 export type BridgePact = z.infer<typeof BridgePactSchema>;

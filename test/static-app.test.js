@@ -39,6 +39,9 @@ test('bottom navigation preserves the original icon arrangement', async () => {
   assert.match(views, /messages-symbol[^<]*<path/);
   assert.match(views, /bridge-symbol[^<]*<path/);
   assert.match(views, /profile-symbol[^<]*<circle[^>]*\/><path/);
+  assert.match(views, /create-symbol[^<]*viewBox="0 0 56 56"[^<]*<circle[^>]*r="27"/);
+  assert.match(css, /\.nav-btn\.is-create \.nav-symbol\{[^}]*width:56px;height:56px[^}]*flex:0 0 56px/);
+  assert.match(css, /\.create-nav small\{display:none\}/);
 });
 
 test('primary screens follow the eight Ardot frames without an invented home hero', async () => {
@@ -65,6 +68,13 @@ test('job screen uses the same two-column image-card system as people', async ()
   assert.match(views, /activeChannel === '找工作'[^\n]*feed-grid job-grid/);
   assert.match(views, /card\(item,'job-card'\)/);
   assert.doesNotMatch(css, /\.feed-card\.job-row>img\{display:none\}/);
+});
+
+test('all two-column content cards share one fixed height', async () => {
+  const css = await readFile(new URL('../ardot.css', import.meta.url), 'utf8');
+  assert.match(css, /\.feed-grid \.feed-card\{height:270px;display:flex;flex-direction:column\}/);
+  assert.match(css, /\.feed-grid \.card-body\{[^}]*flex:1[^}]*display:flex[^}]*flex-direction:column/);
+  assert.match(css, /\.feed-grid \.tag-row\{margin-top:auto/);
 });
 
 test('status bar uses structured Apple cellular wifi and battery icons', async () => {

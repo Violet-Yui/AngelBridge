@@ -8,7 +8,7 @@ function statusBar() { return `<div class="statusbar"><b>9:41</b><div class="app
 function topBar(title = '此刻', back = false) { return `<header class="topbar">${back ? '<button class="icon-btn" data-action="back" aria-label="返回"><span class="back-icon"></span></button>' : '<button class="icon-btn" data-action="search" aria-label="搜索"><span class="search-icon"></span></button>'}<div class="mode"><span>关注</span><b>${escape(title)}</b></div><span class="top-spacer" aria-hidden="true"></span></header>`; }
 
 function navIcon(id) {
-  if (id === 'create') return '<span class="nav-symbol create-symbol"></span>';
+  if (id === 'create') return '<svg class="nav-symbol create-symbol" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27"/><path d="M18 28h20M28 18v20"/></svg>';
   const icons = {
     home:'<svg class="nav-symbol home-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/></svg>',
     messages:'<svg class="nav-symbol messages-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h14a2.5 2.5 0 0 1 2.5 2.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-5 3v-12A2.5 2.5 0 0 1 6.5 4.5Z"/></svg>',

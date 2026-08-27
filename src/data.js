@@ -1,4 +1,4 @@
-export const CHANNELS = ['热门', '视频', '经验', '闲置', '找工作', '找物', '找人'];
+export const CHANNELS = ['人生树', '找人', '找物', '视频', '找工作', '闲置', '经验', '热门'];
 
 export const ZODIAC_PETS = [
   {id:'01-rat',name:'子鼠',trait:'机敏陪伴',image:'assets/zodiac/01-rat.svg'},

@@ -27,6 +27,7 @@ root.addEventListener('click', event => {
   if (action === 'connect') return store.dispatch({type:'OPEN_OVERLAY',overlay:{type:'connect',itemId:target.dataset.item}});
   if (action === 'confirm-connect') return store.dispatch({type:'CONNECT',itemId:target.dataset.item});
   if (action === 'tree') return store.dispatch({type:'SET_TAB',tab:'tree'});
+  if (action === 'pet') return store.dispatch({type:'SET_TAB',tab:'pet'});
   if (action === 'search') return store.dispatch({type:'SHOW_TOAST',message:'搜索将在下一阶段接入'});
   if (action === 'notify' || action === 'coming' || action === 'my-posts') return store.dispatch({type:'SHOW_TOAST',message:'演示版本暂未开放'});
 });

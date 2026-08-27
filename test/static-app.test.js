@@ -20,3 +20,11 @@ test('bottom navigation keeps five labeled destinations', async () => {
   const source = await readFile(new URL('../src/views.js', import.meta.url), 'utf8');
   for (const label of ['天使桥', '消息', '创建', '灵宠', '我']) assert.match(source, new RegExp(label));
 });
+
+test('primary screens follow the eight Ardot frames without an invented home hero', async () => {
+  const source = `${await readFile(new URL('../src/views.js', import.meta.url), 'utf8')}\n${await readFile(new URL('../src/data.js', import.meta.url), 'utf8')}`;
+  for (const screen of ['热门', '视频', '经验', '闲置', '找工作', '找物', '人生树', '找人']) {
+    assert.match(source, new RegExp(screen));
+  }
+  assert.doesNotMatch(source, /home-intro/);
+});

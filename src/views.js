@@ -1,26 +1,41 @@
 import { CHANNELS, FEED_ITEMS, ZODIAC_PETS, PROFILE, INITIAL_MESSAGES } from './data.js';
 
-const icons = { home:'⌂', messages:'◌', create:'＋', pet:'✦', profile:'○' };
+const icons = { home:'⌂', messages:'◌', create:'＋', bridge:'♡', profile:'○' };
 const escape = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
 const petFor = state => ZODIAC_PETS.find(p => p.id === state.selectedPet) || ZODIAC_PETS[3];
 const itemFor = (state, id) => [...state.createdItems, ...FEED_ITEMS].find(item => item.id === id);
 
 function statusBar() { return `<div class="statusbar"><b>9:41</b><span>▮▮▮　⌁　▰</span></div>`; }
-function topBar(title = '此刻', back = false) { return `<header class="topbar">${back ? '<button class="icon-btn" data-action="back" aria-label="返回">‹</button>' : '<button class="icon-btn" data-action="search" aria-label="搜索">⌕</button>'}<div class="mode"><span>关注</span><b>${escape(title)}</b></div><button class="icon-btn" data-action="notify" aria-label="通知">◌</button></header>`; }
+function topBar(title = '此刻', back = false) { return `<header class="topbar">${back ? '<button class="icon-btn" data-action="back" aria-label="返回">‹</button>' : '<button class="icon-btn" data-action="search" aria-label="搜索">⌕</button>'}<div class="mode"><span>关注</span><b>${escape(title)}</b></div><span class="top-spacer" aria-hidden="true"></span></header>`; }
 
 export function renderBottomNav(activeTab) {
-  const nav = [['home','天使桥'],['messages','消息'],['create','创建'],['pet','灵宠'],['profile','我']];
+  const nav = [['home','天使桥'],['messages','消息'],['create','创建'],['bridge','桥约'],['profile','我']];
   return `<nav class="bottom-nav" aria-label="主导航">${nav.map(([id,label]) => `<button class="nav-btn ${activeTab === id ? 'is-active' : ''} ${id === 'create' ? 'is-create' : ''}" data-tab="${id}" aria-label="${label}"><span>${icons[id]}</span><small>${label}</small></button>`).join('')}</nav>`;
 }
 
 function channels(active) { return `<div class="channels" role="tablist">${CHANNELS.map(name => `<button role="tab" aria-selected="${name===active}" class="chip ${name===active?'active':''}" data-channel="${name}">${name}</button>`).join('')}</div>`; }
 function media(item) { return item.image ? `<img src="${item.image}" alt="${escape(item.title)}" loading="lazy">` : `<div class="image-fallback">${escape(item.tags?.[0] || '新')}</div>`; }
-function card(item) { return `<article class="feed-card" tabindex="0" data-item-id="${item.id}">${media(item)}<div class="card-body">${item.match ? `<span class="match-badge">匹配 ${item.match}%</span>` : '<span class="match-badge neutral">我的发布</span>'}<h3>${escape(item.title)}</h3><p>${escape(item.author)} · ${escape(item.meta)}</p><div class="tag-row">${(item.tags||[]).slice(0,2).map(tag=>`<span>${escape(tag)}</span>`).join('')}</div></div></article>`; }
+function card(item, variant='grid') { return `<article class="feed-card ${variant}" tabindex="0" data-item-id="${item.id}">${media(item)}<div class="card-body">${item.match ? `<span class="match-badge">匹配 ${item.match}%</span>` : '<span class="match-badge neutral">我的发布</span>'}<h3>${escape(item.title)}</h3><p>${escape(item.author)} · ${escape(item.meta)}</p><div class="tag-row">${(item.tags||[]).slice(0,2).map(tag=>`<span>${escape(tag)}</span>`).join('')}</div></div></article>`; }
+
+function renderChannelBody(state, items) {
+  if (state.activeChannel === '热门') {
+    const [featured, ...rest] = items;
+    return `<section class="hot-layout">${featured ? `<article class="hot-feature" data-item-id="${featured.id}"><div><span>热门话题</span><h2>${escape(featured.title)}</h2><p>${escape(featured.meta)}</p></div><b>互助</b></article>` : ''}<div class="hot-list">${rest.map(item => card(item,'row')).join('')}${FEED_ITEMS.filter(item=>['视频','经验'].includes(item.channel)).slice(0,2).map(item=>card(item,'row')).join('')}</div></section>`;
+  }
+  if (state.activeChannel === '找工作') return `<section class="feed-list">${items.map(item => card(item,'job-row')).join('')}</section>`;
+  if (state.activeChannel === '视频') return `<section class="feed-grid video-grid">${items.map(item => card(item,'video-card')).join('')}</section>`;
+  if (state.activeChannel === '经验') return `<section class="feed-grid experience-grid">${items.map(item => card(item,'experience-card')).join('')}</section>`;
+  if (state.activeChannel === '找人') return `<section class="feed-grid people-grid">${items.map(item => card(item,'person-card')).join('')}</section>`;
+  if (state.activeChannel === '找物') return `<section class="feed-grid goods-grid">${items.map(item => card(item,'goods-card')).join('')}</section>`;
+  if (state.activeChannel === '闲置') return `<section class="feed-grid idle-grid">${items.map(item => card(item,'idle-card')).join('')}</section>`;
+  return '';
+}
 
 function renderHome(state) {
+  if (state.activeChannel === '人生树') return `${topBar('此刻')}${channels(state.activeChannel)}${renderTreeBody(state)}`;
   const items = [...state.createdItems, ...FEED_ITEMS.filter(item => item.channel === state.activeChannel)];
-  const pet = petFor(state);
-  return `${topBar('此刻')}<section class="home-intro"><div><p>早上好，${PROFILE.nickname}</p><h1>今天也遇见合适的人</h1></div><img src="${pet.image}" alt="当前灵宠 ${pet.name}"></section>${channels(state.activeChannel)}<div class="filter-row"><button class="filter active">推荐</button><button class="filter">附近</button><button class="filter">最新</button><button class="filter">筛选⌄</button></div>${items.length ? `<section class="feed-grid ${state.activeChannel === '找工作' ? 'list-mode':''}">${items.map(card).join('')}</section>` : `<section class="empty"><b>这里还没有内容</b><p>先回热门看看今天的新机会。</p><button data-channel="热门">返回热门</button></section>`}`;
+  const filters = state.activeChannel === '找工作' ? ['推荐','附近','全职','求职','项目'] : state.activeChannel === '找人' ? ['推荐','附近','技能','城市','兴趣'] : ['推荐','附近','最新','交换','筛选⌄'];
+  return `${topBar('此刻')}${channels(state.activeChannel)}<div class="filter-row">${filters.map((label,index)=>`<button class="filter ${index===0?'active':''}">${label}</button>`).join('')}</div>${items.length ? renderChannelBody(state,items) : `<section class="empty"><b>这里还没有内容</b><p>先回热门看看今天的新机会。</p><button data-channel="热门">返回热门</button></section>`}`;
 }
 
 function renderDetail(state) {
@@ -35,10 +50,12 @@ function renderMessages(state) {
   return `${topBar('消息')}<section class="page-pad"><div class="section-heading"><div><p>保持连接</p><h1>消息</h1></div><span>${connections.length + 1}</span></div><div class="message-list">${INITIAL_MESSAGES.map(msg=>`<article class="message pet-message"><img src="${petFor(state).image}" alt="${petFor(state).name}"><div><div><b>${msg.title}</b><time>${msg.time}</time></div><p>${msg.body}</p></div></article>`).join('')}${connections.map(({item,status})=>`<article class="message" data-item-id="${item.id}"><div class="message-thumb">${item.image?`<img src="${item.image}" alt="">`:'桥'}</div><div><div><b>${escape(item.title)}</b><time>刚刚</time></div><p>连接请求已送达，等待对方独立回应。</p><span class="status-pill">${status}</span></div></article>`).join('')}</div></section>`;
 }
 
-function renderTree(state) {
+function renderTreeBody(state) {
   const pet = petFor(state);
-  return `${topBar('人生树')}<section class="tree-page"><div class="tree-hello"><div><p>早上好，${PROFILE.nickname}</p><h1>你的生命树正在生长</h1></div><img src="${pet.image}" alt="${pet.name}"></div><div class="tree-visual"><div class="sun"></div><div class="canopy"><i></i><i></i><i></i><i></i></div><div class="trunk"></div><div class="ground"></div><span class="growth">成长值 <b>${state.growthScore}</b></span></div><div class="stats"><div><b>${PROFILE.owned}</b><span>我的拥有</span></div><div><b>${PROFILE.wishes}</b><span>我的心愿</span></div><div><b>${PROFILE.opportunities + state.connections.length}</b><span>发现机会</span></div></div><div class="section-title"><h2>小天为你匹配到的</h2><button data-tab="home">查看全部</button></div><div class="mini-matches">${FEED_ITEMS.filter(x=>x.match>=93).slice(0,3).map(item=>`<button data-item-id="${item.id}">${media(item)}<b>${item.match}%</b><span>${escape(item.title)}</span></button>`).join('')}</div><div class="section-title"><h2>待确认事项</h2><span>${state.connections.length}</span></div>${state.connections.length ? `<div class="pending-list">${state.connections.map(c=>{const item=itemFor(state,c.itemId);return `<button data-item-id="${c.itemId}"><span><b>${escape(item?.title)}</b><small>等待对方回应</small></span><em>待确认</em></button>`}).join('')}</div>` : `<div class="quiet-empty">发起连接后，事项会出现在这里。</div>`}</section>`;
+  return `<section class="tree-page"><div class="tree-summary"><div><p>早上好，小桥</p><h1>主人的人生树</h1><span>生命树 · 壮年期</span></div><div class="tree-mini"><div class="mini-canopy"></div><div class="mini-trunk"></div></div><b>${state.growthScore}</b></div><div class="stats"><div><b>${PROFILE.owned}</b><span>我的拥有</span></div><div><b>${PROFILE.wishes}</b><span>我的心愿</span></div><div><b>${PROFILE.opportunities + state.connections.length}</b><span>发现机会</span></div></div><div class="section-title"><h2>小天为你匹配到的</h2><button data-channel="热门">查看全部</button></div><div class="mini-matches">${FEED_ITEMS.filter(x=>x.match>=93).slice(0,3).map(item=>`<button data-item-id="${item.id}">${media(item)}<b>${item.match}%</b><span>${escape(item.title)}</span></button>`).join('')}</div><div class="section-title"><h2>待确认事项</h2><span>${state.connections.length}</span></div>${state.connections.length ? `<div class="pending-list">${state.connections.map(c=>{const item=itemFor(state,c.itemId);return `<button data-item-id="${c.itemId}"><span><b>${escape(item?.title)}</b><small>等待对方回应</small></span><em>待确认</em></button>`}).join('')}</div>` : `<div class="pending-list"><button><span><b>领航新链路公寓</b><small>房东已同意出租</small></span><em>去签约</em></button><button><span><b>腾讯 AI 工程师 offer</b><small>已发邀约</small></span><em>查看</em></button></div>`}</section>`;
 }
+
+function renderTree(state) { return `${topBar('人生树')}${renderTreeBody(state)}`; }
 
 function renderPetPage(state) {
   const pet = petFor(state);
@@ -47,12 +64,12 @@ function renderPetPage(state) {
 
 function renderProfile(state) {
   const pet=petFor(state);
-  return `${topBar('我')}<section class="page-pad profile-page"><div class="profile-card"><div class="avatar">桥</div><div><h1>${PROFILE.nickname}</h1><p>${PROFILE.city} · 正在让一次连接发生</p></div><img src="${pet.image}" alt="${pet.name}"></div><div class="profile-stats"><div><b>${state.growthScore}</b><span>成长值</span></div><div><b>${state.connections.length}</b><span>连接</span></div><div><b>${state.createdItems.length}</b><span>发布</span></div></div><div class="menu-list"><button data-action="tree"><span>人生树</span><b>›</b></button><button data-action="my-posts"><span>我的发布</span><b>›</b></button><button data-action="coming"><span>我的收藏</span><b>›</b></button><button data-action="coming"><span>隐私与设置</span><b>›</b></button></div></section>`;
+  return `${topBar('我')}<section class="page-pad profile-page"><div class="profile-card"><div class="avatar">桥</div><div><h1>${PROFILE.nickname}</h1><p>${PROFILE.city} · 正在让一次连接发生</p></div><img src="${pet.image}" alt="${pet.name}"></div><div class="profile-stats"><div><b>${state.growthScore}</b><span>成长值</span></div><div><b>${state.connections.length}</b><span>连接</span></div><div><b>${state.createdItems.length}</b><span>发布</span></div></div><div class="menu-list"><button data-action="tree"><span>人生树</span><b>›</b></button><button data-action="pet"><span>灵宠设置</span><b>›</b></button><button data-action="my-posts"><span>我的发布</span><b>›</b></button><button data-action="coming"><span>隐私与设置</span><b>›</b></button></div></section>`;
 }
 
 function connectSheet(state) { const item=itemFor(state,state.overlay?.itemId); return `<div class="scrim" data-action="dismiss"><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="connect-title"><div class="handle"></div><span class="sheet-icon">↗</span><h2 id="connect-title">发起一次轻量连接</h2><p>向“${escape(item?.title)}”发送本地演示请求。对方回应前，不代表连接已经成功。</p><div class="sheet-actions"><button data-action="dismiss">暂不</button><button class="primary" data-action="confirm-connect" data-item="${item?.id}">确认发起</button></div></section></div>`; }
 function createSheet() { return `<div class="scrim" data-action="dismiss"><section class="sheet create-sheet" role="dialog" aria-modal="true" aria-labelledby="create-title"><div class="handle"></div><h2 id="create-title">告诉小天你想发布什么</h2><form id="create-form"><label>类型<select name="type"><option>需求</option><option>资源</option><option>内容</option></select></label><label>标题<input name="title" maxlength="32" placeholder="例如：寻找周末摄影搭档" required></label><label>描述<textarea name="description" maxlength="120" placeholder="补充地点、时间和你能提供什么" required></textarea></label><button class="primary-action" type="submit">发布到热门</button></form></section></div>`; }
 
 export function renderOverlay(state) { if (state.overlay?.type==='connect') return connectSheet(state); if (state.overlay?.type==='create') return createSheet(); return ''; }
-export function renderPage(state) { if (state.selectedItemId) return renderDetail(state); if (state.activeTab==='messages') return renderMessages(state); if (state.activeTab==='pet') return renderPetPage(state); if (state.activeTab==='profile') return renderProfile(state); if (state.activeTab==='tree') return renderTree(state); return renderHome(state); }
+export function renderPage(state) { if (state.selectedItemId) return renderDetail(state); if (state.activeTab==='messages') return renderMessages(state); if (state.activeTab==='pet') return renderPetPage(state); if (state.activeTab==='profile') return renderProfile(state); if (state.activeTab==='tree' || state.activeTab==='bridge') return renderTree(state); return renderHome(state); }
 export function renderApp(state) { return `<div class="app-shell">${statusBar()}<main class="app-content">${renderPage(state)}</main>${renderBottomNav(state.activeTab)}${renderOverlay(state)}${state.toast?`<div class="toast" role="status">${escape(state.toast)}</div>`:''}</div>`; }

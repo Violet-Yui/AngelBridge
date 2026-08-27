@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Heart, SlidersHorizontal } from "lucide-react";
 import { AppShell } from "@/components/tsq/app-shell";
 import { TopNav } from "@/components/tsq/top-nav";
 import {
-  DISCOVER_CARDS,
   DISCOVER_FILTERS,
   type PersonCard,
   type DiscoverFilter,
 } from "@/lib/tsq/data";
 import { cn } from "@/utils/utils";
 import Link from "next/link";
+import { tsqApi } from "@/lib/tsq/api";
 
 const BADGE_STYLE: Record<string, string> = {
   green: "bg-[color:var(--soft)] text-[color:var(--deep)]",
@@ -29,10 +29,15 @@ const COVER_STYLE: Record<string, string> = {
 
 export default function DiscoverPage() {
   const [active, setActive] = useState<DiscoverFilter>("全部");
+  const [cards, setCards] = useState<PersonCard[]>([]);
+
+  useEffect(() => {
+    tsqApi.getDiscoverFeed().then(setCards).catch(() => setCards([]));
+  }, []);
 
   // 瀑布流：奇偶列
-  const left = DISCOVER_CARDS.filter((_, i) => i % 2 === 0);
-  const right = DISCOVER_CARDS.filter((_, i) => i % 2 === 1);
+  const left = cards.filter((_, i) => i % 2 === 0);
+  const right = cards.filter((_, i) => i % 2 === 1);
 
   return (
     <AppShell>

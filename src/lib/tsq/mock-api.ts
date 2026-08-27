@@ -41,6 +41,10 @@ export async function getDiscoverDetail(id: string): Promise<DiscoverDetail> {
   };
 }
 
+export async function getDiscoverFeed(): Promise<typeof DISCOVER_CARDS> {
+  return DISCOVER_CARDS;
+}
+
 export async function getThreadMessages(threadId: string): Promise<ThreadMessages> {
   const conversation = CONVERSATIONS.find((item) => item.id === threadId);
   if (!conversation) throw new TsqApiError("NOT_FOUND", "没有找到这个会话");

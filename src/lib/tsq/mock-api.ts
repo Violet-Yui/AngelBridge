@@ -4,6 +4,7 @@ import type {
   CreatePostResult,
   DiscoverDetail,
   ThreadMessages,
+  ChatMessage,
   BridgeDetail,
   TreeOverview,
   UserProfile,
@@ -55,6 +56,13 @@ export async function getThreadMessages(threadId: string): Promise<ThreadMessage
       { id: `msg-${threadId}-1`, senderId: threadId, body: conversation.last, createdAt: conversation.time, status: "sent" },
     ],
   };
+}
+
+export async function sendMessage(threadId: string, payload: { body: string }): Promise<ChatMessage> {
+  const conversation = CONVERSATIONS.find((item) => item.id === threadId);
+  if (!conversation) throw new TsqApiError("NOT_FOUND", "没有找到这个会话");
+  if (!payload.body.trim()) throw new TsqApiError("VALIDATION", "消息不能为空");
+  return { id: `msg-${threadId}-${Date.now()}`, senderId: "me", body: payload.body.trim(), createdAt: "刚刚", status: "sent" };
 }
 
 export async function createPost(payload: CreatePostPayload): Promise<CreatePostResult> {

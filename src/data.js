@@ -1,4 +1,4 @@
-export const CHANNELS = ['人生树', '找人', '找物', '视频', '找工作', '闲置', '经验', '热门'];
+export const CHANNELS = ['人生树', '找人', '找物', '找工作', '闲置', '经验', '视频', '热门'];
 
 export const ZODIAC_PETS = [
   {id:'01-rat',name:'子鼠',trait:'机敏陪伴',image:'assets/zodiac/01-rat.svg'},
@@ -24,17 +24,29 @@ const photos = {
   laptop: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=720&q=80',
   plant: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=720&q=80',
   city: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=720&q=80'
+  ,desk: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=720&q=80'
+  ,console: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=720&q=80'
+  ,forest: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=720&q=80'
+  ,guitar: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=720&q=80'
 };
 
 export const FEED_ITEMS = [
-  { id:'hot-team', channel:'热门', title:'一起把社区里的好想法变成真实行动', author:'暖桥计划', image:photos.team, match:94, meta:'12 人正在参与', tags:['社区共创','产品经验'], give:'成熟的社区资源', need:'愿意共同推进的人', description:'我们正在寻找愿意参与社区共创的伙伴，用一次小行动，让互助真正发生。' },
-  { id:'hot-studio', channel:'热门', title:'周末开放工作室，交换彼此的专业经验', author:'小满工作室', image:photos.studio, match:89, meta:'已连接 28 次', tags:['空间','经验交换'], give:'共享空间与设备', need:'摄影和策划支持', description:'把闲置的空间开放出来，也期待遇见不同专业的人，一起做点有意思的事。' },
-  { id:'video-tree', channel:'视频', title:'生命树成长 Vlog：一次连接如何发生', author:'小天记录站', image:photos.plant, match:91, meta:'03:24 · 1.2w 播放', tags:['成长记录','真实故事'], give:'真实连接案例', need:'你的反馈', description:'从表达需要，到小天给出匹配，再到第一次见面，完整记录一段连接故事。' },
-  { id:'video-city', channel:'视频', title:'城市漫步：成都玉林路的互助小店', author:'桥边放映室', image:photos.city, match:86, meta:'10:05 · 8.6k 播放', tags:['城市','互助'], give:'本地生活线索', need:'城市探索者', description:'跟随镜头认识那些愿意分享空间、技能和时间的小店。' },
-  { id:'exp-product', channel:'经验', title:'我如何用 3 个问题拆清一份真实需求', author:'产品小周', image:photos.laptop, match:93, meta:'8 分钟阅读', tags:['产品','需求'], give:'需求分析方法', need:'案例交流', description:'不从复杂表单开始，只用三个问题帮助对方说清楚目标、边界和下一步。' },
-  { id:'exp-space', channel:'经验', title:'从陌生到合作：共享空间的第一次活动', author:'阿禾', image:photos.room, match:84, meta:'163 人收藏', tags:['活动','空间'], give:'活动复盘', need:'场地运营经验', description:'记录第一次社区活动中真正有效的流程，以及我们踩过的坑。' },
-  { id:'idle-bike', channel:'闲置', title:'九成新城市通勤自行车，寻找需要的人', author:'北桥', image:photos.bike, match:88, meta:'¥680 · 同城自提', tags:['闲置','同城'], give:'通勤自行车', need:'自取或等价交换', description:'骑行不到十次，车况很好，希望交给真正会使用它的人。' },
-  { id:'idle-camera', channel:'闲置', title:'复古胶片相机，可交换一次人像拍摄', author:'一卷光', image:photos.camera, match:90, meta:'交换优先', tags:['摄影','交换'], give:'胶片相机', need:'一次人像拍摄', description:'相机功能正常，带一卷胶片。比起出售，更想交换一次认真拍摄。' },
+  { id:'hot-team', channel:'热门', title:'#生命树成长计划', author:'天使桥', image:photos.team, match:94, meta:'128w 人参与 · 本周趋势', tags:['热门话题','成长'], give:'成长记录与同频伙伴', need:'愿意持续行动的人', description:'记录每一次真实连接，让生命树在行动中慢慢长大。' },
+  { id:'hot-studio', channel:'热门', title:'趋势：年轻人的资源互换', author:'天使桥观察', image:photos.studio, match:89, meta:'8.9w 人正在讨论', tags:['趋势','资源互换'], give:'闲置空间与设备', need:'彼此真正需要的资源', description:'越来越多年轻人开始用资源互换建立轻量、可信的新连接。' },
+  { id:'hot-question', channel:'热门', title:'热门问答：如何找到同频的人', author:'小天问答', image:photos.city, match:92, meta:'回答 2.7w', tags:['热门问答','找人'], give:'匹配建议', need:'清晰表达你的需要', description:'从目标、时间和边界三个维度，让小天更准确地理解你。' },
+  { id:'hot-photo', channel:'热门', title:'热门机会：摄影搭子小组', author:'桥边摄影社', image:photos.camera, match:95, meta:'12 个席位', tags:['热门机会','摄影'], give:'周末拍摄活动', need:'摄影与出镜伙伴', description:'一起记录城市里真实的人与故事。' },
+  { id:'video-tree', channel:'视频', title:'生命树成长 vlog：第12天', author:'小树苗', image:photos.plant, match:91, meta:'03:24 · 2.3w 播放', tags:['成长记录','生活'], give:'真实成长记录', need:'你的反馈', description:'记录生命树成长的第十二天，分享一个微小但真实的改变。' },
+  { id:'video-craft', channel:'视频', title:'10分钟学会木条编织', author:'木作日常', image:photos.desk, match:88, meta:'10:05 · 1.8w 播放', tags:['教程','手作'], give:'入门方法', need:'愿意动手的你', description:'十分钟完成一次简单的木条编织练习。' },
+  { id:'video-city', channel:'视频', title:'城市漫步 · 成都玉林路', author:'桥边放映室', image:photos.forest, match:86, meta:'05:41 · 6672 播放', tags:['城市','漫步'], give:'本地生活线索', need:'城市探索者', description:'跟随镜头认识街道和那些愿意分享故事的人。' },
+  { id:'video-guitar', channel:'视频', title:'用吉他弹唱自己的歌', author:'南风', image:photos.guitar, match:84, meta:'04:12 · 1.4w 播放', tags:['音乐','分享'], give:'原创歌曲', need:'愿意倾听的人', description:'一次简单、真诚的客厅弹唱。' },
+  { id:'exp-product', channel:'经验', title:'我如何用3个问题拆解一项真实需求', author:'产品小周', image:photos.laptop, match:93, meta:'小组同行 · 1.2w 赞', tags:['产品','方法'], give:'需求分析方法', need:'案例交流', description:'不从复杂表单开始，只用三个问题帮助对方说清目标、边界和下一步。' },
+  { id:'exp-home', channel:'经验', title:'独居生活半年，我丢掉了80%的东西', author:'小满', image:photos.room, match:89, meta:'收藏 8631', tags:['生活','整理'], give:'生活整理经验', need:'你的实践反馈', description:'减少物品以后，我重新找回了空间与时间。' },
+  { id:'exp-tools', channel:'经验', title:'高效学习的5个方法', author:'学习搭子', image:photos.desk, match:90, meta:'收藏 6542', tags:['学习','效率'], give:'学习方法', need:'同行实践者', description:'五个能立刻开始的小方法，帮助建立稳定节奏。' },
+  { id:'exp-travel', channel:'经验', title:'一个人去旅行，治愈了焦虑', author:'小太阳', image:photos.city, match:86, meta:'1.3w 赞', tags:['旅行','成长'], give:'独行经验', need:'同路人的故事', description:'把注意力交还给沿途，也重新学会照顾自己。' },
+  { id:'idle-bike', channel:'闲置', title:'九成新公路车', author:'广州 · 自提', image:photos.bike, match:88, meta:'¥680', tags:['运动','自提'], give:'公路自行车', need:'同城自取', description:'骑行不到十次，车况很好，希望交给真正会使用它的人。' },
+  { id:'idle-camera', channel:'闲置', title:'复古胶片相机', author:'成都 · 可邮寄', image:photos.camera, match:90, meta:'¥950', tags:['摄影','闲置'], give:'胶片相机', need:'直接购买或交换', description:'相机功能正常，外观有轻微使用痕迹。' },
+  { id:'idle-desk', channel:'闲置', title:'实木书桌', author:'同城 · 自提', image:photos.desk, match:84, meta:'免费', tags:['家具','搬家'], give:'小尺寸实木书桌', need:'周末上门自取', description:'桌面有轻微使用痕迹，结构稳固，适合小房间使用。' },
+  { id:'idle-console', channel:'闲置', title:'Switch 游戏机', author:'武汉 · 自提', image:photos.console, match:87, meta:'¥1580', tags:['数码','闲置'], give:'Switch 游戏机', need:'直接购买', description:'机器使用正常，配件齐全。' },
   { id:'job-ai', channel:'找工作', title:'AI 产品体验设计师', author:'青川科技', image:photos.studio, match:96, meta:'成都 · 20–30K', tags:['UX','AI产品'], give:'成长型团队与真实项目', need:'端到端体验设计能力', description:'负责 AI 原生产品的用户研究、交互框架和验证，和产品、算法、工程一起把复杂能力变得可信易用。' },
   { id:'job-community', channel:'找工作', title:'社区运营策划', author:'附近之间', image:photos.team, match:87, meta:'远程 · 12–18K', tags:['社区','内容策划'], give:'灵活工作与共创空间', need:'社区活动经验', description:'一起设计有温度的线上线下互助活动，让真实连接持续发生。' },
   { id:'find-camera', channel:'找物', title:'寻找一台适合新手的二手微单', author:'夏栀', image:photos.camera, match:92, meta:'预算 3000 元以内', tags:['求购','摄影'], give:'合理预算', need:'相机与选购建议', description:'想开始记录城市人物，希望找到成色可靠、适合新手的微单。' },

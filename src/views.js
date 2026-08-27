@@ -1,16 +1,17 @@
 import { CHANNELS, FEED_ITEMS, ZODIAC_PETS, PROFILE, INITIAL_MESSAGES } from './data.js';
 
-const icons = { home:'⌂', messages:'◌', create:'＋', bridge:'♡', profile:'○' };
 const escape = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
 const petFor = state => ZODIAC_PETS.find(p => p.id === state.selectedPet) || ZODIAC_PETS[3];
 const itemFor = (state, id) => [...state.createdItems, ...FEED_ITEMS].find(item => item.id === id);
 
-function statusBar() { return `<div class="statusbar"><b>9:41</b><span>▮▮▮　⌁　▰</span></div>`; }
-function topBar(title = '此刻', back = false) { return `<header class="topbar">${back ? '<button class="icon-btn" data-action="back" aria-label="返回">‹</button>' : '<button class="icon-btn" data-action="search" aria-label="搜索">⌕</button>'}<div class="mode"><span>关注</span><b>${escape(title)}</b></div><span class="top-spacer" aria-hidden="true"></span></header>`; }
+function statusBar() { return `<div class="statusbar"><b>9:41</b><div class="apple-status" aria-label="蜂窝网络、无线网络和电池状态"><span class="cellular-icon"><i></i><i></i><i></i><i></i></span><span class="wifi-icon"><i></i></span><span class="battery-icon"><i></i></span></div></div>`; }
+function topBar(title = '此刻', back = false) { return `<header class="topbar">${back ? '<button class="icon-btn" data-action="back" aria-label="返回"><span class="back-icon"></span></button>' : '<button class="icon-btn" data-action="search" aria-label="搜索"><span class="search-icon"></span></button>'}<div class="mode"><span>关注</span><b>${escape(title)}</b></div><span class="top-spacer" aria-hidden="true"></span></header>`; }
+
+function navIcon(id) { return id === 'create' ? '<span class="nav-symbol create-symbol"></span>' : `<span class="nav-symbol ${id}-symbol"></span>`; }
 
 export function renderBottomNav(activeTab) {
   const nav = [['home','天使桥'],['messages','消息'],['create','创建'],['bridge','桥约'],['profile','我']];
-  return `<nav class="bottom-nav" aria-label="主导航">${nav.map(([id,label]) => `<button class="nav-btn ${activeTab === id ? 'is-active' : ''} ${id === 'create' ? 'is-create' : ''}" data-tab="${id}" aria-label="${label}"><span>${icons[id]}</span><small>${label}</small></button>`).join('')}</nav>`;
+  return `<nav class="bottom-nav" aria-label="主导航">${nav.map(([id,label]) => `<button class="nav-btn ${activeTab === id ? 'is-active' : ''} ${id === 'create' ? 'is-create' : ''}" data-tab="${id}" aria-label="${label}">${navIcon(id)}<small>${label}</small></button>`).join('')}</nav>`;
 }
 
 function channels(active) { return `<div class="channels" role="tablist">${CHANNELS.map(name => `<button role="tab" aria-selected="${name===active}" class="chip ${name===active?'active':''}" data-channel="${name}">${name}</button>`).join('')}</div>`; }
@@ -20,7 +21,7 @@ function card(item, variant='grid') { return `<article class="feed-card ${varian
 function renderChannelBody(state, items) {
   if (state.activeChannel === '热门') {
     const [featured, ...rest] = items;
-    return `<section class="hot-layout">${featured ? `<article class="hot-feature" data-item-id="${featured.id}"><div><span>热门话题</span><h2>${escape(featured.title)}</h2><p>${escape(featured.meta)}</p></div><b>互助</b></article>` : ''}<div class="hot-list">${rest.map(item => card(item,'row')).join('')}${FEED_ITEMS.filter(item=>['视频','经验'].includes(item.channel)).slice(0,2).map(item=>card(item,'row')).join('')}</div></section>`;
+    return `<section class="hot-layout">${featured ? `<article class="hot-feature" data-item-id="${featured.id}"><div><span>热门话题</span><h2>${escape(featured.title)}</h2><p>${escape(featured.meta)}</p></div><b>成长</b></article>` : ''}<div class="hot-list">${rest.map(item => card(item,'row')).join('')}</div></section>`;
   }
   if (state.activeChannel === '找工作') return `<section class="feed-list">${items.map(item => card(item,'job-row')).join('')}</section>`;
   if (state.activeChannel === '视频') return `<section class="feed-grid video-grid">${items.map(item => card(item,'video-card')).join('')}</section>`;
@@ -34,7 +35,16 @@ function renderChannelBody(state, items) {
 function renderHome(state) {
   if (state.activeChannel === '人生树') return `${topBar('此刻')}${channels(state.activeChannel)}${renderTreeBody(state)}`;
   const items = [...state.createdItems, ...FEED_ITEMS.filter(item => item.channel === state.activeChannel)];
-  const filters = state.activeChannel === '找工作' ? ['推荐','附近','全职','求职','项目'] : state.activeChannel === '找人' ? ['推荐','附近','技能','城市','兴趣'] : ['推荐','附近','最新','交换','筛选⌄'];
+  const filterSets = {
+    找人:['推荐','附近','技能','兴趣','同城'],
+    找物:['推荐','附近','求购','交换','筛选'],
+    找工作:['推荐','附近','全职','实习','远程'],
+    闲置:['全部','附近','免邮','交换','低价'],
+    经验:['推荐','热门','最新','实用','生活'],
+    视频:['推荐','热门','旅行','音乐','手作'],
+    热门:['热门话题','热门问答','热门机会']
+  };
+  const filters = filterSets[state.activeChannel] || ['推荐','附近','最新'];
   return `${topBar('此刻')}${channels(state.activeChannel)}<div class="filter-row">${filters.map((label,index)=>`<button class="filter ${index===0?'active':''}">${label}</button>`).join('')}</div>${items.length ? renderChannelBody(state,items) : `<section class="empty"><b>这里还没有内容</b><p>先回热门看看今天的新机会。</p><button data-channel="热门">返回热门</button></section>`}`;
 }
 
@@ -59,12 +69,12 @@ function renderTree(state) { return `${topBar('人生树')}${renderTreeBody(stat
 
 function renderPetPage(state) {
   const pet = petFor(state);
-  return `${topBar('灵宠')}<section class="page-pad pet-page"><div class="pet-hero"><div><span>当前同行伙伴</span><h1>${pet.name}</h1><p>${pet.trait}，替你留意真正互补的人和机会。</p></div><img src="${pet.image}" alt="${pet.name}"></div><div class="section-title"><h2>选择你的守护灵宠</h2><small>选择会保存在当前设备</small></div><div class="pet-grid">${ZODIAC_PETS.map(item=>`<button class="pet-card ${item.id===state.selectedPet?'selected':''}" data-pet="${item.id}" aria-pressed="${item.id===state.selectedPet}"><img src="${item.image}" alt="${item.name}"><b>${item.name}</b><span>${item.trait}</span></button>`).join('')}</div></section>`;
+  return `${topBar('小天智能体')}<section class="page-pad pet-page"><div class="pet-hero"><div><span>当前小天形象</span><h1>${pet.name}</h1><p>${pet.trait}，替你留意真正互补的人和机会。</p></div><img src="${pet.image}" alt="${pet.name}"></div><div class="section-title"><h2>选择小天的生肖样式</h2><small>12 种形象可选</small></div><div class="pet-grid">${ZODIAC_PETS.map(item=>`<button class="pet-card ${item.id===state.selectedPet?'selected':''}" data-pet="${item.id}" aria-label="选择${item.name}作为小天形象" aria-pressed="${item.id===state.selectedPet}"><img src="${item.image}" alt="${item.name}"><b>${item.name}</b><span>${item.trait}</span></button>`).join('')}</div></section>`;
 }
 
 function renderProfile(state) {
   const pet=petFor(state);
-  return `${topBar('我')}<section class="page-pad profile-page"><div class="profile-card"><div class="avatar">桥</div><div><h1>${PROFILE.nickname}</h1><p>${PROFILE.city} · 正在让一次连接发生</p></div><img src="${pet.image}" alt="${pet.name}"></div><div class="profile-stats"><div><b>${state.growthScore}</b><span>成长值</span></div><div><b>${state.connections.length}</b><span>连接</span></div><div><b>${state.createdItems.length}</b><span>发布</span></div></div><div class="menu-list"><button data-action="tree"><span>人生树</span><b>›</b></button><button data-action="pet"><span>灵宠设置</span><b>›</b></button><button data-action="my-posts"><span>我的发布</span><b>›</b></button><button data-action="coming"><span>隐私与设置</span><b>›</b></button></div></section>`;
+  return `${topBar('我')}<section class="page-pad profile-page"><div class="profile-card"><div class="avatar">桥</div><div><h1>${PROFILE.nickname}</h1><p>${PROFILE.city} · 正在让一次连接发生</p></div><img src="${pet.image}" alt="当前小天形象：${pet.name}"></div><button class="xiaotian-entry" data-action="pet"><span><small>小天智能体</small><b>${pet.name} · 12 种形象可选</b></span><span class="xiaotian-preview">${ZODIAC_PETS.slice(0,4).map(item=>`<img src="${item.image}" alt="">`).join('')}</span><i>›</i></button><div class="profile-stats"><div><b>${state.growthScore}</b><span>成长值</span></div><div><b>${state.connections.length}</b><span>连接</span></div><div><b>${state.createdItems.length}</b><span>发布</span></div></div><div class="menu-list"><button data-action="tree"><span>人生树</span><b>›</b></button><button data-action="my-posts"><span>我的发布</span><b>›</b></button><button data-action="coming"><span>隐私与设置</span><b>›</b></button></div></section>`;
 }
 
 function connectSheet(state) { const item=itemFor(state,state.overlay?.itemId); return `<div class="scrim" data-action="dismiss"><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="connect-title"><div class="handle"></div><span class="sheet-icon">↗</span><h2 id="connect-title">发起一次轻量连接</h2><p>向“${escape(item?.title)}”发送本地演示请求。对方回应前，不代表连接已经成功。</p><div class="sheet-actions"><button data-action="dismiss">暂不</button><button class="primary" data-action="confirm-connect" data-item="${item?.id}">确认发起</button></div></section></div>`; }

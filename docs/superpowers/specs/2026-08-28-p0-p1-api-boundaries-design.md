@@ -40,10 +40,10 @@ type GrowthLogOverview = {
   level: number;
   nextLevelGrowth: number;
   stage: string;
-  entries: Array<{ date: string; label: string; delta: number }>;
+  entries: Array<{ date: string; title: string; delta: number }>;
 };
 
-type UpdateSettingsPayload = Pick<Settings, "notifications" | "privacy" | "language">;
+type UpdateSettingsPayload = Pick<Settings, "notifications" | "publicProfile" | "language">;
 
 type UpdateSettingsResult = Settings;
 ```

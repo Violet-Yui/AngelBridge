@@ -1,0 +1,227 @@
+{
+  "common": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "loading": "Loading…",
+    "on": "On",
+    "off": "Off",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "userId": "User ID"
+  },
+  "language": {
+    "label": "Language",
+    "triggerLabel": "Language: {{language}}",
+    "followSystem": "System",
+    "followSystemWithLanguage": "System ({{language}})",
+    "enUS": "English",
+    "zhCN": "中文"
+  },
+  "tsq": {
+    "tabs": {
+      "home": "Bridge",
+      "messages": "Messages",
+      "create": "Create",
+      "bridge": "Pacts",
+      "me": "Me"
+    },
+    "nav": { "follow": "Following", "now": "Now" },
+    "home": {
+      "tree": "My Life Tree",
+      "growthRecord": "Growth log",
+      "growth": "Growth",
+      "vsYesterday": "vs. yesterday",
+      "followedYou": "follow you",
+      "newGrowth": "new growth",
+      "todayStatus": "Today",
+      "own": "I Have",
+      "ownSub": "Resources to offer",
+      "wish": "I Wish",
+      "wishSub": "Resources I want",
+      "opp": "Opportunities",
+      "oppSub": "Found by AI",
+      "matchTitle": "Xiaotian matched for you",
+      "todoTitle": "To confirm",
+      "seeAll": "See all",
+      "alsoInterested": "also interested",
+      "todoEmpty": "All done — Xiaotian will keep watching for new chances 🌱",
+      "reject": "Decline",
+      "accept": "Accept",
+      "accepted": "Accepted — opening the pact to chat…",
+      "rejected": "Declined — Xiaotian will learn your taste"
+    },
+    "discover": {
+      "subtitle": "Find people worth knowing",
+      "openCard": "View their profile — connect or propose a swap"
+    },
+    "bridge": {
+      "title": "Pacts",
+      "subtitle": "Coop · Friend · Swap — all invites in one place",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Declined",
+      "coop": "Coop",
+      "friend": "Friend",
+      "swap": "Swap",
+      "inviteSuffix": " invites",
+      "count": "",
+      "empty": "No invites here yet",
+      "mineOffer": "I offer",
+      "theirsOffer": "They offer",
+      "reject": "Decline",
+      "accept": "Accept",
+      "enterChat": "Open chat · finish the swap",
+      "archived": "Archived",
+      "toastAccept": "Accepted — arrange it in Messages",
+      "toastReject": "Invite declined"
+    },
+    "messages": {
+      "title": "Messages",
+      "subtitle": "Friends · Strangers · Xiaotian AI",
+      "friends": "Friends",
+      "strangers": "Strangers",
+      "unread": "unread",
+      "openAi": "Open chat with Xiaotian",
+      "open": "Open chat with {{name}}"
+    },
+    "me": {
+      "title": "Me",
+      "resources": "My Resources",
+      "resourcesSub": "All I can exchange",
+      "needs": "My Needs",
+      "needsSub": "What I want",
+      "growth": "My Growth",
+      "growthSub": "Experience · vitality",
+      "level": "Life tree level",
+      "growthValue": "Growth · today",
+      "luck": "Luck · mood",
+      "toNext": "{{n}} to Lv.{{lv}}",
+      "petAgent": "Xiaotian companion",
+      "petAgentSub": "{{name}} · 12 appearances to choose from"
+    },
+    "pets": {
+      "title": "Choose Xiaotian",
+      "subtitle": "Twelve companions for every connection",
+      "backToMe": "Back to my page",
+      "current": "Current Xiaotian companion",
+      "choose": "Choose a companion"
+    },
+    "create": {
+      "title": "Create",
+      "subtitle": "Post what you have or wish for — let resources flow",
+      "have": "I have · to offer",
+      "want": "I want · a wish",
+      "pickChannel": "Pick a channel",
+      "describeHave": "Describe what you can offer",
+      "describeWant": "Describe what you want",
+      "placeholderHave": "e.g. I have a spare film camera, happy to swap for a design course or service~",
+      "placeholderWant": "e.g. Looking for a long-term brand designer, can trade photography services.",
+      "publish": "Publish",
+      "empty": "Write something first~",
+      "published": "Published — Xiaotian will look for matches 🌱"
+    },
+    "xiaotian": {
+      "title": "Bridge",
+      "subtitle": "Talk with Xiaotian",
+      "placeholder": "Tell Xiaotian something...",
+      "inputLabel": "Send a message to Xiaotian",
+      "send": "Send",
+      "sending": "Sending",
+      "sendFailed": "Could not send. Please try again.",
+      "retryHint": "Your message is preserved and ready to resend",
+      "thinking": "Xiaotian is thinking…",
+      "justNow": "Just now",
+      "summaryTitle": "Xiaotian is organizing 🌱",
+      "summaryOffer": "Offer: a weekend studio in exchange for brand photos",
+      "summaryNeed": "Need: brand photography",
+      "summaryBoundary": "Boundary: show the area only; prefer a swap, with a possible price difference",
+      "messages": {
+        "welcome": "Hi, I'm Xiaotian 🌱\nTell me what's on your mind and I'll help you sort it out.",
+        "offer": "I have a studio available on weekends and want to exchange it for brand photos.",
+        "timeQuestion": "Got it. When is your studio available?",
+        "timeAnswer": "Saturday and Sunday during the day.",
+        "locationQuestion": "How much of the location can be public? Is showing only the area okay?",
+        "locationAnswer": "Show the area first, but not the exact address.",
+        "exchangeQuestion": "Would you like photography only, or could you also cover a price difference?",
+        "exchangeAnswer": "A direct exchange is preferred, but a price difference is possible."
+      },
+      "task": {
+        "title": "Xiaotian Bridge",
+        "subtitle": "Two-way matching task",
+        "progressTitle": "Matching progress",
+        "searchingTitle": "Xiaotian is finding candidate bridges",
+        "searchingBody": "Checking needs, resources, and mutual benefits…",
+        "candidateCount": "{{count}} candidate bridges found",
+        "failedTitle": "This bridge task was interrupted",
+        "retry": "Try again",
+        "retrying": "Matching again",
+        "retryFailed": "Retry failed. Please try again later.",
+        "tryAgain": "Retry",
+        "status": {
+          "running": "Building bridges",
+          "completed": "Match complete",
+          "failed": "Task interrupted"
+        }
+      }
+    },
+    "pet": {
+      "title": "Xiaotian",
+      "collapse": "Collapse",
+      "note": "The more kindness you share, the better I grow. You finished 1 swap today — I'm happy!",
+      "luck": "Luck",
+      "match": "Matches",
+      "level": "Level",
+      "mood": "Mood",
+      "defaultBubble": "I found 3 new opportunities"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "code": "404",
+      "title": "Page not found",
+      "description": "The page you're looking for doesn't exist or may have been moved.",
+      "backHome": "Back to home"
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. You can try again or return to the home page.",
+      "tryAgain": "Try again",
+      "backHome": "Back to home"
+    }
+  },
+  "starter": {
+    "badge": "Eazo App Starter",
+    "title": "Build your next app with Eazo",
+    "subtitle": "You now have a clean foundation with auth, data access, and platform integrations ready for your product.",
+    "steps": {
+      "readDocs": {
+        "title": "Read the docs",
+        "desc": "Open AGENTS.md and README.md to understand the template architecture.",
+        "code": "AGENTS.md + README.md"
+      },
+      "replacePage": {
+        "title": "Replace this page",
+        "desc": "Move your product UI into src/components and keep page.tsx thin.",
+        "code": "src/app/page.tsx"
+      },
+      "firstFeature": {
+        "title": "Build your first feature",
+        "desc": "Add API routes under src/app/api and call them from typed helpers.",
+        "code": "src/app/api/*"
+      },
+      "translations": {
+        "title": "Add translations",
+        "desc": "Edit en-US / zh-CN strings in src/i18n/locales. LanguageSwitcher and I18nProvider in layout.tsx are already wired.",
+        "code": "src/i18n/locales/"
+      }
+    },
+    "nextCommand": {
+      "title": "Next command",
+      "desc": "Start developing and iterate in real time.",
+      "command": "bun dev"
+    }
+  }
+}

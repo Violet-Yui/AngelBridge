@@ -1,0 +1,227 @@
+{
+  "common": {
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "loading": "加载中…",
+    "on": "开",
+    "off": "关",
+    "close": "关闭",
+    "save": "保存",
+    "cancel": "取消",
+    "edit": "编辑",
+    "delete": "删除",
+    "userId": "用户 ID"
+  },
+  "language": {
+    "label": "语言",
+    "triggerLabel": "语言：{{language}}",
+    "followSystem": "跟随系统",
+    "followSystemWithLanguage": "跟随系统（{{language}}）",
+    "enUS": "English",
+    "zhCN": "中文"
+  },
+  "tsq": {
+    "tabs": {
+      "home": "天使桥",
+      "messages": "消息",
+      "create": "创建",
+      "bridge": "桥约",
+      "me": "我"
+    },
+    "nav": { "follow": "关注", "now": "此刻" },
+    "home": {
+      "tree": "我的生命树",
+      "growthRecord": "成长记录",
+      "growth": "成长值",
+      "vsYesterday": "比昨天",
+      "followedYou": "关注了你",
+      "newGrowth": "新成长",
+      "todayStatus": "今日状态",
+      "own": "我的拥有",
+      "ownSub": "可置换的资源",
+      "wish": "我的心愿",
+      "wishSub": "想获得的资源",
+      "opp": "发现机会",
+      "oppSub": "AI 为你发现",
+      "matchTitle": "小天为你匹配到的",
+      "todoTitle": "待确认事项",
+      "seeAll": "查看全部",
+      "alsoInterested": "人也感兴趣",
+      "todoEmpty": "都处理完啦，小天会继续为你留意新机会 🌱",
+      "reject": "拒绝",
+      "accept": "接受",
+      "accepted": "已接受，正在进入桥约沟通～",
+      "rejected": "已婉拒，小天会更懂你的偏好"
+    },
+    "discover": {
+      "subtitle": "找到值得认识的人",
+      "openCard": "查看 TA 的资料，可发起连接或换物邀请"
+    },
+    "bridge": {
+      "title": "桥约",
+      "subtitle": "合作 · 交友 · 换物，统一管理你收到与发起的邀请",
+      "pending": "待处理",
+      "accepted": "已接收",
+      "rejected": "已拒绝",
+      "coop": "合作",
+      "friend": "交友",
+      "swap": "换物",
+      "inviteSuffix": "邀请",
+      "count": "条",
+      "empty": "这里还没有邀请",
+      "mineOffer": "我方提供",
+      "theirsOffer": "对方提供",
+      "reject": "拒绝",
+      "accept": "接受",
+      "enterChat": "进入消息 · 完成交换",
+      "archived": "已归档",
+      "toastAccept": "已接受，去消息里约定沟通吧～",
+      "toastReject": "已婉拒该邀请"
+    },
+    "messages": {
+      "title": "消息",
+      "subtitle": "好友 · 陌生人 · 小天 AI",
+      "friends": "好友消息",
+      "strangers": "陌生人消息",
+      "unread": "条未读",
+      "openAi": "打开与小天的对话",
+      "open": "打开与 {{name}} 的对话"
+    },
+    "me": {
+      "title": "我",
+      "resources": "我的资源",
+      "resourcesSub": "可置换的总和",
+      "needs": "我的需求",
+      "needsSub": "想获得的资源",
+      "growth": "我的成长",
+      "growthSub": "经验值 · 生命力",
+      "level": "生命树等级",
+      "growthValue": "成长值 · 今",
+      "luck": "好运包 · 心情",
+      "toNext": "距离 Lv.{{lv}} 还需 {{n}}",
+      "petAgent": "小天智能体",
+      "petAgentSub": "{{name}} · 12 种形象可选"
+    },
+    "pets": {
+      "title": "选择小天形象",
+      "subtitle": "12 个萌宠陪伴你的每一次连接",
+      "backToMe": "返回我的页面",
+      "current": "当前小天形象",
+      "choose": "选择一位萌宠"
+    },
+    "create": {
+      "title": "创建",
+      "subtitle": "发布你的拥有或心愿，让资源流动起来",
+      "have": "我拥有 · 可提供",
+      "want": "我想要 · 心愿",
+      "pickChannel": "选择频道",
+      "describeHave": "描述你可以提供的资源",
+      "describeWant": "描述你想获得的资源",
+      "placeholderHave": "例如：我有一台闲置胶片相机，想换设计相关的课程或服务～",
+      "placeholderWant": "例如：想找一位长期合作的品牌设计师，可用摄影服务交换。",
+      "publish": "发布",
+      "empty": "先写点内容吧～",
+      "published": "已发布，小天会为你寻找匹配 🌱"
+    },
+    "xiaotian": {
+      "title": "天使桥",
+      "subtitle": "和小天说",
+      "placeholder": "和小天说点什么...",
+      "inputLabel": "给小天发送消息",
+      "send": "发送",
+      "sending": "发送中",
+      "sendFailed": "发送失败，请稍后重试",
+      "retryHint": "内容已保留，可再次发送",
+      "thinking": "小天正在思考…",
+      "justNow": "刚刚",
+      "summaryTitle": "小天整理中 🌱",
+      "summaryOffer": "Offer（我提供）：周末工作室，换品牌照片",
+      "summaryNeed": "Need（我需要）：摄影服务（品牌照片）",
+      "summaryBoundary": "Boundary（我设定）：先展示区域，不公开门牌；优先互换，可视情况补差价",
+      "messages": {
+        "welcome": "Hi，我是小天 🌱\n有什么想法都可以和我说，我会帮你一起梳理。",
+        "offer": "我有一个周末闲置工作室，想换一组品牌照片。",
+        "timeQuestion": "明白啦，我先帮你整理意图。你的工作室可用时间是？",
+        "timeAnswer": "周六和周日白天都可以。",
+        "locationQuestion": "地点方便公开到什么程度？是否接受仅展示区域信息？",
+        "locationAnswer": "可以先展示区域，不先公开具体门牌。",
+        "exchangeQuestion": "好的。交换方式是只换摄影服务，还是也可以补差价？",
+        "exchangeAnswer": "优先互换，也可以视情况补差价。"
+      },
+      "task": {
+        "title": "小天搭桥",
+        "subtitle": "双向匹配任务详情",
+        "progressTitle": "匹配进度",
+        "searchingTitle": "小天正在寻找候选桥",
+        "searchingBody": "正在检查需求、资源和双方收益，请稍候～",
+        "candidateCount": "已匹配到 {{count}} 个候选桥",
+        "failedTitle": "这次搭桥暂时中断",
+        "retry": "重新尝试",
+        "retrying": "重新匹配中",
+        "retryFailed": "重试失败，请稍后再试",
+        "tryAgain": "重试",
+        "status": {
+          "running": "正在搭桥",
+          "completed": "匹配完成",
+          "failed": "任务中断"
+        }
+      }
+    },
+    "pet": {
+      "title": "灵宠小天",
+      "collapse": "收起",
+      "note": "主人释放的善意越多，我就长得越好。今天你完成了 1 次交换，我很开心～",
+      "luck": "好运包",
+      "match": "匹配项",
+      "level": "等级",
+      "mood": "心情",
+      "defaultBubble": "我发现 3 个新机会"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "code": "404",
+      "title": "页面未找到",
+      "description": "你访问的页面不存在，或已被移动。",
+      "backHome": "返回首页"
+    },
+    "generic": {
+      "title": "出了点问题",
+      "description": "发生了意外错误。你可以重试，或返回首页继续。",
+      "tryAgain": "重试",
+      "backHome": "返回首页"
+    }
+  },
+  "starter": {
+    "badge": "Eazo 应用模板",
+    "title": "用 Eazo 构建你的下一个应用",
+    "subtitle": "你现在拥有干净的基础：认证、数据访问与平台能力已就绪，可直接开发产品功能。",
+    "steps": {
+      "readDocs": {
+        "title": "阅读文档",
+        "desc": "打开 AGENTS.md 与 README.md，了解模板架构与约定。",
+        "code": "AGENTS.md + README.md"
+      },
+      "replacePage": {
+        "title": "替换本页",
+        "desc": "将产品 UI 放到 src/components 下，并保持 page.tsx 为薄入口。",
+        "code": "src/app/page.tsx"
+      },
+      "firstFeature": {
+        "title": "开发第一个功能",
+        "desc": "在 src/app/api 添加接口，并通过 src/lib/api 中的类型化 helper 调用。",
+        "code": "src/app/api/*"
+      },
+      "translations": {
+        "title": "补充翻译",
+        "desc": "在 src/i18n/locales 编辑中英文文案；layout 已接入 LanguageSwitcher 与 I18nProvider。",
+        "code": "src/i18n/locales/"
+      }
+    },
+    "nextCommand": {
+      "title": "下一步命令",
+      "desc": "启动开发服务器，实时迭代你的产品。",
+      "command": "bun dev"
+    }
+  }
+}

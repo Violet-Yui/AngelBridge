@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/tsq/app-shell";
 import { ProfileHeader } from "@/components/tsq/profile-header";
 import { ME } from "@/lib/tsq/data";
-import { DEFAULT_ZODIAC_PET_ID, getZodiacPet, ZODIAC_PETS } from "@/lib/tsq/pets";
+import { ZODIAC_PETS } from "@/lib/tsq/pets";
 import { cn } from "@/utils/utils";
 import Link from "next/link";
 
@@ -18,7 +18,6 @@ const KIND_TAG: Record<string, string> = {
 
 export default function MePage() {
   const { t } = useTranslation();
-  const activePet = getZodiacPet(DEFAULT_ZODIAC_PET_ID);
   return (
     <AppShell topInset="none">
       <ProfileHeader />
@@ -29,14 +28,10 @@ export default function MePage() {
             href="/me/pets"
             className="flex items-center gap-3 rounded-[20px] border border-[color:var(--border)] bg-white p-3.5 shadow-[var(--brand-shadow-sm)] active:scale-[.99]"
           >
-            <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-[color:var(--soft)]">
-              <Image
-                src={activePet.image}
-                alt={activePet.name}
-                width={40}
-                height={40}
-                className="h-full w-full object-contain"
-              />
+            <span className="grid h-10 w-10 shrink-0 grid-cols-2 overflow-hidden rounded-xl bg-[color:var(--soft)] p-0.5">
+              {ZODIAC_PETS.slice(0, 4).map((pet) => (
+                <Image key={pet.id} src={pet.image} alt="" width={20} height={20} className="h-full w-full object-contain" />
+              ))}
             </span>
             <span className="min-w-0 flex-1">
               <small className="block text-[12px] text-[color:var(--deep)]">{t("tsq.me.petAgent")}</small>

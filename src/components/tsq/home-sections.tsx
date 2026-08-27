@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { ShoppingBag, Heart, Star, Briefcase, Users, Repeat2, X, Check } from "lucide-react";
-import { HOME_MATCHES, HOME_TODOS, type Todo, type Match } from "@/lib/tsq/data";
+import type { HomeOverview } from "@/lib/tsq/api";
 import { getMatchHref } from "@/lib/tsq/navigation";
 import { cn } from "@/utils/utils";
 
@@ -21,9 +21,12 @@ const TODO_ICON = {
   swap: Repeat2,
 } as const;
 
-export function HomeSections() {
+type Match = HomeOverview["matches"][number];
+type Todo = HomeOverview["todos"][number];
+
+export function HomeSections({ matches, initialTodos }: { matches: Match[]; initialTodos: Todo[] }) {
   const { t } = useTranslation();
-  const [todos, setTodos] = useState<Todo[]>(HOME_TODOS);
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
   function resolve(id: string, accept: boolean) {
     const todo = todos.find((x) => x.id === id);
@@ -49,7 +52,7 @@ export function HomeSections() {
 
       <SectionTitle title={t("tsq.home.matchTitle")} href="/discover" cta={t("tsq.home.seeAll")} />
       <div className="tsq-noscroll -mx-1 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-2">
-        {HOME_MATCHES.map((m) => (
+        {matches.map((m) => (
           <MatchCard key={m.id} m={m} interestedLabel={t("tsq.home.alsoInterested")} />
         ))}
       </div>

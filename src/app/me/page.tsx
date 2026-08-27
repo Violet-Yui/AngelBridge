@@ -41,7 +41,7 @@ export default function MePage() {
             <span className="min-w-0 flex-1">
               <small className="block text-[12px] text-[color:var(--deep)]">{t("tsq.me.petAgent")}</small>
               <b className="mt-0.5 block text-[16px]">
-                {t("tsq.me.petAgentSub", { name: activePet.name })}
+                {t("tsq.me.petAgentSub")}
               </b>
             </span>
             <span className="flex -space-x-2" aria-hidden>

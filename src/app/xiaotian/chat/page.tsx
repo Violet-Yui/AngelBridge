@@ -4,7 +4,9 @@ import { type FormEvent, useState } from "react";
 import Image from "next/image";
 import { Mic, Pencil, Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { FlowShell, XiaotianAvatar } from "@/components/tsq/flow-shell";
+import { AppShell } from "@/components/tsq/app-shell";
+import { PageHeader } from "@/components/tsq/page-header";
+import { XiaotianAvatar } from "@/components/tsq/flow-shell";
 import { tsqApi } from "@/lib/tsq/api";
 import { TSQ_ASSETS } from "@/lib/tsq/assets";
 import type { ChatMessage } from "@/lib/tsq/types";
@@ -68,10 +70,10 @@ export default function XiaotianChatPage() {
   }
 
   return (
-    <FlowShell title={t("tsq.xiaotian.title")} subtitle={t("tsq.xiaotian.subtitle")} right="bell">
-      <section data-el="xiaotian-chat" className="relative overflow-hidden rounded-[24px] border border-[color:var(--border)] bg-white/72 shadow-[var(--brand-shadow-md)] backdrop-blur-md">
-        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#e9f7ff] to-transparent" />
-        <div className="relative max-h-[calc(100dvh-260px)] space-y-3 overflow-y-auto px-3 pb-4 pt-4">
+    <AppShell>
+      <PageHeader title={t("tsq.xiaotian.title")} subtitle={t("tsq.xiaotian.subtitle")} />
+      <section data-el="xiaotian-chat" className="mx-4 mt-3 overflow-hidden rounded-[24px] border border-[color:var(--border)] bg-white shadow-[var(--brand-shadow-md)]">
+        <div className="max-h-[calc(100dvh-285px)] space-y-3 overflow-y-auto bg-gradient-to-b from-[color:var(--soft)]/35 to-white px-3 pb-4 pt-4">
           {messages.map((message) => (
             <ChatBubble key={message.id} from={message.senderId === "me" ? "me" : "ai"} text={message.body} status={message.status} />
           ))}
@@ -89,7 +91,7 @@ export default function XiaotianChatPage() {
           </article>
         </div>
       </section>
-      <form data-el="xiaotian-chat-form" onSubmit={handleSubmit} className="mt-3">
+      <form data-el="xiaotian-chat-form" onSubmit={handleSubmit} className="mx-4 mt-3">
         <div className="flex items-center gap-2 rounded-full border border-[color:var(--border)] bg-white p-2 shadow-[var(--brand-shadow-sm)]">
           <input
             data-el="xiaotian-chat-input"
@@ -105,14 +107,14 @@ export default function XiaotianChatPage() {
             type="submit"
             disabled={pending || !draft.trim()}
             aria-label={pending ? t("tsq.xiaotian.sending") : t("tsq.xiaotian.send")}
-            className="grid h-11 w-11 place-items-center rounded-full bg-[#5B8DEF] text-white shadow-[0_8px_18px_rgba(91,141,239,.28)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+            className="grid h-11 w-11 place-items-center rounded-full bg-[color:var(--primary)] text-white shadow-[0_8px_18px_rgba(88,169,66,.24)] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Send className={`h-5 w-5 ${pending ? "animate-pulse" : ""}`} />
           </button>
         </div>
         {error && <p role="alert" className="mt-2 px-3 text-[12px] text-red-600">{error} · {t("tsq.xiaotian.retryHint")}</p>}
       </form>
-    </FlowShell>
+    </AppShell>
   );
 }
 
@@ -121,7 +123,7 @@ function ChatBubble({ from, text, status = "sent" }: { from: "ai" | "me"; text: 
   return (
     <div className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
       {!isMe && <XiaotianAvatar size={38} />}
-      <div className={`max-w-[74%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-[14px] leading-relaxed shadow-[0_6px_14px_rgba(55,95,42,.08)] ${isMe ? "rounded-br-sm bg-[#ccefdc] text-[#153b2a]" : "rounded-bl-sm bg-white text-[#243b5a]"} ${status === "failed" ? "border border-red-200" : ""}`}>
+      <div className={`max-w-[74%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-[14px] leading-relaxed shadow-[0_6px_14px_rgba(55,95,42,.08)] ${isMe ? "rounded-br-sm bg-[color:var(--soft)] text-[color:var(--deep)]" : "rounded-bl-sm bg-white text-neutral-700"} ${status === "failed" ? "border border-red-200" : ""}`}>
         {text}
       </div>
       {isMe && <span className="grid h-8 w-8 place-items-center rounded-full border border-[#e3c27c] bg-[#9dc4e4] text-white"><Image src={TSQ_ASSETS.pet} alt="你" width={22} height={22} className="opacity-0" />你</span>}

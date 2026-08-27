@@ -43,7 +43,10 @@ function renderChannelBody(state, items) {
 
 function renderHome(state) {
   if (state.activeChannel === '人生树') return `${topBar('此刻')}${channels(state.activeChannel)}${renderTreeBody(state)}`;
-  const items = [...state.createdItems, ...FEED_ITEMS.filter(item => item.channel === state.activeChannel)];
+  const channelItems = FEED_ITEMS.filter(item => item.channel === state.activeChannel);
+  const items = state.activeChannel === '热门'
+    ? [channelItems[0], ...state.createdItems, ...channelItems.slice(1)].filter(Boolean)
+    : channelItems;
   const filterSets = {
     找人:['推荐','附近','技能','兴趣','同城'],
     找物:['推荐','附近','求购','交换','筛选'],

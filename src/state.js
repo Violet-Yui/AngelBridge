@@ -4,10 +4,24 @@ const initialState = {
   connections:[], growthScore:1000, createdItems:[], overlay:null, toast:null
 };
 
+const POST_IMAGES = {
+  需求:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=720&q=80',
+  资源:'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=720&q=80',
+  内容:'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=720&q=80'
+};
+const enhanceCreatedItem = item => {
+  const type = item.type || item.tags?.[0] || '内容';
+  const score = 86 + ([...String(item.title || '')].reduce((sum,char) => sum + char.codePointAt(0), 0) % 10);
+  return { ...item, match:item.match || score, image:item.image || POST_IMAGES[type] || POST_IMAGES.内容, tags:item.tags?.length ? item.tags : [type,'我的发布'] };
+};
+
 export function createStore(storage = globalThis.localStorage) {
   let state = { ...initialState, connections:[], createdItems:[] };
   const listeners = new Set();
-  try { state = { ...state, ...JSON.parse(storage?.getItem(STORAGE_KEY) || '{}') }; } catch {}
+  try {
+    state = { ...state, ...JSON.parse(storage?.getItem(STORAGE_KEY) || '{}') };
+    state.createdItems = (state.createdItems || []).map(enhanceCreatedItem);
+  } catch {}
   const persist = () => { try { storage?.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {} };
   const emit = () => listeners.forEach(listener => listener(state));
   const update = patch => { state = { ...state, ...patch }; persist(); emit(); };
@@ -34,7 +48,7 @@ export function createStore(storage = globalThis.localStorage) {
           const title = action.payload?.title?.trim();
           const description = action.payload?.description?.trim();
           if (!title || !description) { update({ toast:'请填写标题和描述' }); break; }
-          const item = { ...action.payload, id:`created-${Date.now()}`, title, description, channel:'热门', author:'我', match:null, meta:'刚刚发布', tags:[action.payload.type || '内容'], image:'' };
+          const item = enhanceCreatedItem({ ...action.payload, id:`created-${Date.now()}`, title, description, channel:'热门', author:'我', meta:'刚刚发布', tags:[action.payload.type || '内容','我的发布'] });
           update({ createdItems:[item, ...state.createdItems], activeTab:'home', activeChannel:'热门', overlay:null, toast:'发布成功，已加入热门' });
           break;
         }

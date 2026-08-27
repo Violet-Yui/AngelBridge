@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { FEED_ITEMS } from '../src/data.js';
+import { renderPage } from '../src/views.js';
 
 test('document exposes a mobile app mount and module entry', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
@@ -56,6 +57,18 @@ test('profile life-tree entry opens the channel layout with the global header', 
   const source = await readFile(new URL('../app.js', import.meta.url), 'utf8');
   assert.match(source, /action === 'tree'[^\n]*SET_CHANNEL[^\n]*channel:'人生树'/);
   assert.doesNotMatch(source, /action === 'tree'[^\n]*SET_TAB[^\n]*tab:'tree'/);
+});
+
+test('new posts use standard hot-list cards without replacing the featured topic', () => {
+  const html = renderPage({
+    activeTab:'home', activeChannel:'热门', selectedItemId:null, connections:[], growthScore:1000,
+    selectedPet:'04-rabbit', overlay:null, toast:null,
+    createdItems:[{id:'created-test',channel:'热门',title:'寻找摄影搭档',author:'我',meta:'刚刚发布',match:88,image:'preview.jpg',tags:['需求']}]
+  });
+  const featureEnd = html.indexOf('</article>');
+  assert.ok(html.indexOf('created-test') > featureEnd);
+  assert.match(html, /feed-card row[^>]*data-item-id="created-test"/);
+  assert.match(html, /匹配 88%/);
 });
 
 test('idle screen contains the complete four-card layout from the Ardot frame', () => {

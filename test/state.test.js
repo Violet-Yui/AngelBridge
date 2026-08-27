@@ -31,4 +31,6 @@ test('created item requires a title and description', () => {
   assert.equal(store.getState().createdItems.length, 0);
   store.dispatch({ type: 'CREATE_ITEM', payload: { type: '需求', title: '寻找摄影搭档', description: '周末一起拍摄城市故事' } });
   assert.equal(store.getState().createdItems.length, 1);
+  assert.ok(store.getState().createdItems[0].match >= 80);
+  assert.ok(store.getState().createdItems[0].image);
 });

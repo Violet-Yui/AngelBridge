@@ -23,3 +23,4 @@ Thumbs.db
 # Local Codex planning and temporary files
 .planning/
 .codex-tmp/
+.superdesign/home-baseline.html

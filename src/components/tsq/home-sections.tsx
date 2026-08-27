@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { ShoppingBag, Heart, Star, Briefcase, Users, Repeat2, X, Check } from "lucide-react";
-import type { HomeOverview } from "@/lib/tsq/api";
+import type { Match, Todo } from "@/lib/tsq/api";
 import { getMatchHref } from "@/lib/tsq/navigation";
 import { cn } from "@/utils/utils";
 
@@ -20,9 +20,6 @@ const TODO_ICON = {
   coop: Users,
   swap: Repeat2,
 } as const;
-
-type Match = HomeOverview["matches"][number];
-type Todo = HomeOverview["todos"][number];
 
 export function HomeSections({ matches, initialTodos }: { matches: Match[]; initialTodos: Todo[] }) {
   const { t } = useTranslation();

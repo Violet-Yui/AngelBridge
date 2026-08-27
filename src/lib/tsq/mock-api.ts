@@ -36,6 +36,7 @@ export async function getHome(): Promise<HomeOverview> {
       growth: ME.growth,
       growthDelta: ME.growthDelta,
       level: ME.level,
+      followers: 126,
       luck: ME.luck,
       mood: ME.mood,
     },
@@ -130,7 +131,7 @@ export async function getTreeOverview(): Promise<TreeOverview> {
 }
 
 export async function updateProfile(payload: Partial<Pick<UserProfile, "name" | "bio" | "location" | "stage">>): Promise<UserProfile> {
-  return { id: "me", name: payload.name ?? ME.name, handle: ME.handle, stage: payload.stage ?? ME.stage, location: payload.location ?? "杭州", bio: payload.bio ?? "", growth: ME.growth, growthDelta: ME.growthDelta, level: ME.level, luck: ME.luck, mood: ME.mood };
+  return { id: "me", name: payload.name ?? ME.name, handle: ME.handle, stage: payload.stage ?? ME.stage, location: payload.location ?? "杭州", bio: payload.bio ?? "", growth: ME.growth, growthDelta: ME.growthDelta, level: ME.level, followers: 126, luck: ME.luck, mood: ME.mood };
 }
 
 export async function getResourceDetail(id: string): Promise<ResourceDetail> { const index = Number(id.replace("resource-", "")); const item = ME.resources[index]; if (!item) throw new TsqApiError("NOT_FOUND", "没有找到这项资源"); return { id, ...item, description: `${item.label}是你可以持续分享与交换的资源。`, visibility: "matches" }; }

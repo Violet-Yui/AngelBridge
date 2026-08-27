@@ -1,5 +1,7 @@
 import type { Conversation, Kind, Match, PersonCard, Todo } from "./data";
 
+export type { Match, Todo } from "./data";
+
 export type ResourceKind = Kind;
 
 export type DiscoverCard = Omit<PersonCard, "author"> & {
@@ -74,7 +76,7 @@ export type CreatePostPayload = {
 };
 
 export type CreatePostResult = { postId: string };
-export type UserProfile = { id: string; name: string; handle: string; avatarUrl?: string; stage: string; location?: string; bio?: string; growth: number; growthDelta: number; level: number; luck: number; mood: string };
+export type UserProfile = { id: string; name: string; handle: string; avatarUrl?: string; stage: string; location?: string; bio?: string; growth: number; growthDelta: number; level: number; followers: number; luck: number; mood: string };
 export type HomeOverview = {
   profile: UserProfile;
   matches: Match[];

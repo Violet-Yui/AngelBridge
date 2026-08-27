@@ -66,7 +66,7 @@ export function LifeTreeHero({ profile }: { profile: UserProfile }) {
                 <span className="mx-auto grid h-9 w-9 place-items-center rounded-full border-2 border-[color:var(--warm)] shadow-[0_0_0_8px_rgba(242,169,59,0.12)]">
                   <Sun className="h-4 w-4 text-[color:var(--warm)]" />
                 </span>
-                <p className="mt-2 text-sm font-semibold">{profile.level}</p>
+                <p className="mt-2 text-sm font-semibold">{profile.followers}</p>
                 <p className="text-[11px] text-muted-foreground">{t("tsq.home.followedYou")}</p>
               </div>
               <div className="text-center">

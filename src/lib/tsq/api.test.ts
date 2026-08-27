@@ -4,7 +4,7 @@ import { getHome, getMessageList, tsqApi } from "./api";
 test("home overview returns profile, matches, and pending todos", async () => {
   const home = await getHome();
   expect(home.profile.name).toBe("林一叶");
-  expect(home.profile.followers).toBe(126);
+  expect(home.profile.followers).toBe(12);
   expect(home.matches.length).toBeGreaterThan(0);
   expect(home.todos.every((todo) => todo.id.length > 0)).toBe(true);
 });

@@ -32,7 +32,7 @@ function renderChannelBody(state, items) {
     const [featured, ...rest] = items;
     return `<section class="hot-layout">${featured ? `<article class="hot-feature" data-item-id="${featured.id}"><div><span>热门话题</span><h2>${escape(featured.title)}</h2><p>${escape(featured.meta)}</p></div><b>成长</b></article>` : ''}<div class="hot-list">${rest.map(item => card(item,'row')).join('')}</div></section>`;
   }
-  if (state.activeChannel === '找工作') return `<section class="feed-list">${items.map(item => card(item,'job-row')).join('')}</section>`;
+  if (state.activeChannel === '找工作') return `<section class="feed-grid job-grid">${items.map(item => card(item,'job-card')).join('')}</section>`;
   if (state.activeChannel === '视频') return `<section class="feed-grid video-grid">${items.map(item => card(item,'video-card')).join('')}</section>`;
   if (state.activeChannel === '经验') return `<section class="feed-grid experience-grid">${items.map(item => card(item,'experience-card')).join('')}</section>`;
   if (state.activeChannel === '找人') return `<section class="feed-grid people-grid">${items.map(item => card(item,'person-card')).join('')}</section>`;

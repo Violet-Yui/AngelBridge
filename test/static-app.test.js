@@ -59,6 +59,14 @@ test('content-heavy Ardot screens keep the original four-card density', () => {
   }
 });
 
+test('job screen uses the same two-column image-card system as people', async () => {
+  const views = await readFile(new URL('../src/views.js', import.meta.url), 'utf8');
+  const css = await readFile(new URL('../ardot.css', import.meta.url), 'utf8');
+  assert.match(views, /activeChannel === '找工作'[^\n]*feed-grid job-grid/);
+  assert.match(views, /card\(item,'job-card'\)/);
+  assert.doesNotMatch(css, /\.feed-card\.job-row>img\{display:none\}/);
+});
+
 test('status bar uses structured Apple cellular wifi and battery icons', async () => {
   const source = await readFile(new URL('../src/views.js', import.meta.url), 'utf8');
   for (const className of ['cellular-icon', 'wifi-icon', 'battery-icon']) assert.match(source, new RegExp(className));

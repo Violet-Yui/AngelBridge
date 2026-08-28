@@ -2,22 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, Ellipsis, Settings2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AppShell } from "@/components/tsq/app-shell";
+import { ChatComposer } from "@/components/tsq/chat-composer";
+import { ChatMessageList } from "@/components/tsq/chat-message-list";
 import { tsqApi } from "@/lib/tsq/api";
 import type { ThreadMessages } from "@/lib/tsq/types";
 
 export default function ThreadPage({ params }: { params: Promise<{ threadId: string }> }) {
-  const [data, setData] = useState<ThreadMessages>(); const [error, setError] = useState<string>(); const [text, setText] = useState("");
-  useEffect(() => { params.then(({ threadId }) => tsqApi.getThreadMessages(threadId).then(setData).catch((e) => setError(e.message))); }, [params]);
-  async function sendMessage(e: React.FormEvent) {
-    e.preventDefault();
-    const body = text.trim();
-    if (!body || !data) return;
-    const { threadId } = await params;
-    const message = await tsqApi.sendMessage(threadId, { body });
-    setData((current) => current ? { ...current, messages: [...current.messages, message] } : current);
-    setText("");
-  }
-  return <AppShell><header className="flex items-center gap-3 border-b border-[color:var(--border)] px-4 pb-3 pt-2"><Link href="/messages" aria-label="返回消息" className="grid h-9 w-9 place-items-center rounded-full bg-white shadow-sm"><ArrowLeft className="h-4 w-4" /></Link><div><h1 className="text-[18px] font-bold">{data?.thread.title ?? "消息"}</h1><p className="text-xs text-muted-foreground">{data?.thread.updatedAt ?? "加载中"}</p></div></header>{error ? <div className="m-4 rounded-2xl bg-white p-6 text-center text-sm text-muted-foreground">{error}</div> : !data ? <div className="m-4 h-32 animate-pulse rounded-2xl bg-[#edf1eb]" /> : <><div className="space-y-3 px-4 py-5">{data.messages.map((message) => <div key={message.id} className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm ${message.senderId === "me" ? "ml-auto bg-[color:var(--primary)] text-white" : "bg-white text-neutral-700 shadow-sm"}`}>{message.body}<div className="mt-1 text-[10px] opacity-60">{message.createdAt}</div></div>)}</div><form onSubmit={sendMessage} className="fixed bottom-20 left-1/2 flex w-full max-w-[430px] -translate-x-1/2 gap-2 border-t border-[color:var(--border)] bg-[color:var(--bg-canvas)] p-3"><input value={text} onChange={(e) => setText(e.target.value)} placeholder="写下你的消息…" className="min-w-0 flex-1 rounded-full border border-[color:var(--border)] bg-white px-4 py-2.5 text-sm outline-none" /><button aria-label="发送" className="grid h-10 w-10 place-items-center rounded-full bg-[color:var(--primary)] text-white"><Send className="h-4 w-4" /></button></form></>}</AppShell>;
+  const { t } = useTranslation();
+  const [data, setData] = useState<ThreadMessages>(); const [error, setError] = useState<string>(); const [text, setText] = useState(""); const [sending, setSending] = useState(false); const [threadId, setThreadId] = useState(""); const [menu, setMenu] = useState(false);
+  useEffect(() => { let active = true; params.then(({ threadId: id }) => { setThreadId(id); return tsqApi.getThreadMessages(id); }).then((result) => active && setData(result)).catch((cause) => active && setError(cause.message)); return () => { active = false; }; }, [params]);
+  async function sendMessage() { const body = text.trim(); if (!body || !data || sending) return; setSending(true); setError(undefined); try { const message = await tsqApi.sendMessage(threadId, { body }); setData((current) => current ? { ...current, messages: [...current.messages, message] } : current); setText(""); } catch (cause) { setError(cause instanceof Error ? cause.message : t("tsq.chat.sendFailed")); } finally { setSending(false); } }
+  return <AppShell><header className="sticky top-0 z-10 flex min-h-16 items-center gap-3 border-b border-[color:var(--border)] bg-[color:var(--bg-canvas)] px-4"><Link href="/messages" aria-label={t("tsq.chat.back")} className="grid h-11 w-11 place-items-center rounded-full bg-white"><ArrowLeft className="h-5 w-5" /></Link><div className="min-w-0 flex-1"><h1 className="truncate text-[18px] font-bold">{data?.thread.title ?? t("tsq.messages.title")}</h1><p className="text-xs text-[color:var(--deep)]">{t("tsq.chat.online")}</p></div><button aria-label={t("tsq.chat.more")} onClick={() => setMenu((open) => !open)} className="grid h-11 w-11 place-items-center rounded-full bg-white"><Ellipsis className="h-5 w-5" /></button></header>{menu && <div className="absolute right-4 top-16 z-30 w-40 rounded-2xl bg-white p-2 shadow-[var(--brand-shadow-md)]"><Link href={`/messages/${threadId}/settings`} className="flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm hover:bg-[color:var(--soft)]"><Settings2 className="h-4 w-4" />{t("tsq.chat.relationshipSettings")}</Link></div>}{error && !data ? <div className="m-4 rounded-2xl bg-white p-6 text-center text-sm text-muted-foreground">{error}</div> : !data ? <div className="m-4 h-40 animate-pulse rounded-2xl bg-[color:var(--soft)]" /> : <><ChatMessageList messages={data.messages} />{error && <p className="px-4 text-center text-xs text-destructive">{t("tsq.chat.sendFailed")}</p>}<ChatComposer value={text} onChange={setText} onSubmit={sendMessage} sending={sending} /></>}</AppShell>;
 }

@@ -1,0 +1,6 @@
+import { request } from "@/lib/api/request";
+export type AuthUser = { id: string; email: string; name: string };
+export async function login(input: { email: string; password: string }): Promise<AuthUser> { const response = await request("/api/auth/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input) }); if (!response.ok) throw new Error((await response.json().catch(() => null))?.error ?? "AUTH_FAILED"); return (await response.json()).user as AuthUser; }
+export async function register(input: { email: string; password: string; name: string }): Promise<AuthUser> { const response = await request("/api/auth/register", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input) }); if (!response.ok) throw new Error((await response.json().catch(() => null))?.error ?? "AUTH_FAILED"); return (await response.json()).user as AuthUser; }
+export async function getSession(): Promise<AuthUser | null> { const response = await request("/api/auth/session"); if (!response.ok) return null; return (await response.json()).user as AuthUser | null; }
+export async function logout(): Promise<void> { await request("/api/auth/logout", { method: "POST" }); }

@@ -93,6 +93,8 @@
       "empty": "还没有成长记录，完成一次连接后会出现在这里",
       "retry": "重新加载"
     },
+    "chat": { "back": "返回消息", "online": "正在连接", "more": "更多操作", "relationshipSettings": "关系设置", "voice": "语音消息", "expression": "表情", "attachments": "更多附件", "placeholder": "写下你的消息…", "send": "发送", "sendFailed": "发送失败，请重试", "unavailable": "图片、位置与文件功能即将开放", "mute": "消息免打扰", "block": "拉黑此联系人", "report": "投诉此对话", "saving": "正在保存…", "saved": "设置已保存", "blockConfirm": "确认拉黑", "keepChatting": "暂不拉黑", "blockConfirmBody": "拉黑后将不再收到对方的新消息。", "retry": "重试" },
+    "report": { "title": "投诉", "subtitle": "请选择投诉原因，我们会认真处理。", "description": "补充说明", "evidenceUnavailable": "证据上传功能即将开放", "submit": "确认提交", "submitting": "正在提交…", "validation": "请选择至少一项投诉原因", "submitted": "投诉已提交", "submittedHint": "感谢你的反馈，我们会妥善处理。", "backToChat": "返回聊天", "retry": "重试", "harassment": "存在骚扰或辱骂行为", "fraud": "存在欺诈或虚假信息", "unsafe": "存在不安全内容", "illegal": "存在违法违规行为", "other": "其他问题" },
     "me": {
       "title": "我",
       "resources": "我的资源",
@@ -199,8 +201,8 @@
     }
   },
   "starter": {
-    "badge": "Eazo 应用模板",
-    "title": "用 Eazo 构建你的下一个应用",
+    "badge": "天使桥",
+    "title": "连接人与人、人与资源",
     "subtitle": "你现在拥有干净的基础：认证、数据访问与平台能力已就绪，可直接开发产品功能。",
     "steps": {
       "readDocs": {

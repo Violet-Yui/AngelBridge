@@ -93,6 +93,8 @@
       "empty": "No growth activity yet. Complete a connection to begin.",
       "retry": "Try again"
     },
+    "chat": { "back": "Back to messages", "online": "Connected", "more": "More actions", "relationshipSettings": "Relationship settings", "voice": "Voice message", "expression": "Expression", "attachments": "More attachments", "placeholder": "Write a message…", "send": "Send", "sendFailed": "Could not send. Try again.", "unavailable": "Images, location, and files are coming soon", "mute": "Mute messages", "block": "Block this contact", "report": "Report this conversation", "saving": "Saving…", "saved": "Settings saved", "blockConfirm": "Block contact", "keepChatting": "Keep chatting", "blockConfirmBody": "You will no longer receive new messages from this contact.", "retry": "Retry" },
+    "report": { "title": "Report", "subtitle": "Choose a reason and we will review it carefully.", "description": "Additional details", "evidenceUnavailable": "Evidence upload is coming soon", "submit": "Submit report", "submitting": "Submitting…", "validation": "Choose at least one reason", "submitted": "Report submitted", "submittedHint": "Thank you. We will handle your feedback carefully.", "backToChat": "Back to chat", "retry": "Retry", "harassment": "Harassment or abuse", "fraud": "Fraud or misleading information", "unsafe": "Unsafe content", "illegal": "Illegal activity", "other": "Other" },
     "me": {
       "title": "Me",
       "resources": "My Resources",
@@ -199,8 +201,8 @@
     }
   },
   "starter": {
-    "badge": "Eazo App Starter",
-    "title": "Build your next app with Eazo",
+    "badge": "Angel Bridge",
+    "title": "Connect people and resources",
     "subtitle": "You now have a clean foundation with auth, data access, and platform integrations ready for your product.",
     "steps": {
       "readDocs": {

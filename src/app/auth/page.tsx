@@ -1,11 +1,58 @@
 "use client";
+
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff, KeyRound, Mail, UserRound } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { login, register } from "@/lib/api/auth";
-import { ArrowLeft, Eye, EyeOff, TreePine } from "lucide-react";
+import { AuthShell } from "@/components/auth/auth-shell";
 
 export default function AuthPage() {
-  const router = useRouter(); const [mode, setMode] = useState<"login" | "register">("login"); const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [name, setName] = useState(""); const [error, setError] = useState(""); const [loading, setLoading] = useState(false); const [showPassword, setShowPassword] = useState(false);
-  async function submit(event: React.FormEvent) { event.preventDefault(); setLoading(true); setError(""); try { if (mode === "login") await login({ email, password }); else await register({ email, password, name }); router.push("/"); } catch { setError(mode === "login" ? "邮箱或密码不正确" : "请检查填写内容，邮箱可能已注册"); } finally { setLoading(false); } }
-  return <main data-el="auth-page" className="min-h-screen bg-[var(--bg-canvas)] px-5 py-8 text-[var(--foreground)]"><div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md flex-col justify-center"><button type="button" onClick={() => router.push("/")} aria-label="返回首页" className="mb-8 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-[var(--deep)] shadow-sm"><ArrowLeft className="h-5 w-5" /></button><div className="mb-8 text-center"><div className="mx-auto mb-5 grid h-20 w-20 place-items-center rounded-full bg-[var(--soft)] text-[var(--deep)]"><TreePine className="h-10 w-10" /></div><p className="text-sm text-[var(--deep)]">天使桥</p><h1 className="mt-2 text-3xl font-semibold">{mode === "login" ? "欢迎回来" : "加入天使桥"}</h1><p className="mt-3 text-sm text-[var(--muted-foreground)]">让每一次连接，都带来一点成长</p></div><div className="mb-4 grid grid-cols-2 rounded-full bg-[var(--soft)] p-1" data-el="auth-mode-switch"><button type="button" onClick={() => { setMode("login"); setError(""); }} className={`h-10 rounded-full text-sm ${mode === "login" ? "bg-white font-medium text-[var(--deep)] shadow-sm" : "text-[var(--muted-foreground)]"}`}>登录</button><button type="button" onClick={() => { setMode("register"); setError(""); }} className={`h-10 rounded-full text-sm ${mode === "register" ? "bg-white font-medium text-[var(--deep)] shadow-sm" : "text-[var(--muted-foreground)]"}`}>注册</button></div><form data-el="auth-form" onSubmit={submit} className="rounded-[28px] border border-[var(--border)] bg-white/90 p-6 shadow-[var(--brand-shadow-md)]"><div className="space-y-4">{mode === "register" && <label className="block text-sm">昵称<input data-el="auth-name" required value={name} onChange={(e) => setName(e.target.value)} className="mt-2 h-12 w-full rounded-2xl border border-[var(--border)] bg-white px-4 outline-none focus:ring-2 focus:ring-[var(--ring)]" /></label>}<label className="block text-sm">邮箱<input data-el="auth-email" required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 h-12 w-full rounded-2xl border border-[var(--border)] bg-white px-4 outline-none focus:ring-2 focus:ring-[var(--ring)]" /></label><label className="block text-sm">密码<div className="relative mt-2"><input data-el="auth-password" required minLength={8} type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 w-full rounded-2xl border border-[var(--border)] bg-white px-4 pr-12 outline-none focus:ring-2 focus:ring-[var(--ring)]" /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? "隐藏密码" : "显示密码"} className="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center text-[var(--muted-foreground)]">{showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}</button></div></label></div>{error && <p data-el="auth-error" role="alert" className="mt-4 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}<button data-el="auth-submit" disabled={loading} className="mt-6 h-12 w-full rounded-full bg-[var(--deep)] font-medium text-white disabled:opacity-60">{loading ? "处理中…" : mode === "login" ? "登录" : "创建账号"}</button></form></div></main>;
+  const router = useRouter();
+  const { t } = useTranslation();
+  const [mode, setMode] = useState<"login" | "register">("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const isLogin = mode === "login";
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      if (isLogin) await login({ email, password });
+      else await register({ email, password, name });
+      router.push("/");
+    } catch {
+      setError(t(isLogin ? "auth.invalidCredentials" : "auth.registerError"));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <AuthShell eyebrow={t("auth.eyebrow")} title={t(isLogin ? "auth.welcomeBack" : "auth.joinTitle")} description={t("auth.description")}>
+      <div data-el="auth-mode-switch" className="mb-5 grid grid-cols-2 rounded-2xl bg-[var(--soft)]/85 p-1">
+        {(["login", "register"] as const).map((item) => <button key={item} type="button" onClick={() => { setMode(item); setError(""); }} className={`h-10 rounded-xl text-sm transition ${mode === item ? "bg-white font-semibold text-[var(--deep)] shadow-sm" : "text-[var(--muted-foreground)] hover:text-[var(--deep)]"}`}>{t(`auth.${item}`)}</button>)}
+      </div>
+      <form data-el="auth-form" onSubmit={submit} className="space-y-4">
+        {!isLogin && <Field label={t("auth.nickname")} icon={<UserRound />}><input data-el="auth-name" required value={name} onChange={(event) => setName(event.target.value)} placeholder={t("auth.nicknamePlaceholder")} /></Field>}
+        <Field label={t("auth.email")} icon={<Mail />}><input data-el="auth-email" required type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" /></Field>
+        <Field label={t("auth.password")} icon={<KeyRound />} action={<button type="button" onClick={() => setShowPassword((current) => !current)} aria-label={t(showPassword ? "auth.hidePassword" : "auth.showPassword")} className="grid h-8 w-8 place-items-center rounded-lg text-[var(--muted-foreground)] hover:bg-[var(--soft)]">{showPassword ? <EyeOff /> : <Eye />}</button>}><input data-el="auth-password" required minLength={8} autoComplete={isLogin ? "current-password" : "new-password"} type={showPassword ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder={t("auth.passwordHint")} /></Field>
+        {isLogin && <div className="flex justify-end"><Link href="/auth/forgot-password" className="text-xs font-medium text-[var(--deep)] underline-offset-4 hover:underline">{t("auth.forgotPassword")}</Link></div>}
+        {error && <p data-el="auth-error" role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+        <button data-el="auth-submit" disabled={loading} className="h-12 w-full rounded-2xl bg-[linear-gradient(135deg,var(--primary),var(--deep))] font-semibold text-white shadow-[0_12px_22px_rgba(47,125,50,.24)] transition hover:brightness-105 disabled:opacity-60">{loading ? t("auth.processing") : t(isLogin ? "auth.loginAction" : "auth.registerAction")}</button>
+      </form>
+      <div className="mt-5 rounded-2xl bg-[var(--soft)]/65 px-4 py-3 text-center text-xs leading-5 text-[var(--muted-foreground)]">{isLogin ? t("auth.loginNote") : t("auth.registerNote")}</div>
+    </AuthShell>
+  );
+}
+
+function Field({ label, icon, action, children }: { label: string; icon: React.ReactNode; action?: React.ReactNode; children: React.ReactNode }) {
+  return <label className="block text-sm font-medium text-[var(--deep)]"><span className="mb-2 block">{label}</span><span className="flex h-12 items-center rounded-2xl border border-[var(--border)] bg-white/90 px-3 focus-within:border-[var(--ring)] focus-within:ring-2 focus-within:ring-[var(--ring)]/20"><span className="mr-2 text-[var(--deep)] [&_svg]:h-4 [&_svg]:w-4">{icon}</span><span className="min-w-0 flex-1 [&_input]:h-10 [&_input]:w-full [&_input]:bg-transparent [&_input]:text-base [&_input]:outline-none [&_input::placeholder]:text-[var(--muted-foreground)]">{children}</span>{action}</span></label>;
 }

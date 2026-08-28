@@ -2,24 +2,60 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Sparkles, ChevronDown, ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/tsq/app-shell";
 import { PageHeader } from "@/components/tsq/page-header";
-import { CONVERSATIONS, type Conversation } from "@/lib/tsq/data";
+import { tsqApi } from "@/lib/tsq/api";
 import { TSQ_ASSETS } from "@/lib/tsq/assets";
 import { cn } from "@/utils/utils";
+
+type Conversation = Awaited<ReturnType<typeof tsqApi.getMessageList>>[number];
 
 export default function MessagesPage() {
   const { t } = useTranslation();
   const [strangerOpen, setStrangerOpen] = useState(false);
+  const [conversations, setConversations] = useState<Conversation[] | null>(null);
+  const [error, setError] = useState(false);
 
-  const ai = CONVERSATIONS.filter((c) => c.zone === "ai");
-  const friends = CONVERSATIONS.filter((c) => c.zone === "friend");
-  const strangers = CONVERSATIONS.filter((c) => c.zone === "stranger");
+  const loadMessages = useCallback(() => {
+    void tsqApi.getMessageList().then(
+      (nextConversations) => {
+        setConversations(nextConversations);
+        setError(false);
+      },
+      () => setError(true),
+    );
+  }, []);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    void tsqApi.getMessageList().then(
+      (nextConversations) => {
+        if (isCurrent) {
+          setConversations(nextConversations);
+          setError(false);
+        }
+      },
+      () => {
+        if (isCurrent) {
+          setError(true);
+        }
+      },
+    );
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
+
+  const ai = conversations?.filter((c) => c.zone === "ai") ?? [];
+  const friends = conversations?.filter((c) => c.zone === "friend") ?? [];
+  const strangers = conversations?.filter((c) => c.zone === "stranger") ?? [];
   const strangerUnread = strangers.reduce((n, c) => n + c.unread, 0);
 
   return (
@@ -27,6 +63,11 @@ export default function MessagesPage() {
       <PageHeader title={t("tsq.messages.title")} subtitle={t("tsq.messages.subtitle")} />
 
       <div className="mt-3 space-y-5 px-4">
+        {!conversations && !error && <div data-el="messages-loading" className="mx-4 mt-3 h-28 animate-pulse rounded-[20px] bg-white/70" />}
+        {error && <button data-el="messages-retry" onClick={loadMessages}>{t("tsq.messages.retry")}</button>}
+        {conversations?.length === 0 && <p data-el="messages-empty">{t("tsq.messages.empty")}</p>}
+        {conversations && conversations.length > 0 && (
+          <>
         {/* 小天 AI 置顶 */}
         <section>
           {ai.map((c) => (
@@ -89,6 +130,8 @@ export default function MessagesPage() {
             </div>
           )}
         </section>
+          </>
+        )}
       </div>
     </AppShell>
   );

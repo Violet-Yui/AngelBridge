@@ -8,3 +8,9 @@ test("homepage reads its product data through tsqApi", () => {
   expect(page).toContain("tsqApi.getHome");
   expect(`${hero}\n${sections}`).not.toContain('@/lib/tsq/data');
 });
+
+test("message list reads conversations through tsqApi", () => {
+  const page = readFileSync("src/app/messages/page.tsx", "utf8");
+  expect(page).toContain("tsqApi.getMessageList");
+  expect(page).not.toContain("CONVERSATIONS");
+});

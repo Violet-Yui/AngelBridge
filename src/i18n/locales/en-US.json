@@ -84,6 +84,8 @@
       "friends": "Friends",
       "strangers": "Strangers",
       "unread": "unread",
+      "empty": "No messages yet. Discover someone worth meeting.",
+      "retry": "Try again",
       "openAi": "Open chat with Xiaotian",
       "open": "Open chat with {{name}}"
     },

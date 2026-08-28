@@ -7,7 +7,7 @@ import type {
   ThreadMessages,
   ChatMessage,
   BridgeDetail,
-  TreeOverview,
+  TreeOverview, GrowthLogOverview,
   UserProfile,
   ResourceDetail, NeedDetail, Settings, NotificationItem,
   SendXiaotianMessagePayload, SendXiaotianMessageResult,
@@ -158,6 +158,16 @@ export async function scheduleBridge(id: string, payload: { slot: string }): Pro
 
 export async function getTreeOverview(): Promise<TreeOverview> {
   return { growth: ME.growth, level: ME.level, nextLevelGrowth: 1500, stage: ME.stage, milestones: ME.growthLog.map((item, i) => ({ id: `milestone-${i}`, ...item })) };
+}
+
+export async function getGrowthLog(): Promise<GrowthLogOverview> {
+  return {
+    growth: ME.growth,
+    level: ME.level,
+    nextLevelGrowth: 1500,
+    stage: ME.stage,
+    entries: ME.growthLog.map((entry) => ({ ...entry })),
+  };
 }
 
 export async function updateProfile(payload: Partial<Pick<UserProfile, "name" | "bio" | "location" | "stage">>): Promise<UserProfile> {

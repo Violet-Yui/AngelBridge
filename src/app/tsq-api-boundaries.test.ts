@@ -28,3 +28,19 @@ test("message mount load cancels Strict Mode replay before dispatch", () => {
   expect(page).toContain("const initialLoadTimer = window.setTimeout");
   expect(page).toContain("window.clearTimeout(initialLoadTimer)");
 });
+
+test("growth log reads product data through tsqApi", () => {
+  const page = readFileSync("src/app/growth/page.tsx", "utf8");
+
+  expect(page).toContain("tsqApi.getGrowthLog");
+  expect(page).not.toContain("@/lib/tsq/data");
+});
+
+test("growth retry uses one guarded loading path", () => {
+  const page = readFileSync("src/app/growth/page.tsx", "utf8");
+
+  expect(page).toContain("if (inFlightRef.current) return");
+  expect(page.match(/tsqApi.getGrowthLog/g)?.length).toBe(1);
+  expect(page).toContain("disabled={isLoading}");
+  expect(page).toContain("window.clearTimeout(initialLoadTimer)");
+});

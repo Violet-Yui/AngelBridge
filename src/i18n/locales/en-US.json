@@ -89,6 +89,10 @@
       "openAi": "Open chat with Xiaotian",
       "open": "Open chat with {{name}}"
     },
+    "growth": {
+      "empty": "No growth activity yet. Complete a connection to begin.",
+      "retry": "Try again"
+    },
     "me": {
       "title": "Me",
       "resources": "My Resources",

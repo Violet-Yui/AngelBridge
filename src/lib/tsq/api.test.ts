@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import {
   getHome,
+  getGrowthLog,
   getMessageList,
   getRelationshipSettings,
   submitConversationReport,
@@ -20,6 +21,13 @@ test("message list returns addressable conversations", async () => {
   const conversations = await getMessageList();
   expect(conversations.length).toBeGreaterThan(0);
   expect(conversations.every((thread) => thread.id && thread.name)).toBe(true);
+});
+
+test("growth log returns a reachable next level and complete entries", async () => {
+  const growthLog = await getGrowthLog();
+
+  expect(growthLog.nextLevelGrowth).toBeGreaterThan(growthLog.growth);
+  expect(growthLog.entries.every((entry) => entry.title && entry.date)).toBe(true);
 });
 
 test("relationship settings retain a saved mute preference per thread", async () => {

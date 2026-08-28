@@ -92,6 +92,13 @@ export type HomeOverview = {
   todos: Todo[];
 };
 export type TreeOverview = { growth: number; level: number; nextLevelGrowth: number; stage: string; milestones: Array<{ id: string; title: string; date: string; delta: number }> };
+export type GrowthLogOverview = {
+  growth: number;
+  level: number;
+  nextLevelGrowth: number;
+  stage: string;
+  entries: Array<{ title: string; date: string; delta: number }>;
+};
 export type ResourceDetail = { id: string; label: string; value: string; kind: ResourceKind; description: string; visibility: "public" | "matches" | "private" };
 export type NeedDetail = { id: string; title: string; description: string; status: "open" | "matched" | "closed"; matchCount: number };
 export type Settings = { notifications: boolean; publicProfile: boolean; language: "zh-CN" | "en-US" };

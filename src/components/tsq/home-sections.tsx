@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { ShoppingBag, Heart, Star, Briefcase, Users, Repeat2, X, Check } from "lucide-react";
 import type { Match, Todo } from "@/lib/tsq/api";
@@ -23,6 +24,7 @@ const TODO_ICON = {
 
 export function HomeSections({ matches, initialTodos }: { matches: Match[]; initialTodos: Todo[] }) {
   const { t } = useTranslation();
+  const router = useRouter();
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
 
   function resolve(id: string, accept: boolean) {
@@ -32,6 +34,9 @@ export function HomeSections({ matches, initialTodos }: { matches: Match[]; init
       toast(accept ? t("tsq.home.accepted") : t("tsq.home.rejected"), {
         description: todo.title,
       });
+      if (accept) {
+        router.push(`/messages/${todo.threadId}`);
+      }
     }
   }
 

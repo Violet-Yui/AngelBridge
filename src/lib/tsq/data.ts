@@ -18,6 +18,7 @@ export type TodoKind = "job" | "coop" | "swap";
 export type Todo = {
   id: string;
   kind: TodoKind;
+  threadId: string;
   title: string;
   desc: string;
   meta: string;
@@ -66,6 +67,7 @@ export const HOME_TODOS: Todo[] = [
   {
     id: "t1",
     kind: "job",
+    threadId: "c1",
     title: "小天发现一份可能适合你的工作",
     desc: "该职位与你的技能和经验高度匹配，是否接受推荐？",
     meta: "XX公司 · 产品设计师 · 匹配度 91%",
@@ -73,6 +75,7 @@ export const HOME_TODOS: Todo[] = [
   {
     id: "t2",
     kind: "coop",
+    threadId: "c2",
     title: "有人希望与你建立合作关系",
     desc: "摄影师小林想与你合作拍摄项目，可互换资源。",
     meta: "合作 · 摄影拍摄",
@@ -80,6 +83,7 @@ export const HOME_TODOS: Todo[] = [
   {
     id: "t3",
     kind: "swap",
+    threadId: "c2",
     title: "一个换物机会等待你确认",
     desc: "对方想用「胶片相机」交换你的「设计课程名额」。",
     meta: "换物 · 相机 ↔ 课程",

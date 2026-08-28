@@ -44,3 +44,12 @@ test("growth retry uses one guarded loading path", () => {
   expect(page).toContain("disabled={isLoading}");
   expect(page).toContain("window.clearTimeout(initialLoadTimer)");
 });
+
+test("home pending actions navigate on accept and remove on reject", () => {
+  const source = readFileSync("src/components/tsq/home-sections.tsx", "utf8");
+  expect(source).toContain("router.push");
+  expect(source).toContain("setTodos((prev) => prev.filter");
+  expect(source).toContain("/messages/${todo.threadId}");
+  expect(source).not.toContain('todo.kind === "coop"');
+  expect(source).not.toContain('todo.kind === "swap"');
+});

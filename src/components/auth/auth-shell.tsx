@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { ArrowLeft, Sparkles, TreePine } from "lucide-react";
+import { Sparkles, TreePine } from "lucide-react";
 
 type AuthShellProps = {
   eyebrow: string;
@@ -15,9 +14,6 @@ export function AuthShell({ eyebrow, title, description, children }: AuthShellPr
       <div aria-hidden className="absolute -left-16 top-48 -z-10 h-48 w-48 rounded-full bg-[var(--soft)]/75 blur-3xl" />
       <div aria-hidden className="absolute -right-20 bottom-8 -z-10 h-56 w-56 rounded-full bg-[var(--warm)]/35 blur-3xl" />
       <div className="mx-auto flex min-h-[calc(100dvh-3rem)] w-full flex-col justify-center">
-        <Link href="/" aria-label="返回首页" className="mb-6 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/80 bg-white/80 text-[var(--deep)] shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]">
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
         <section className="rounded-[32px] border border-white/80 bg-white/78 p-5 shadow-[0_22px_55px_rgba(66,111,53,.13)] backdrop-blur-xl sm:p-7">
           <div className="mb-7 text-center">
             <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-[23px] bg-[linear-gradient(135deg,#f6ffe9,#dff5d4)] text-[var(--deep)] shadow-[0_10px_24px_rgba(88,169,66,.18)]">

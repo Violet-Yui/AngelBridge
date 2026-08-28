@@ -13,6 +13,10 @@ import type {
   SendXiaotianMessagePayload, SendXiaotianMessageResult,
   XiaotianTask, XiaotianTaskStep,
   HomeOverview,
+  RelationshipSettings,
+  SubmitConversationReportPayload,
+  SubmitConversationReportResult,
+  UpdateRelationshipSettingsPayload,
 } from "./types";
 import { TsqApiError } from "./types";
 
@@ -25,6 +29,8 @@ const messagesByThread: Record<string, ThreadMessages["messages"]> = {
     { id: "msg-c1-1", senderId: "c1", body: "我为你新匹配到 3 个换物机会，要看看吗？", createdAt: "刚刚", status: "sent" },
   ],
 };
+
+const relationshipByThread: Record<string, RelationshipSettings> = {};
 
 export async function getHome(): Promise<HomeOverview> {
   return {
@@ -92,6 +98,30 @@ export async function sendMessage(threadId: string, payload: { body: string }): 
   if (!conversation) throw new TsqApiError("NOT_FOUND", "没有找到这个会话");
   if (!payload.body.trim()) throw new TsqApiError("VALIDATION", "消息不能为空");
   return { id: `msg-${threadId}-${Date.now()}`, senderId: "me", body: payload.body.trim(), createdAt: "刚刚", status: "sent" };
+}
+
+export async function getRelationshipSettings(threadId: string): Promise<RelationshipSettings> {
+  await getThreadMessages(threadId);
+  return { ...(relationshipByThread[threadId] ?? { muted: false, blocked: false }) };
+}
+
+export async function updateRelationshipSettings(
+  threadId: string,
+  payload: UpdateRelationshipSettingsPayload,
+): Promise<RelationshipSettings> {
+  await getThreadMessages(threadId);
+  relationshipByThread[threadId] = { ...payload };
+  return { ...relationshipByThread[threadId] };
+}
+
+export async function submitConversationReport(
+  payload: SubmitConversationReportPayload,
+): Promise<SubmitConversationReportResult> {
+  await getThreadMessages(payload.threadId);
+  if (payload.reasons.length === 0) {
+    throw new TsqApiError("VALIDATION", "请选择至少一项投诉原因");
+  }
+  return { reportId: `report-${Date.now()}`, submittedAt: "刚刚" };
 }
 
 export async function createPost(payload: CreatePostPayload): Promise<CreatePostResult> {

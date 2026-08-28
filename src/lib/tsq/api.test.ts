@@ -1,5 +1,12 @@
 import { expect, test } from "bun:test";
-import { getHome, getMessageList, tsqApi } from "./api";
+import {
+  getHome,
+  getMessageList,
+  getRelationshipSettings,
+  submitConversationReport,
+  tsqApi,
+  updateRelationshipSettings,
+} from "./api";
 
 test("home overview returns profile, matches, and pending todos", async () => {
   const home = await getHome();
@@ -13,6 +20,28 @@ test("message list returns addressable conversations", async () => {
   const conversations = await getMessageList();
   expect(conversations.length).toBeGreaterThan(0);
   expect(conversations.every((thread) => thread.id && thread.name)).toBe(true);
+});
+
+test("relationship settings retain a saved mute preference per thread", async () => {
+  const saved = await updateRelationshipSettings("c2", { muted: true, blocked: false });
+
+  expect(saved).toEqual({ muted: true, blocked: false });
+  expect(await getRelationshipSettings("c2")).toEqual(saved);
+});
+
+test("conversation report requires a reason and returns an addressable receipt", async () => {
+  await expect(
+    submitConversationReport({ threadId: "c2", reasons: [] }),
+  ).rejects.toMatchObject({ code: "VALIDATION" });
+
+  const result = await submitConversationReport({
+    threadId: "c2",
+    reasons: ["fraud"],
+    description: "信息与实际不符",
+  });
+
+  expect(result.reportId).toMatch(/^report-/);
+  expect(result.submittedAt).toBeTruthy();
 });
 
 test("discover detail returns a card-shaped record", async () => {

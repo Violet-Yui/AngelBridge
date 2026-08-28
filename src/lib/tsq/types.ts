@@ -32,6 +32,15 @@ export type ChatMessage = {
 };
 
 export type ThreadMessages = { thread: MessageThread; messages: ChatMessage[] };
+export type RelationshipSettings = { muted: boolean; blocked: boolean };
+export type UpdateRelationshipSettingsPayload = RelationshipSettings;
+export type ReportReason = "harassment" | "fraud" | "unsafe" | "illegal" | "other";
+export type SubmitConversationReportPayload = {
+  threadId: string;
+  reasons: ReportReason[];
+  description?: string;
+};
+export type SubmitConversationReportResult = { reportId: string; submittedAt: string };
 
 export type SendXiaotianMessagePayload = {
   body: string;

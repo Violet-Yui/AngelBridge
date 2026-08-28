@@ -22,3 +22,9 @@ test("message retry uses one guarded loading path", () => {
   expect(page.match(/tsqApi.getMessageList/g)?.length).toBe(1);
   expect(page).toContain("disabled={isLoading}");
 });
+
+test("message mount load cancels Strict Mode replay before dispatch", () => {
+  const page = readFileSync("src/app/messages/page.tsx", "utf8");
+  expect(page).toContain("const initialLoadTimer = window.setTimeout");
+  expect(page).toContain("window.clearTimeout(initialLoadTimer)");
+});

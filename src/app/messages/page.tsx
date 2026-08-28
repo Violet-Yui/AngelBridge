@@ -58,9 +58,12 @@ export default function MessagesPage() {
 
   useEffect(() => {
     isMountedRef.current = true;
-    void loadInitialMessages();
+    const initialLoadTimer = window.setTimeout(() => {
+      void loadInitialMessages();
+    }, 0);
 
     return () => {
+      window.clearTimeout(initialLoadTimer);
       isMountedRef.current = false;
       requestIdRef.current += 1;
       inFlightRef.current = false;

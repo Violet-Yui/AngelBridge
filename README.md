@@ -1,4 +1,6 @@
-A minimal Next.js starter for building apps inside the [Eazo](https://eazo.ai) platform. Includes a working example of the Eazo session token flow: the app requests the encrypted user token from the host via `postMessage`, sends it to a Next.js API route, decrypts it server-side with `@eazo/node-sdk`, and returns the user profile.
+# 天使桥
+
+天使桥是一个使用 Next.js 构建的独立资源互换社区应用。
 
 ## Getting Started
 
@@ -24,7 +26,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and fill in your private key:
+Copy `.env.example` to `.env` and configure the services you use:
 
 ```bash
 cp .env.example .env
@@ -32,13 +34,13 @@ cp .env.example .env
 
 | Variable | Description |
 |---|---|
-| `EAZO_PRIVATE_KEY` | Your Eazo developer private key (hex, 64 chars). Used server-side to decrypt the user session token. |
-
-You can generate a keypair in the Eazo developer settings. Never expose the private key to the browser.
+| `NEXT_PUBLIC_APP_TITLE` | Product title used in metadata. |
+| `NEXT_PUBLIC_APP_DESCRIPTION` | Product description used in metadata. |
+| `DATABASE_URL` | PostgreSQL connection string used by Drizzle ORM. |
+| `CRON_SECRET` | Secret used to authenticate scheduled notification requests. |
 
 ## Learn More
 
-- [Eazo Documentation](https://docs.eazo.ai)
 - [Next.js Documentation](https://nextjs.org/docs)
 
 ## Deploy on Vercel

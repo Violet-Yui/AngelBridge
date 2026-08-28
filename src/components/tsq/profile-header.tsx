@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ME } from "@/lib/tsq/data";
 import { usePetStore } from "@/stores/pet-store";
 import Link from "next/link";
+import { SettingsEntry } from "@/components/tsq/settings-entry";
 
 // 「我」页头部：个人画像 + 成长值 + 生命树缩影
 export function ProfileHeader() {
@@ -16,6 +17,9 @@ export function ProfileHeader() {
       data-el="profile-header"
       className="relative overflow-hidden rounded-b-[32px] bg-gradient-to-b from-[color:var(--soft)] to-[color:var(--bg-canvas)] px-4 pb-5 pt-10"
     >
+      <div className="absolute right-4 top-8 z-10">
+        <SettingsEntry label={t("tsq.me.openSettings")} />
+      </div>
       <div className="flex items-center gap-3.5">
         <span className="grid h-16 w-16 place-items-center rounded-full border-2 border-white bg-white text-3xl shadow-[0_8px_20px_rgba(55,95,42,0.14)]">
           🌳

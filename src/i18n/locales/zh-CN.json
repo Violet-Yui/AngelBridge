@@ -131,7 +131,25 @@
       "empty": "还没有成长记录，完成一次连接后会出现在这里",
       "retry": "重新加载"
     },
-    "chat": { "back": "返回消息", "online": "正在连接", "more": "更多操作", "relationshipSettings": "关系设置", "voice": "语音消息", "expression": "表情", "attachments": "更多附件", "placeholder": "写下你的消息…", "send": "发送", "sendFailed": "发送失败，请重试", "unavailable": "图片、位置与文件功能即将开放", "mute": "消息免打扰", "block": "拉黑此联系人", "report": "投诉此对话", "saving": "正在保存…", "saved": "设置已保存", "blockConfirm": "确认拉黑", "keepChatting": "暂不拉黑", "blockConfirmBody": "拉黑后将不再收到对方的新消息。", "retry": "重试" },
+    "settings": {
+      "title": "设置",
+      "subtitle": "管理你的偏好与展示方式",
+      "back": "返回我的页面",
+      "notifications": "接收通知",
+      "notificationsHint": "接收搭桥进度、邀请和消息提醒",
+      "publicProfile": "公开个人资料",
+      "publicProfileHint": "允许其他用户查看你的资源与心愿",
+      "language": "语言",
+      "save": "保存设置",
+      "saving": "保存中…",
+      "saved": "设置已保存",
+      "saveFailed": "保存失败，当前修改已保留",
+      "retrySave": "重新保存",
+      "loadFailed": "暂时无法加载设置",
+      "loadFailedHint": "请检查网络后重新加载",
+      "retry": "重新加载"
+    },
+    "chat": { "back": "返回消息", "online": "正在连接", "more": "更多操作", "relationshipSettings": "关系设置", "voice": "语音消息", "expression": "表情", "attachments": "更多附件", "image": "图片", "camera": "拍照", "location": "位置", "file": "文件", "placeholder": "写下你的消息…", "send": "发送", "sendFailed": "发送失败，请重试", "unavailable": "图片、位置与文件功能即将开放", "mute": "消息免打扰", "block": "拉黑此联系人", "report": "投诉此对话", "saving": "正在保存…", "saved": "设置已保存", "blockConfirm": "确认拉黑", "keepChatting": "暂不拉黑", "blockConfirmBody": "拉黑后将不再收到对方的新消息。", "retry": "重试" },
     "report": { "title": "投诉", "subtitle": "请选择投诉原因，我们会认真处理。", "description": "补充说明", "evidenceUnavailable": "证据上传功能即将开放", "submit": "确认提交", "submitting": "正在提交…", "validation": "请选择至少一项投诉原因", "submitted": "投诉已提交", "submittedHint": "感谢你的反馈，我们会妥善处理。", "backToChat": "返回聊天", "retry": "重试", "harassment": "存在骚扰或辱骂行为", "fraud": "存在欺诈或虚假信息", "unsafe": "存在不安全内容", "illegal": "存在违法违规行为", "other": "其他问题" },
     "me": {
       "title": "我",
@@ -146,7 +164,21 @@
       "luck": "好运包 · 心情",
       "toNext": "距离 Lv.{{lv}} 还需 {{n}}",
       "petAgent": "小天智能体",
-      "petAgentSub": "12 种萌宠形象可选"
+      "petAgentSub": "12 种萌宠形象可选",
+      "openSettings": "打开设置",
+      "manageAssets": "管理",
+      "suggestions": "小天整理的建议",
+      "suggestionsSub": "请确认后再加入你的资料",
+      "acceptSuggestion": "采纳",
+      "ignoreSuggestion": "忽略",
+      "manageTitle": "管理资源与需求",
+      "addResource": "新增资源",
+      "addNeed": "新增需求",
+      "saveAssets": "保存资料",
+      "savedAssets": "资料已保存",
+      "assetLabel": "资源名称",
+      "assetValue": "资源说明",
+      "needLabel": "需求内容"
     },
     "pets": {
       "title": "选择小天形象",
@@ -221,7 +253,7 @@
       "match": "匹配项",
       "level": "等级",
       "mood": "心情",
-      "defaultBubble": "我发现 3 个新机会"
+      "defaultBubble": "我发现 {{count}} 个新机会"
     }
   },
   "errors": {

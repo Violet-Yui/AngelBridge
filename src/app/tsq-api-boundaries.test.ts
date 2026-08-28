@@ -53,3 +53,37 @@ test("home pending actions navigate on accept and remove on reject", () => {
   expect(source).not.toContain('todo.kind === "coop"');
   expect(source).not.toContain('todo.kind === "swap"');
 });
+
+test("bridge acceptance routes through each invitation's conversation id", () => {
+  const source = readFileSync("src/app/bridge/page.tsx", "utf8");
+
+  expect(source).toContain("invite.threadId");
+  expect(source).toContain("router.push(`/messages/${invite.threadId}`)");
+});
+
+test("bridge result returns to its bridge-specific conversation", () => {
+  const source = readFileSync("src/app/bridge/[id]/result/page.tsx", "utf8");
+
+  expect(source).toContain("getBridgeThreadId");
+  expect(source).toContain("/messages/${threadId ?? ''}");
+});
+
+test("pet supports edge-docked drag and persisted position", () => {
+  const source = readFileSync("src/components/tsq/pet.tsx", "utf8");
+  expect(source).toContain("onPointerDown");
+  expect(source).toContain("touchAction: \"none\"");
+  expect(source).toContain("localStorage.setItem");
+  expect(source).toContain("Math.min");
+  expect(source).toContain("canvasWidth - 48");
+  expect(source).toContain("calc(50% - 215px)");
+  expect(source).toContain("const nearLeft");
+  expect(source).toContain("const nearRight");
+  expect(source).toContain("isDocked");
+  expect(source).toContain("bg-red-500");
+  expect(source).toContain("opportunityCount > 0");
+  expect(source).toContain("position.x + 76");
+  expect(source).toContain("getDockedPetPresentation");
+  expect(source).not.toContain("rotate(45deg)");
+  expect(source).not.toContain("clipPath:");
+  expect(source).toContain("aria-label={t(\"tsq.pet.title\")}");
+});

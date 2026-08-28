@@ -257,7 +257,7 @@ export async function getResourceDetail(id: string): Promise<ResourceDetail> {
   const normalizedId = id.startsWith("resource-") ? id : `resource-${id}`;
   const item = profileAssetsState.resources.find((resource) => resource.id === normalizedId);
   if (!item) throw new TsqApiError("NOT_FOUND", "没有找到这项资源");
-  return { id: item.id, ...item, description: `${item.label}是你可以持续分享与交换的资源。`, visibility: "matches" };
+  return { ...item, description: `${item.label}是你可以持续分享与交换的资源。`, visibility: "matches", updatedAt: "刚刚" };
 }
 export async function getNeedDetail(id: string): Promise<NeedDetail> { const normalizedId = id.startsWith("need-") ? id : `need-${id}`; const item = profileAssetsState.needs.find((need) => need.id === normalizedId); if (!item) throw new TsqApiError("NOT_FOUND", "没有找到这条需求"); return { id: item.id, title: item.title, description: "期待通过天使桥找到合适的伙伴，一起把需求变成行动。", status: "open", matchCount: 2 }; }
 export async function getProfileAssets(): Promise<ProfileAssets> { return structuredClone(profileAssetsState); }

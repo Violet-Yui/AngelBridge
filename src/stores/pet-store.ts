@@ -16,7 +16,7 @@ type PetState = {
 // 灵宠面板开合与气泡文案的全局状态
 export const usePetStore = create<PetState>((set) => ({
   open: false,
-  bubble: "我发现 3 个新机会",
+  bubble: "",
   selectedPetId: DEFAULT_ZODIAC_PET_ID,
   toggle: () => set((s) => ({ open: !s.open })),
   close: () => set({ open: false }),

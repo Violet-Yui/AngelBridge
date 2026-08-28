@@ -33,13 +33,14 @@ export default function BridgePage() {
   }, [invites, status]);
 
   function resolve(id: string, accept: boolean) {
+    const invite = invites.find((item) => item.id === id);
     setInvites((prev) =>
       prev.map((i) =>
         i.id === id ? { ...i, status: accept ? "accepted" : "rejected" } : i,
       ),
     );
     toast(accept ? t("tsq.bridge.toastAccept") : t("tsq.bridge.toastReject"));
-    if (accept) router.push(`/messages/${id}`);
+    if (accept && invite) router.push(`/messages/${invite.threadId}`);
   }
 
   const counts = STATUS_KEYS.map((key) => ({

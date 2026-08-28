@@ -200,6 +200,7 @@ export type BridgeSource = "小天撮合" | "对方发起" | "我发起";
 
 export type Invite = {
   id: string;
+  threadId: string;
   status: BridgeStatus;
   type: BridgeType;
   source: BridgeSource;
@@ -216,6 +217,7 @@ export type Invite = {
 export const INVITES: Invite[] = [
   {
     id: "i1",
+    threadId: "c5",
     status: "pending",
     type: "swap",
     source: "小天撮合",
@@ -227,6 +229,7 @@ export const INVITES: Invite[] = [
   },
   {
     id: "i2",
+    threadId: "i2",
     status: "pending",
     type: "coop",
     source: "对方发起",
@@ -237,6 +240,7 @@ export const INVITES: Invite[] = [
   },
   {
     id: "i3",
+    threadId: "i3",
     status: "pending",
     type: "friend",
     source: "对方发起",
@@ -247,6 +251,7 @@ export const INVITES: Invite[] = [
   },
   {
     id: "i4",
+    threadId: "c4",
     status: "accepted",
     type: "swap",
     source: "我发起",
@@ -258,6 +263,7 @@ export const INVITES: Invite[] = [
   },
   {
     id: "i5",
+    threadId: "c7",
     status: "accepted",
     type: "coop",
     source: "小天撮合",
@@ -268,6 +274,7 @@ export const INVITES: Invite[] = [
   },
   {
     id: "i6",
+    threadId: "c8",
     status: "rejected",
     type: "friend",
     source: "对方发起",
@@ -278,6 +285,7 @@ export const INVITES: Invite[] = [
   },
   {
     id: "i7",
+    threadId: "c9",
     status: "rejected",
     type: "swap",
     source: "我发起",
@@ -353,6 +361,33 @@ export const CONVERSATIONS: Conversation[] = [
     name: "野生产品汪",
     emoji: "💡",
     last: "看到你也是产品，想交流下经验～",
+    time: "上周",
+    unread: 0,
+  },
+  {
+    id: "c7",
+    zone: "friend",
+    name: "创意工作室",
+    emoji: "🏠",
+    last: "已确认长期共创，来约定首次沟通时间吧。",
+    time: "3 天前",
+    unread: 0,
+  },
+  {
+    id: "c8",
+    zone: "stranger",
+    name: "匿名用户",
+    emoji: "◌",
+    last: "关于搭子邀请，期待之后有机会再认识。",
+    time: "上周",
+    unread: 0,
+  },
+  {
+    id: "c9",
+    zone: "stranger",
+    name: "旧书小屋",
+    emoji: "📚",
+    last: "耳机与旧书的交换邀约。",
     time: "上周",
     unread: 0,
   },

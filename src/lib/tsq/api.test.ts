@@ -8,6 +8,9 @@ import {
   tsqApi,
   updateRelationshipSettings,
   updateSettings,
+  getProfileAssets,
+  updateProfileAssets,
+  resolveAssetSuggestion,
 } from "./api";
 
 test("home overview returns profile, matches, and pending todos", async () => {
@@ -137,6 +140,23 @@ test("settings mutation persists the updated preferences", async () => {
   const updated = await updateSettings({ notifications: false, publicProfile: true, language: "zh-CN" });
   expect(updated.notifications).toBe(false);
   expect(await tsqApi.getSettings()).toEqual(updated);
+});
+
+test("profile assets preserve user edits and Xiaotian suggestions", async () => {
+  const initial = await getProfileAssets();
+  expect(initial.resources.length).toBeGreaterThan(0);
+  expect(initial.needs.length).toBeGreaterThan(0);
+  expect(initial.suggestions.some((item) => item.status === "pending")).toBe(true);
+
+  const updated = await updateProfileAssets({
+    resources: [...initial.resources, { id: "resource-user", label: "摄影", value: "活动拍摄", kind: "green", source: "user" }],
+    needs: initial.needs,
+  });
+  expect(updated.resources.some((item) => item.id === "resource-user")).toBe(true);
+
+  const suggestion = initial.suggestions.find((item) => item.status === "pending")!;
+  const resolved = await resolveAssetSuggestion({ id: suggestion.id, action: "accept" });
+  expect(resolved.suggestions.find((item) => item.id === suggestion.id)?.status).toBe("accepted");
 });
 
 test("xiaotian chat returns addressable user and assistant messages", async () => {

@@ -131,7 +131,25 @@
       "empty": "No growth activity yet. Complete a connection to begin.",
       "retry": "Try again"
     },
-    "chat": { "back": "Back to messages", "online": "Connected", "more": "More actions", "relationshipSettings": "Relationship settings", "voice": "Voice message", "expression": "Expression", "attachments": "More attachments", "placeholder": "Write a message…", "send": "Send", "sendFailed": "Could not send. Try again.", "unavailable": "Images, location, and files are coming soon", "mute": "Mute messages", "block": "Block this contact", "report": "Report this conversation", "saving": "Saving…", "saved": "Settings saved", "blockConfirm": "Block contact", "keepChatting": "Keep chatting", "blockConfirmBody": "You will no longer receive new messages from this contact.", "retry": "Retry" },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Manage your preferences and visibility",
+      "back": "Back to my page",
+      "notifications": "Notifications",
+      "notificationsHint": "Receive bridge progress, invitation, and message updates",
+      "publicProfile": "Public profile",
+      "publicProfileHint": "Let others view your resources and wishes",
+      "language": "Language",
+      "save": "Save settings",
+      "saving": "Saving…",
+      "saved": "Settings saved",
+      "saveFailed": "Save failed. Your changes are preserved.",
+      "retrySave": "Save again",
+      "loadFailed": "Settings could not be loaded",
+      "loadFailedHint": "Check your connection and try again",
+      "retry": "Try again"
+    },
+    "chat": { "back": "Back to messages", "online": "Connected", "more": "More actions", "relationshipSettings": "Relationship settings", "voice": "Voice message", "expression": "Expression", "attachments": "More attachments", "image": "Image", "camera": "Camera", "location": "Location", "file": "File", "placeholder": "Write a message…", "send": "Send", "sendFailed": "Could not send. Try again.", "unavailable": "Images, location, and files are coming soon", "mute": "Mute messages", "block": "Block this contact", "report": "Report this conversation", "saving": "Saving…", "saved": "Settings saved", "blockConfirm": "Block contact", "keepChatting": "Keep chatting", "blockConfirmBody": "You will no longer receive new messages from this contact.", "retry": "Retry" },
     "report": { "title": "Report", "subtitle": "Choose a reason and we will review it carefully.", "description": "Additional details", "evidenceUnavailable": "Evidence upload is coming soon", "submit": "Submit report", "submitting": "Submitting…", "validation": "Choose at least one reason", "submitted": "Report submitted", "submittedHint": "Thank you. We will handle your feedback carefully.", "backToChat": "Back to chat", "retry": "Retry", "harassment": "Harassment or abuse", "fraud": "Fraud or misleading information", "unsafe": "Unsafe content", "illegal": "Illegal activity", "other": "Other" },
     "me": {
       "title": "Me",
@@ -146,7 +164,21 @@
       "luck": "Luck · mood",
       "toNext": "{{n}} to Lv.{{lv}}",
       "petAgent": "Xiaotian companion",
-      "petAgentSub": "12 companion appearances to choose from"
+      "petAgentSub": "12 companion appearances to choose from",
+      "openSettings": "Open settings",
+      "manageAssets": "Manage",
+      "suggestions": "Xiaotian suggestions",
+      "suggestionsSub": "Confirm before adding them to your profile",
+      "acceptSuggestion": "Accept",
+      "ignoreSuggestion": "Ignore",
+      "manageTitle": "Manage resources and needs",
+      "addResource": "Add resource",
+      "addNeed": "Add need",
+      "saveAssets": "Save profile",
+      "savedAssets": "Profile saved",
+      "assetLabel": "Resource name",
+      "assetValue": "Resource details",
+      "needLabel": "Need"
     },
     "pets": {
       "title": "Choose Xiaotian",
@@ -221,7 +253,7 @@
       "match": "Matches",
       "level": "Level",
       "mood": "Mood",
-      "defaultBubble": "I found 3 new opportunities"
+      "defaultBubble": "I found {{count}} new opportunities"
     }
   },
   "errors": {

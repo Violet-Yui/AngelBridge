@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -13,43 +13,57 @@ import { tsqApi } from "@/lib/tsq/api";
 import { TSQ_ASSETS } from "@/lib/tsq/assets";
 import { cn } from "@/utils/utils";
 
-type Conversation = Awaited<ReturnType<typeof tsqApi.getMessageList>>[number];
+type Conversation = Awaited<ReturnType<typeof tsqApi["getMessageList"]>>[number];
 
 export default function MessagesPage() {
   const { t } = useTranslation();
   const [strangerOpen, setStrangerOpen] = useState(false);
   const [conversations, setConversations] = useState<Conversation[] | null>(null);
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const inFlightRef = useRef(false);
+  const isMountedRef = useRef(true);
+  const requestIdRef = useRef(0);
 
   const loadMessages = useCallback(() => {
-    void tsqApi.getMessageList().then(
-      (nextConversations) => {
-        setConversations(nextConversations);
-        setError(false);
-      },
-      () => setError(true),
-    );
+    if (inFlightRef.current) return;
+
+    inFlightRef.current = true;
+    const requestId = ++requestIdRef.current;
+    setIsLoading(true);
+    setError(false);
+
+    void tsqApi.getMessageList()
+      .then(
+        (nextConversations) => {
+          if (!isMountedRef.current || requestId !== requestIdRef.current) return;
+
+          setConversations(nextConversations);
+        },
+        () => {
+          if (!isMountedRef.current || requestId !== requestIdRef.current) return;
+
+          setError(true);
+        },
+      )
+      .finally(() => {
+        if (!isMountedRef.current || requestId !== requestIdRef.current) return;
+
+        inFlightRef.current = false;
+        setIsLoading(false);
+      });
   }, []);
 
-  useEffect(() => {
-    let isCurrent = true;
+  const loadInitialMessages = useEffectEvent(loadMessages);
 
-    void tsqApi.getMessageList().then(
-      (nextConversations) => {
-        if (isCurrent) {
-          setConversations(nextConversations);
-          setError(false);
-        }
-      },
-      () => {
-        if (isCurrent) {
-          setError(true);
-        }
-      },
-    );
+  useEffect(() => {
+    isMountedRef.current = true;
+    void loadInitialMessages();
 
     return () => {
-      isCurrent = false;
+      isMountedRef.current = false;
+      requestIdRef.current += 1;
+      inFlightRef.current = false;
     };
   }, []);
 
@@ -63,8 +77,8 @@ export default function MessagesPage() {
       <PageHeader title={t("tsq.messages.title")} subtitle={t("tsq.messages.subtitle")} />
 
       <div className="mt-3 space-y-5 px-4">
-        {!conversations && !error && <div data-el="messages-loading" className="mx-4 mt-3 h-28 animate-pulse rounded-[20px] bg-white/70" />}
-        {error && <button data-el="messages-retry" onClick={loadMessages}>{t("tsq.messages.retry")}</button>}
+        {isLoading && !conversations && <div data-el="messages-loading" className="mx-4 mt-3 h-28 animate-pulse rounded-[20px] bg-white/70" />}
+        {error && <button data-el="messages-retry" onClick={loadMessages} disabled={isLoading}>{t("tsq.messages.retry")}</button>}
         {conversations?.length === 0 && <p data-el="messages-empty">{t("tsq.messages.empty")}</p>}
         {conversations && conversations.length > 0 && (
           <>

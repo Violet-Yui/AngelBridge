@@ -14,3 +14,11 @@ test("message list reads conversations through tsqApi", () => {
   expect(page).toContain("tsqApi.getMessageList");
   expect(page).not.toContain("CONVERSATIONS");
 });
+
+test("message retry uses one guarded loading path", () => {
+  const page = readFileSync("src/app/messages/page.tsx", "utf8");
+  expect(page).toContain("const [isLoading, setIsLoading] = useState(false)");
+  expect(page).toContain("if (inFlightRef.current) return");
+  expect(page.match(/tsqApi.getMessageList/g)?.length).toBe(1);
+  expect(page).toContain("disabled={isLoading}");
+});

@@ -177,7 +177,9 @@ export async function updateProfile(payload: Partial<Pick<UserProfile, "name" | 
 
 export async function getResourceDetail(id: string): Promise<ResourceDetail> { const index = Number(id.replace("resource-", "")); const item = ME.resources[index]; if (!item) throw new TsqApiError("NOT_FOUND", "没有找到这项资源"); return { id, ...item, description: `${item.label}是你可以持续分享与交换的资源。`, visibility: "matches" }; }
 export async function getNeedDetail(id: string): Promise<NeedDetail> { const index = Number(id.replace("need-", "")); const title = ME.needs[index]; if (!title) throw new TsqApiError("NOT_FOUND", "没有找到这条需求"); return { id, title, description: "期待通过天使桥找到合适的伙伴，一起把需求变成行动。", status: "open", matchCount: index + 2 }; }
-export async function getSettings(): Promise<Settings> { return { notifications: true, publicProfile: true, language: "zh-CN" }; }
+let settingsState: Settings = { notifications: true, publicProfile: true, language: "zh-CN" };
+export async function getSettings(): Promise<Settings> { return { ...settingsState }; }
+export async function updateSettings(payload: Settings): Promise<Settings> { settingsState = { ...payload }; return { ...settingsState }; }
 export async function getNotifications(): Promise<NotificationItem[]> { return [{ id: "notice-1", title: "新的桥约提醒", body: "胶片旅人正在等待你确认桥约。", time: "刚刚", kind: "bridge" }, { id: "notice-2", title: "成长值增加了", body: "完成一次资源交换，获得 +28 成长值。", time: "今天", kind: "growth" }]; }
 
 export async function sendXiaotianMessage(

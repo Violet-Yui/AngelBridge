@@ -7,6 +7,7 @@ import {
   submitConversationReport,
   tsqApi,
   updateRelationshipSettings,
+  updateSettings,
 } from "./api";
 
 test("home overview returns profile, matches, and pending todos", async () => {
@@ -130,6 +131,12 @@ test("settings and notifications expose backend-ready shapes", async () => {
   const notifications = await tsqApi.getNotifications();
   expect(notifications.length).toBeGreaterThan(0);
   expect(notifications[0].id).toBeTruthy();
+});
+
+test("settings mutation persists the updated preferences", async () => {
+  const updated = await updateSettings({ notifications: false, publicProfile: true, language: "zh-CN" });
+  expect(updated.notifications).toBe(false);
+  expect(await tsqApi.getSettings()).toEqual(updated);
 });
 
 test("xiaotian chat returns addressable user and assistant messages", async () => {

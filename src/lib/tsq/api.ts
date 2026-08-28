@@ -15,7 +15,7 @@ export {
   scheduleBridge,
   getTreeOverview,
   updateProfile,
-  getResourceDetail, getNeedDetail, getSettings, getNotifications,
+  getResourceDetail, getNeedDetail, getSettings, updateSettings, getNotifications,
   sendXiaotianMessage,
   getXiaotianTask,
   retryXiaotianTask,
@@ -23,7 +23,7 @@ export {
   updateRelationshipSettings,
 } from "./mock-api";
 
-import { createPost, getHome, getGrowthLog, getMessageList, getRelationshipSettings, sendMessage, getDiscoverFeed, getDiscoverDetail, getThreadMessages, confirmBridge, getBridgeDetail, scheduleBridge, getTreeOverview, updateProfile, getResourceDetail, getNeedDetail, getSettings, getNotifications, sendXiaotianMessage, getXiaotianTask, retryXiaotianTask, submitConversationReport, updateRelationshipSettings } from "./mock-api";
+import { createPost, getHome, getGrowthLog, getMessageList, getRelationshipSettings, sendMessage, getDiscoverFeed, getDiscoverDetail, getThreadMessages, confirmBridge, getBridgeDetail, scheduleBridge, getTreeOverview, updateProfile, getResourceDetail, getNeedDetail, getSettings, updateSettings, getNotifications, sendXiaotianMessage, getXiaotianTask, retryXiaotianTask, submitConversationReport, updateRelationshipSettings } from "./mock-api";
 
 export const tsqApi = {
   getHome,
@@ -40,7 +40,7 @@ export const tsqApi = {
   scheduleBridge,
   getTreeOverview,
   updateProfile,
-  getResourceDetail, getNeedDetail, getSettings, getNotifications, sendXiaotianMessage,
+  getResourceDetail, getNeedDetail, getSettings, updateSettings, getNotifications, sendXiaotianMessage,
   getXiaotianTask, retryXiaotianTask,
   submitConversationReport, updateRelationshipSettings,
 };

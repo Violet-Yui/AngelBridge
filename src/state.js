@@ -1,0 +1,64 @@
+const STORAGE_KEY = 'angel-bridge-prototype-v1';
+const initialState = {
+  activeTab:'home', activeChannel:'热门', selectedPet:'04-rabbit', selectedItemId:null,
+  connections:[], growthScore:1000, createdItems:[], overlay:null, toast:null
+};
+
+const POST_IMAGES = {
+  需求:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=720&q=80',
+  资源:'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=720&q=80',
+  内容:'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=720&q=80'
+};
+const enhanceCreatedItem = item => {
+  const type = item.type || item.tags?.[0] || '内容';
+  const score = 86 + ([...String(item.title || '')].reduce((sum,char) => sum + char.codePointAt(0), 0) % 10);
+  const fallbackImage = POST_IMAGES[type] || POST_IMAGES.内容;
+  const isFallback = !item.image || Object.values(POST_IMAGES).includes(item.image);
+  const imageSource = item.imageSource || (isFallback ? 'matched-placeholder' : 'user-upload');
+  return { ...item, match:item.match || score, image:item.image || fallbackImage, imageSource,
+    imageStatus:item.imageStatus || (imageSource === 'matched-placeholder' ? 'pending-generation' : 'ready'),
+    tags:item.tags?.length ? item.tags : [type,'我的发布'] };
+};
+
+export function createStore(storage = globalThis.localStorage) {
+  let state = { ...initialState, connections:[], createdItems:[] };
+  const listeners = new Set();
+  try {
+    state = { ...state, ...JSON.parse(storage?.getItem(STORAGE_KEY) || '{}') };
+    state.createdItems = (state.createdItems || []).map(enhanceCreatedItem);
+  } catch {}
+  const persist = () => { try { storage?.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {} };
+  const emit = () => listeners.forEach(listener => listener(state));
+  const update = patch => { state = { ...state, ...patch }; persist(); emit(); };
+  return {
+    getState: () => state,
+    subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); },
+    reset() { state = { ...initialState, connections:[], createdItems:[] }; persist(); emit(); },
+    dispatch(action) {
+      switch (action.type) {
+        case 'SET_TAB': update({ activeTab:action.tab, selectedItemId:null, overlay:null }); break;
+        case 'SET_CHANNEL': update({ activeTab:'home', activeChannel:action.channel, selectedItemId:null }); break;
+        case 'OPEN_ITEM': update({ selectedItemId:action.itemId, overlay:null }); break;
+        case 'CLOSE_ITEM': update({ selectedItemId:null }); break;
+        case 'OPEN_OVERLAY': update({ overlay:action.overlay }); break;
+        case 'CLOSE_OVERLAY': update({ overlay:null }); break;
+        case 'SELECT_PET': update({ selectedPet:action.petId, toast:'灵宠已陪你同行' }); break;
+        case 'CLEAR_TOAST': update({ toast:null }); break;
+        case 'CONNECT': {
+          if (state.connections.some(item => item.itemId === action.itemId)) { update({ overlay:null, toast:'该连接已发起' }); break; }
+          update({ connections:[{ itemId:action.itemId, status:'待回应', createdAt:Date.now() }, ...state.connections], growthScore:state.growthScore + 20, overlay:null, toast:'连接已发起，等待对方回应' });
+          break;
+        }
+        case 'CREATE_ITEM': {
+          const title = action.payload?.title?.trim();
+          const description = action.payload?.description?.trim();
+          if (!title || !description) { update({ toast:'请填写标题和描述' }); break; }
+          const item = enhanceCreatedItem({ ...action.payload, id:`created-${Date.now()}`, title, description, channel:'热门', author:'我', meta:'刚刚发布', tags:[action.payload.type || '内容','我的发布'] });
+          update({ createdItems:[item, ...state.createdItems], activeTab:'home', activeChannel:'热门', overlay:null, toast:'发布成功，已加入热门' });
+          break;
+        }
+        case 'SHOW_TOAST': update({ toast:action.message }); break;
+      }
+    }
+  };
+}

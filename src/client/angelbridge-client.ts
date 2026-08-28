@@ -1,11 +1,21 @@
-import type { UpdateIntentInput, UpdatePactInput } from "../application/contracts";
+import type {
+  UpdateIntentInput,
+  UpdatePactInput,
+  UpdateValueNodeInput,
+} from "../application/contracts";
 import type { DemoBootstrap } from "../application/app-service";
 import type { MatchCardView, MatchDetailView } from "../product/match-view-models";
 import type { LifeTreeDetail, LifeTreeOverview } from "../product/life-tree-contracts";
-import type { BridgePact, Intent, ParseResult } from "../domain/contracts";
+import type {
+  BridgePact,
+  Intent,
+  ParseResult,
+  ValueNode,
+} from "../domain/contracts";
 import type { ConsentRecord } from "../domain/workflow";
 import type { ConnectionDisclosureView } from "../product/disclosure-view-service";
 import type { PetTextTurn, PetTextTurnInput } from "../product/pet-conversation-contracts";
+import type { ConversationMessage, ConversationSummary } from "../product/conversation-contracts";
 
 type ApiEnvelope<T> = { data: T };
 type ApiErrorEnvelope = { error?: { code?: string; message?: string } };
@@ -35,12 +45,28 @@ export class AngelBridgeClient {
     return this.request("/api/demo/sessions", "POST", { scenarioId });
   }
 
+  resetSession(sessionId: string): Promise<DemoBootstrap> {
+    return this.request(this.sessionPath(sessionId, "reset"), "POST");
+  }
+
   getDashboard(sessionId: string): Promise<LifeTreeOverview> {
     return this.request(this.sessionPath(sessionId, "dashboard"));
   }
 
   parse(sessionId: string, text: string): Promise<ParseResult> {
     return this.request(this.sessionPath(sessionId, "parse"), "POST", { text });
+  }
+
+  updateNode(
+    sessionId: string,
+    nodeId: string,
+    input: UpdateValueNodeInput,
+  ): Promise<ValueNode> {
+    return this.request(
+      this.sessionPath(sessionId, `nodes/${encodeURIComponent(nodeId)}`),
+      "PATCH",
+      input,
+    );
   }
 
   confirmNodes(sessionId: string, nodeIds: string[]): Promise<{ nodeIds: string[]; confirmed: true }> {
@@ -105,6 +131,22 @@ export class AngelBridgeClient {
 
   listPetTextTurns(sessionId: string): Promise<PetTextTurn[]> {
     return this.request(this.sessionPath(sessionId, "pet/turns"));
+  }
+
+  listConversations(sessionId: string): Promise<ConversationSummary[]> {
+    return this.request(this.sessionPath(sessionId, "conversations"));
+  }
+
+  listConversationMessages(sessionId: string, conversationId: string): Promise<ConversationMessage[]> {
+    return this.request(this.sessionPath(sessionId, `conversations/${encodeURIComponent(conversationId)}/messages`));
+  }
+
+  sendConversationMessage(sessionId: string, conversationId: string, text: string): Promise<ConversationMessage> {
+    return this.request(
+      this.sessionPath(sessionId, `conversations/${encodeURIComponent(conversationId)}/messages`),
+      "POST",
+      { text },
+    );
   }
 
   private sessionPath(sessionId: string, resource: string): string {

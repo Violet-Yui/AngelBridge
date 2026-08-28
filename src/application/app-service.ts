@@ -24,6 +24,10 @@ import {
   type PetTextTurn,
   type PetTextTurnInput,
 } from "../product/pet-conversation-contracts";
+import type {
+  ConversationMessage,
+  ConversationSummary,
+} from "../product/conversation-contracts";
 
 export class ApplicationError extends Error {
   constructor(
@@ -55,6 +59,7 @@ export class AngelBridgeApplication {
   private readonly tokensBySession = new Map<string, string[]>();
   private readonly voiceTurns: VoiceTurnResponse[] = [];
   private readonly petTextTurns: PetTextTurn[] = [];
+  private readonly conversationMessages: ConversationMessage[] = [];
 
   constructor(
     readonly demo: InMemoryDemoService = new InMemoryDemoService(),
@@ -131,6 +136,7 @@ export class AngelBridgeApplication {
     this.demo.resetSession(sessionId);
     this.removeSessionTurns(this.voiceTurns, sessionId);
     this.removeSessionTurns(this.petTextTurns, sessionId);
+    this.removeSessionTurns(this.conversationMessages, sessionId);
     const tokens = this.tokensBySession.get(sessionId) ?? [];
     const roles = before.profiles.map((profile, index) => ({
       personaId: profile.personaId,
@@ -436,6 +442,57 @@ export class AngelBridgeApplication {
     };
   }
 
+  listConversations(sessionId: string, token: string): ConversationSummary[] {
+    const role = this.authorize(sessionId, token);
+    const session = this.demo.getSession(sessionId);
+    const connection = getSelectedConnection(session);
+    if (!connection || connection.consent.state !== "mutual_accepted") return [];
+    if (!connection.consent.partyIds.includes(role.personaId)) {
+      throw new ApplicationError("conversation is not available for this role", 403, "forbidden");
+    }
+    const matchId = session.selectedMatchId!;
+    const counterpartId = connection.consent.partyIds.find((id) => id !== role.personaId)!;
+    const counterpart = session.profiles.find((profile) => profile.personaId === counterpartId)!;
+    const messages = this.messagesFor(sessionId, matchId);
+    return [{
+      conversationId: matchId,
+      matchId,
+      counterpartId,
+      counterpartDisplayName: counterpart.displayName,
+      lastMessage: messages.at(-1)?.text ?? null,
+      messageCount: messages.length,
+      updatedAt: messages.at(-1)?.createdAt ?? session.updatedAt,
+      isSynthetic: true,
+    }];
+  }
+
+  listConversationMessages(sessionId: string, token: string, conversationId: string): ConversationMessage[] {
+    this.requireConversation(sessionId, token, conversationId);
+    return structuredClone(this.messagesFor(sessionId, conversationId));
+  }
+
+  sendConversationMessage(
+    sessionId: string,
+    token: string,
+    conversationId: string,
+    text: string,
+  ): ConversationMessage {
+    const { role, session } = this.requireConversation(sessionId, token, conversationId);
+    const sender = session.profiles.find((profile) => profile.personaId === role.personaId)!;
+    const message: ConversationMessage = {
+      messageId: randomUUID(),
+      conversationId,
+      sessionId,
+      senderPersonaId: role.personaId,
+      senderDisplayName: sender.displayName,
+      text,
+      createdAt: new Date().toISOString(),
+      isSynthetic: true,
+    };
+    this.conversationMessages.push(message);
+    return structuredClone(message);
+  }
+
   private authorize(sessionId: string, token: string): Role {
     if (!token) throw new ApplicationError("missing demo role token", 401, "unauthorized");
     const role = this.rolesByToken.get(token);
@@ -444,6 +501,25 @@ export class AngelBridgeApplication {
       throw new ApplicationError("demo role token belongs to another session", 403, "forbidden");
     }
     return role;
+  }
+
+  private requireConversation(sessionId: string, token: string, conversationId: string) {
+    const role = this.authorize(sessionId, token);
+    const session = this.demo.getSession(sessionId);
+    const connection = session.connections[conversationId];
+    if (!connection || connection.consent.state !== "mutual_accepted") {
+      throw new ApplicationError("mutual consent is required before messaging", 409, "conversation_not_ready");
+    }
+    if (!connection.consent.partyIds.includes(role.personaId)) {
+      throw new ApplicationError("conversation is not available for this role", 403, "forbidden");
+    }
+    return { role, session };
+  }
+
+  private messagesFor(sessionId: string, conversationId: string): ConversationMessage[] {
+    return this.conversationMessages.filter(
+      (message) => message.sessionId === sessionId && message.conversationId === conversationId,
+    );
   }
 
   private removeSessionTurns<T extends { sessionId: string }>(turns: T[], sessionId: string): void {

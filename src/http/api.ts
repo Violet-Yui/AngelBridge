@@ -15,6 +15,7 @@ import {
   UpdateValueNodeInputSchema,
 } from "../application/contracts";
 import { PetTextTurnInputSchema } from "../product/pet-conversation-contracts";
+import { SendConversationMessageInputSchema } from "../product/conversation-contracts";
 
 const corsHeaders = {
   "access-control-allow-origin": "*",
@@ -185,6 +186,16 @@ export const createApiHandler = (
       }
       if (resource === "inbox" && !childId && request.method === "GET") {
         return ok(app.getInbox(sessionId, token));
+      }
+      if (resource === "conversations" && !childId && request.method === "GET") {
+        return ok(app.listConversations(sessionId, token));
+      }
+      if (resource === "conversations" && childId && action === "messages" && request.method === "GET") {
+        return ok(app.listConversationMessages(sessionId, token, childId));
+      }
+      if (resource === "conversations" && childId && action === "messages" && request.method === "POST") {
+        const input = await parseBody(request, SendConversationMessageInputSchema);
+        return ok(app.sendConversationMessage(sessionId, token, childId, input.text), 201);
       }
 
       throw new ApplicationError("route not found", 404, "not_found");

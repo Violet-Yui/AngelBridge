@@ -181,6 +181,77 @@ describe("local HTTP API", () => {
     ]);
   });
 
+  it("opens a role-scoped conversation only after mutual consent", async () => {
+    const handle = createTestApi();
+    const created = await call(handle, "/api/demo/sessions", {
+      method: "POST",
+      body: { scenarioId: "studio-photography" },
+    });
+    const bootstrap = created.body.data;
+    const viewer = bootstrap.roles.find((role: any) => role.isViewer);
+    const candidate = bootstrap.roles.find((role: any) => role.personaId === "studio-b");
+    const base = `/api/sessions/${bootstrap.sessionId}`;
+    const parsed = await call(handle, `${base}/parse`, {
+      method: "POST",
+      token: viewer.token,
+      body: { text: "我有周末工作室，希望置换品牌摄影。" },
+    });
+    const nodeIds = parsed.body.data.nodes.map((node: any) => node.id);
+    await call(handle, `${base}/nodes/confirm`, {
+      method: "POST",
+      token: viewer.token,
+      body: { nodeIds },
+    });
+    await call(handle, `${base}/intent`, {
+      method: "PUT",
+      token: viewer.token,
+      body: {
+        ...parsed.body.data.intent,
+        disclosurePolicy: {
+          matchLocationPrecision: "region",
+          contactDisclosure: "after_mutual_consent",
+          exactLocationDisclosure: "after_pact_active",
+        },
+      },
+    });
+    await call(handle, `${base}/intent/activate`, { method: "POST", token: viewer.token });
+    const matched = await call(handle, `${base}/matches/run`, { method: "POST", token: viewer.token });
+    const matchId = matched.body.data[0].matchId;
+    await call(handle, `${base}/matches/${encodeURIComponent(matchId)}/consent`, {
+      method: "POST",
+      token: viewer.token,
+      body: { decision: "accepted" },
+    });
+    const beforeMutual = await call(handle, `${base}/conversations`, { token: viewer.token });
+    expect(beforeMutual.body.data).toEqual([]);
+    await call(handle, `${base}/matches/${encodeURIComponent(matchId)}/consent`, {
+      method: "POST",
+      token: candidate.token,
+      body: { decision: "accepted" },
+    });
+
+    const conversations = await call(handle, `${base}/conversations`, { token: viewer.token });
+    expect(conversations.body.data[0].conversationId).toBe(matchId);
+    const sent = await call(handle, `${base}/conversations/${encodeURIComponent(matchId)}/messages`, {
+      method: "POST",
+      token: viewer.token,
+      body: { text: "你好，我们先交换三张参考图吧。" },
+    });
+    expect(sent.response.status).toBe(201);
+    await call(handle, `${base}/conversations/${encodeURIComponent(matchId)}/messages`, {
+      method: "POST",
+      token: candidate.token,
+      body: { text: "可以，我今晚发给你。" },
+    });
+    const history = await call(handle, `${base}/conversations/${encodeURIComponent(matchId)}/messages`, {
+      token: viewer.token,
+    });
+    expect(history.body.data.map((message: any) => message.text)).toEqual([
+      "你好，我们先交换三张参考图吧。",
+      "可以，我今晚发给你。",
+    ]);
+  });
+
   it("rejects missing credentials and invalid request bodies", async () => {
     const handle = createTestApi();
     const created = await call(handle, "/api/demo/sessions", {

@@ -88,3 +88,4 @@ export const ActiveIntentSchema = IntentSchema.extend({ status: z.literal("activ
 
 export type UpdateIntentInput = z.infer<typeof UpdateIntentInputSchema>;
 export type UpdatePactInput = z.infer<typeof UpdatePactInputSchema>;
+export type UpdateValueNodeInput = z.infer<typeof UpdateValueNodeInputSchema>;

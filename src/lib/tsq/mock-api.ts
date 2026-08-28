@@ -9,7 +9,15 @@ import type {
   BridgeDetail,
   TreeOverview,
   UserProfile,
-  ResourceDetail, NeedDetail, Settings, NotificationItem,
+  ResourceDetail,
+  NeedDetail,
+  Settings,
+  NotificationItem,
+  ProfileAssets,
+  UpdateProfileAssetsPayload,
+  ResolveAssetSuggestionPayload,
+  UpdateResourcePayload,
+  PublicProfile,
   SendXiaotianMessagePayload, SendXiaotianMessageResult,
   XiaotianTask, XiaotianTaskStep,
   HomeOverview,
@@ -32,6 +40,28 @@ const messagesByThread: Record<string, ThreadMessages["messages"]> = {
 };
 
 const relationshipByThread: Record<string, RelationshipSettings> = {};
+
+const initialResourceState = (): ResourceDetail[] =>
+  ME.resources.map((item, index) => ({
+    id: `resource-${index}`,
+    label: item.label,
+    value: item.value,
+    kind: item.kind,
+    description: `${item.label}是你可以持续分享与交换的资源。`,
+    visibility: index === 0 ? "public" : "matches",
+    updatedAt: "刚刚",
+  }));
+
+const resourceState = initialResourceState();
+
+let profileAssetsState: ProfileAssets = {
+  resources: ME.resources.map((item, index) => ({ id: `resource-${index}`, ...item, source: "user" })),
+  needs: ME.needs.map((title, index) => ({ id: `need-${index}`, title, source: "user" })),
+  suggestions: [
+    { id: "suggestion-resource-1", type: "resource", label: "周末工作室", value: "周六日白天可用", kind: "green", reason: "小天从你的对话中整理到可提供的空间", status: "pending" },
+    { id: "suggestion-need-1", type: "need", label: "品牌摄影服务", reason: "小天发现你正在寻找品牌照片合作", status: "pending" },
+  ],
+};
 
 export async function getHome(): Promise<HomeOverview> {
   return {
@@ -175,8 +205,76 @@ export async function updateProfile(payload: Partial<Pick<UserProfile, "name" | 
   return { id: "me", name: payload.name ?? ME.name, handle: ME.handle, stage: payload.stage ?? ME.stage, location: payload.location ?? "杭州", bio: payload.bio ?? "", growth: ME.growth, growthDelta: ME.growthDelta, level: ME.level, followers: ME.followers, luck: ME.luck, mood: ME.mood };
 }
 
-export async function getResourceDetail(id: string): Promise<ResourceDetail> { const index = Number(id.replace("resource-", "")); const item = ME.resources[index]; if (!item) throw new TsqApiError("NOT_FOUND", "没有找到这项资源"); return { id, ...item, description: `${item.label}是你可以持续分享与交换的资源。`, visibility: "matches" }; }
-export async function getNeedDetail(id: string): Promise<NeedDetail> { const index = Number(id.replace("need-", "")); const title = ME.needs[index]; if (!title) throw new TsqApiError("NOT_FOUND", "没有找到这条需求"); return { id, title, description: "期待通过天使桥找到合适的伙伴，一起把需求变成行动。", status: "open", matchCount: index + 2 }; }
+function cloneResource(resource: ResourceDetail): ResourceDetail {
+  return { ...resource };
+}
+
+export async function getOwnerResources(): Promise<ResourceDetail[]> {
+  return resourceState.map(cloneResource);
+}
+
+export async function updateResource(id: string, payload: UpdateResourcePayload): Promise<ResourceDetail> {
+  const index = resourceState.findIndex((resource) => resource.id === id);
+  if (index < 0) {
+    throw new TsqApiError("NOT_FOUND", "没有找到这项资源");
+  }
+
+  const label = payload.label.trim();
+  const value = payload.value.trim();
+  const description = payload.description.trim();
+  if (!label || !value || !description) {
+    throw new TsqApiError("VALIDATION", "请完整填写资源信息");
+  }
+
+  resourceState[index] = {
+    id,
+    label,
+    value,
+    kind: payload.kind,
+    description,
+    visibility: payload.visibility,
+    updatedAt: "刚刚",
+  };
+
+  return cloneResource(resourceState[index]);
+}
+
+export async function getPublicProfile(userId: string): Promise<PublicProfile> {
+  if (userId !== "user-yiye") {
+    throw new TsqApiError("NOT_FOUND", "没有找到这个用户");
+  }
+
+  return {
+    id: userId,
+    name: ME.name,
+    handle: ME.handle,
+    bio: "喜欢用设计连接人与资源。",
+    resources: resourceState.filter((resource) => resource.visibility === "public").map(cloneResource),
+  };
+}
+
+export async function getResourceDetail(id: string): Promise<ResourceDetail> {
+  const normalizedId = id.startsWith("resource-") ? id : `resource-${id}`;
+  const item = profileAssetsState.resources.find((resource) => resource.id === normalizedId);
+  if (!item) throw new TsqApiError("NOT_FOUND", "没有找到这项资源");
+  return { id: item.id, ...item, description: `${item.label}是你可以持续分享与交换的资源。`, visibility: "matches" };
+}
+export async function getNeedDetail(id: string): Promise<NeedDetail> { const normalizedId = id.startsWith("need-") ? id : `need-${id}`; const item = profileAssetsState.needs.find((need) => need.id === normalizedId); if (!item) throw new TsqApiError("NOT_FOUND", "没有找到这条需求"); return { id: item.id, title: item.title, description: "期待通过天使桥找到合适的伙伴，一起把需求变成行动。", status: "open", matchCount: 2 }; }
+export async function getProfileAssets(): Promise<ProfileAssets> { return structuredClone(profileAssetsState); }
+export async function updateProfileAssets(payload: UpdateProfileAssetsPayload): Promise<ProfileAssets> {
+  profileAssetsState = { ...profileAssetsState, resources: structuredClone(payload.resources), needs: structuredClone(payload.needs) };
+  return getProfileAssets();
+}
+export async function resolveAssetSuggestion(payload: ResolveAssetSuggestionPayload): Promise<ProfileAssets> {
+  const suggestion = profileAssetsState.suggestions.find((item) => item.id === payload.id);
+  if (!suggestion) throw new TsqApiError("NOT_FOUND", "没有找到这条小天建议");
+  suggestion.status = payload.action === "accept" ? "accepted" : "ignored";
+  if (payload.action === "accept") {
+    if (suggestion.type === "resource") profileAssetsState.resources.push({ id: `resource-${Date.now()}`, label: suggestion.label, value: suggestion.value ?? "", kind: suggestion.kind ?? "green", source: "xiaotian" });
+    else profileAssetsState.needs.push({ id: `need-${Date.now()}`, title: suggestion.label, source: "xiaotian" });
+  }
+  return getProfileAssets();
+}
 let settingsState: Settings = { notifications: true, publicProfile: true, language: "zh-CN" };
 export async function getSettings(): Promise<Settings> { return { ...settingsState }; }
 export async function updateSettings(payload: Settings): Promise<Settings> { settingsState = { ...payload }; return { ...settingsState }; }
@@ -273,3 +371,4 @@ export async function retryXiaotianTask(taskId: string): Promise<XiaotianTask> {
     updatedAt: "刚刚",
   };
 }
+

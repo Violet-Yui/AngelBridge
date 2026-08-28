@@ -99,8 +99,35 @@ export type GrowthLogOverview = {
   stage: string;
   entries: Array<{ title: string; date: string; delta: number }>;
 };
-export type ResourceDetail = { id: string; label: string; value: string; kind: ResourceKind; description: string; visibility: "public" | "matches" | "private" };
+export type ResourceVisibility = "public" | "matches" | "private";
+
+export type ResourceDetail = {
+  id: string;
+  label: string;
+  value: string;
+  kind: ResourceKind;
+  description: string;
+  visibility: ResourceVisibility;
+  updatedAt: string;
+};
+
+export type UpdateResourcePayload = Omit<ResourceDetail, "id" | "updatedAt">;
+
+export type PublicProfile = {
+  id: string;
+  name: string;
+  handle: string;
+  avatarUrl?: string;
+  bio?: string;
+  resources: ResourceDetail[];
+};
 export type NeedDetail = { id: string; title: string; description: string; status: "open" | "matched" | "closed"; matchCount: number };
+export type ProfileAsset = { id: string; label: string; value: string; kind: ResourceKind; source: "user" | "xiaotian" };
+export type ProfileNeed = { id: string; title: string; source: "user" | "xiaotian" };
+export type AssetSuggestion = { id: string; type: "resource" | "need"; label: string; value?: string; kind?: ResourceKind; reason: string; status: "pending" | "accepted" | "ignored" };
+export type ProfileAssets = { resources: ProfileAsset[]; needs: ProfileNeed[]; suggestions: AssetSuggestion[] };
+export type UpdateProfileAssetsPayload = Pick<ProfileAssets, "resources" | "needs">;
+export type ResolveAssetSuggestionPayload = { id: string; action: "accept" | "ignore" };
 export type Settings = { notifications: boolean; publicProfile: boolean; language: "zh-CN" | "en-US" };
 export type NotificationItem = { id: string; title: string; body: string; time: string; kind: "bridge" | "growth" | "system" };
 

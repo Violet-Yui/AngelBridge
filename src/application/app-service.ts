@@ -28,6 +28,7 @@ import type {
   ConversationMessage,
   ConversationSummary,
 } from "../product/conversation-contracts";
+import type { ApplicationSessionSnapshot } from "../persistence/application-state";
 
 export class ApplicationError extends Error {
   constructor(
@@ -75,6 +76,54 @@ export class AngelBridgeApplication {
       viewerPersonaId,
       isSynthetic: true as const,
     }));
+  }
+
+  hasSession(sessionId: string): boolean {
+    return this.demo.hasSession(sessionId);
+  }
+
+  exportSessionSnapshot(sessionId: string): ApplicationSessionSnapshot {
+    const tokens = this.tokensBySession.get(sessionId);
+    if (!tokens) {
+      throw new Error(`role tokens are missing for session: ${sessionId}`);
+    }
+    return {
+      version: 1,
+      sessionId,
+      session: this.demo.getSession(sessionId),
+      roles: tokens.map((token) => {
+        const role = this.rolesByToken.get(token);
+        if (!role) throw new Error(`role token is missing from the application: ${token}`);
+        return { token, ...role };
+      }),
+      voiceTurns: structuredClone(
+        this.voiceTurns.filter((turn) => turn.sessionId === sessionId),
+      ),
+      petTextTurns: structuredClone(
+        this.petTextTurns.filter((turn) => turn.sessionId === sessionId),
+      ),
+      conversationMessages: structuredClone(
+        this.conversationMessages.filter((message) => message.sessionId === sessionId),
+      ),
+    };
+  }
+
+  restoreSessionSnapshot(snapshot: ApplicationSessionSnapshot): void {
+    this.demo.restoreSession(snapshot.session);
+    const previousTokens = this.tokensBySession.get(snapshot.sessionId) ?? [];
+    previousTokens.forEach((token) => this.rolesByToken.delete(token));
+    const tokens = snapshot.roles.map((role) => role.token);
+    this.tokensBySession.set(snapshot.sessionId, tokens);
+    snapshot.roles.forEach(({ token, sessionId, personaId }) => {
+      this.rolesByToken.set(token, { sessionId, personaId });
+    });
+    this.replaceSessionItems(this.voiceTurns, snapshot.sessionId, snapshot.voiceTurns);
+    this.replaceSessionItems(this.petTextTurns, snapshot.sessionId, snapshot.petTextTurns);
+    this.replaceSessionItems(
+      this.conversationMessages,
+      snapshot.sessionId,
+      snapshot.conversationMessages,
+    );
   }
 
   createDemoSession(scenarioId: string): DemoBootstrap {
@@ -526,6 +575,15 @@ export class AngelBridgeApplication {
     for (let index = turns.length - 1; index >= 0; index -= 1) {
       if (turns[index].sessionId === sessionId) turns.splice(index, 1);
     }
+  }
+
+  private replaceSessionItems<T extends { sessionId: string }>(
+    target: T[],
+    sessionId: string,
+    items: T[],
+  ): void {
+    this.removeSessionTurns(target, sessionId);
+    target.push(...structuredClone(items));
   }
 
   private notFound(error: unknown): ApplicationError {

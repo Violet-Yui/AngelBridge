@@ -1,0 +1,16 @@
+.git
+.github
+.claude
+.codex-tmp
+.planning
+.env
+.env.*
+!.env.example
+node_modules
+coverage
+docs
+FrontEnd
+eazo-app
+frontend-1ban
+*.zip
+*.log

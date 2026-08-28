@@ -17,8 +17,9 @@ const writeResponse = async (response: Response, target: ServerResponse) => {
   target.end(body);
 };
 
-export const createLocalApiServer = () => {
-  const handle = createApiHandler();
+export const createLocalApiServer = (
+  handle: (request: Request) => Promise<Response> = createApiHandler(),
+) => {
   return createServer(async (incoming, outgoing) => {
     try {
       const body = await readBody(incoming);

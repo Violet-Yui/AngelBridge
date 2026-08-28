@@ -16,6 +16,7 @@ import {
 } from "../application/contracts";
 import { PetTextTurnInputSchema } from "../product/pet-conversation-contracts";
 import { SendConversationMessageInputSchema } from "../product/conversation-contracts";
+import type { ApplicationStateRepository } from "../persistence/application-state";
 
 const corsHeaders = {
   "access-control-allow-origin": "*",
@@ -68,8 +69,9 @@ const tokenFor = (request: Request): string =>
 
 export const createApiHandler = (
   app = new AngelBridgeApplication(),
+  stateRepository?: ApplicationStateRepository,
 ): ((request: Request) => Promise<Response>) => {
-  return async (request: Request): Promise<Response> => {
+  const handleRequest = async (request: Request): Promise<Response> => {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
 
     try {
@@ -77,7 +79,11 @@ export const createApiHandler = (
       const parts = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
 
       if (request.method === "GET" && url.pathname === "/api/health") {
-        return ok({ status: "ok", service: "angelbridge-local-api" });
+        return ok({
+          status: "ok",
+          service: "angelbridge-local-api",
+          persistence: stateRepository ? "postgres" : "memory",
+        });
       }
       if (request.method === "GET" && url.pathname === "/api/demo/scenarios") {
         return ok(app.listScenarios());
@@ -217,6 +223,55 @@ export const createApiHandler = (
       }
       const message = error instanceof Error ? error.message : "unexpected application error";
       return json({ error: { code: "invalid_state", message } }, 409);
+    }
+  };
+
+  return async (request: Request): Promise<Response> => {
+    if (!stateRepository) return handleRequest(request);
+
+    const url = new URL(request.url);
+    const parts = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
+    const sessionId = parts[0] === "api" && parts[1] === "sessions"
+      ? parts[2]
+      : undefined;
+
+    try {
+      if (url.pathname === "/api/health") {
+        await stateRepository.ping();
+      }
+      if (sessionId && !app.hasSession(sessionId)) {
+        const snapshot = await stateRepository.findBySessionId(sessionId);
+        if (snapshot) app.restoreSessionSnapshot(snapshot);
+      }
+
+      const response = await handleRequest(request);
+      if (!response.ok || ["GET", "HEAD", "OPTIONS"].includes(request.method)) {
+        return response;
+      }
+
+      let changedSessionId = sessionId;
+      if (!changedSessionId && url.pathname === "/api/demo/sessions") {
+        const payload = await response.clone().json() as {
+          data?: { sessionId?: string };
+        };
+        changedSessionId = payload.data?.sessionId;
+      }
+      if (changedSessionId) {
+        await stateRepository.save(app.exportSessionSnapshot(changedSessionId));
+      }
+      return response;
+    } catch (error) {
+      return json(
+        {
+          error: {
+            code: "persistence_unavailable",
+            message: error instanceof Error
+              ? error.message
+              : "PostgreSQL persistence is unavailable",
+          },
+        },
+        503,
+      );
     }
   };
 };

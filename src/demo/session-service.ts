@@ -112,6 +112,14 @@ export class InMemoryDemoService {
     return clone(this.requireSession(sessionId));
   }
 
+  hasSession(sessionId: string): boolean {
+    return this.sessions.has(sessionId);
+  }
+
+  restoreSession(session: DemoSession): void {
+    this.sessions.set(session.id, clone(session));
+  }
+
   getStage(sessionId: string): DemoStage {
     const session = this.requireSession(sessionId);
     const connection = getSelectedConnection(session);

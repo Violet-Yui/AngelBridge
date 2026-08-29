@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天使桥 AngelBridge · 路演</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap">
+<style>
+:root{
+  --paper:#FBF5E9; --paper2:#F4EAD7; --card:#FFFDF7;
+  --ink:#33454F; --ink2:#5C6F79; --ink3:#93A2A8; --line:rgba(51,69,79,.22);
+  --sky:#7FA8C9; --skyd:#3F6E8C; --rose:#DD9A95; --apricot:#E8B078;
+  --moss:#93B48B; --lilac:#AB9DC5; --gold:#D8B45E;
+  --fh:'Ma Shan Zheng','LXGW WenKai','HanziPen SC','Xingkai SC',serif;
+  --fb:'LXGW WenKai','HanziPen SC','PingFang SC','Hiragino Sans GB',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:#EFE6D6;color:var(--ink);font-family:var(--fb);-webkit-font-smoothing:antialiased}
+.deck{position:absolute;inset:0;margin:auto;width:100vw;height:100vh;container-type:size;
+  box-shadow:0 0 6vh rgba(60,48,30,.18)}
+@media(min-width:769px){.deck{max-width:calc(100vh*16/9);max-height:calc(100vw*9/16)}}
+.slide{position:absolute;inset:0;padding:6cqh 7cqh;display:flex;flex-direction:column;
+  justify-content:center;background:var(--paper);opacity:0;visibility:hidden;overflow:hidden;
+  transition:opacity .45s ease}
+.slide.active{opacity:1;visibility:visible}
+.grain{position:absolute;inset:0;z-index:40;pointer-events:none;mix-blend-mode:multiply;opacity:.55;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.36'/%3E%3C/svg%3E")}
+.wash{position:absolute;pointer-events:none;mix-blend-mode:multiply;border-radius:50%;z-index:0;
+  filter:blur(2.6cqh)}
+.slide>*{position:relative;z-index:2}
+.eyebrow{font-size:1.9cqh;letter-spacing:.28em;color:var(--ink3);text-transform:uppercase}
+h1{font-family:var(--fh);font-weight:400;font-size:11cqh;line-height:1.02;letter-spacing:.02em}
+h2{font-family:var(--fh);font-weight:400;font-size:6.2cqh;line-height:1.15;letter-spacing:.01em}
+h3{font-family:var(--fb);font-weight:700;font-size:2.9cqh;line-height:1.3}
+p,li,td,th{font-size:2.35cqh;line-height:1.62;color:var(--ink2)}
+.lead{font-size:3cqh;color:var(--ink)}
+.sub{font-size:2.5cqh;color:var(--ink2)}
+.tiny{font-size:1.85cqh;color:var(--ink3);line-height:1.5}
+strong{color:var(--ink);font-weight:700}
+em{font-style:normal;color:var(--skyd);font-weight:700}
+.head{display:flex;align-items:flex-end;gap:2cqh;margin-bottom:3.4cqh}
+.head .n{font-family:var(--fh);font-size:4.4cqh;color:var(--rose);line-height:1}
+.mark{display:inline-block;padding:0 .28em;background:linear-gradient(transparent 58%,rgba(232,176,120,.55) 58%)}
+
+/* ── 手绘卡片 ── */
+.card{position:relative;background:var(--card);padding:2.8cqh 2.6cqh;
+  border:1.6px solid var(--line);border-radius:1.6cqh .8cqh 1.8cqh .9cqh;
+  box-shadow:.5cqh .7cqh 0 rgba(51,69,79,.07)}
+.card::after{content:'';position:absolute;inset:.7cqh;border:1px solid rgba(51,69,79,.10);
+  border-radius:1.2cqh .6cqh 1.4cqh .7cqh;pointer-events:none}
+.card .ico{font-size:3.4cqh;line-height:1;margin-bottom:1.2cqh;display:block}
+.card h3{margin-bottom:.7cqh}
+.card p{font-size:2.05cqh;line-height:1.55}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2.6cqh}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4cqh}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.9cqh}
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:4.4cqh;align-items:center}
+.stack{display:flex;flex-direction:column;gap:2cqh}
+
+/* ── 手绘描边工具 ── */
+.pill{display:inline-flex;align-items:center;gap:.5em;padding:.42em 1em;border:1.5px solid var(--line);
+  border-radius:2em;font-size:1.95cqh;color:var(--ink2);background:rgba(255,253,247,.75)}
+.tag{display:inline-block;padding:.28em .8em;border-radius:1.4em;font-size:1.8cqh;font-weight:700}
+.t-sky{background:rgba(127,168,201,.24);color:var(--skyd)}
+.t-rose{background:rgba(221,154,149,.26);color:#A9605B}
+.t-moss{background:rgba(147,180,139,.26);color:#57774F}
+.t-gold{background:rgba(216,180,94,.28);color:#8A6A19}
+.t-lilac{background:rgba(171,157,197,.28);color:#6C5C8C}
+.rule{height:1.6px;background:var(--line);border-radius:2px;margin:1.6cqh 0}
+.dash{border-top:1.8px dashed var(--line)}
+
+/* ── 生命树 ── */
+.tree{position:relative;width:100%;height:100%}
+.tree svg{width:100%;height:100%;overflow:visible}
+.draw{stroke-dasharray:2200;stroke-dashoffset:2200;animation:draw 2.4s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pop{opacity:0;animation:pop .7s cubic-bezier(.2,1.5,.4,1) forwards}
+@keyframes pop{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:scale(1)}}
+
+/* ── 动画 ── */
+.slide.active .up{animation:up .7s cubic-bezier(.2,.8,.2,1) both}
+.up{opacity:0}
+@keyframes up{from{opacity:0;transform:translateY(2.6cqh)}to{opacity:1;transform:none}}
+.slide.active .stag>*{animation:up .62s cubic-bezier(.2,.8,.2,1) both}
+.stag>*{opacity:0}
+.slide.active .stag>*:nth-child(1){animation-delay:.10s}
+.slide.active .stag>*:nth-child(2){animation-delay:.20s}
+.slide.active .stag>*:nth-child(3){animation-delay:.30s}
+.slide.active .stag>*:nth-child(4){animation-delay:.40s}
+.slide.active .stag>*:nth-child(5){animation-delay:.50s}
+.slide.active .stag>*:nth-child(6){animation-delay:.60s}
+.slide.active .stag>*:nth-child(7){animation-delay:.70s}
+.d1{animation-delay:.12s!important}.d2{animation-delay:.26s!important}
+.d3{animation-delay:.42s!important}.d4{animation-delay:.6s!important}
+.d5{animation-delay:.8s!important}
+
+/* ── 导航 ── */
+.bar{position:fixed;top:0;left:0;height:3px;background:var(--rose);z-index:99;transition:width .35s}
+.nav{position:fixed;bottom:2.4cqh;right:3cqh;display:flex;align-items:center;gap:1.4cqh;z-index:99}
+.nav button{width:3.8cqh;height:3.8cqh;min-width:30px;min-height:30px;border:1.5px solid var(--line);
+  background:rgba(255,253,247,.8);border-radius:50%;cursor:pointer;color:var(--ink2);font-size:1.9cqh}
+.nav button:hover{background:var(--card);color:var(--ink)}
+.cnt{font-size:1.8cqh;color:var(--ink3);font-variant-numeric:tabular-nums}
+.timer{position:fixed;bottom:2.4cqh;left:3cqh;z-index:99;font-size:1.75cqh;color:var(--ink3);
+  font-variant-numeric:tabular-nums}
+.foot{position:absolute;left:7cqh;bottom:3cqh;font-size:1.7cqh;color:var(--ink3);z-index:2}
+
+@media(max-width:768px){
+  .slide{padding:5cqh 4.5cqh}
+  h1{font-size:8.5cqh}h2{font-size:5cqh}
+  .grid3,.grid4,.grid2,.split{grid-template-columns:1fr;gap:1.6cqh}
+}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="deck" id="deck">
+
+<!-- ══ 1 · 封面 ══ -->
+<div class="slide active" data-note="20">
+  <div class="wash" style="width:52cqh;height:44cqh;left:-10cqh;top:-12cqh;background:radial-gradient(closest-side,rgba(127,168,201,.55),transparent 72%)"></div>
+  <div class="wash" style="width:46cqh;height:40cqh;right:-8cqh;bottom:-10cqh;background:radial-gradient(closest-side,rgba(232,176,120,.5),transparent 72%)"></div>
+  <div class="wash" style="width:34cqh;height:30cqh;right:22cqh;top:-6cqh;background:radial-gradient(closest-side,rgba(221,154,149,.42),transparent 72%)"></div>
+  <div class="split" style="grid-template-columns:1.12fr .88fr">
+    <div class="stack" style="gap:2.4cqh">
+      <div class="eyebrow up">SheNicest 2026 · 软件应用赛道 · 滴水穿石</div>
+      <h1 class="up d1">天使桥<br><span style="font-size:.42em;color:var(--skyd);letter-spacing:.06em">AngelBridge</span></h1>
+      <div class="rule up d2" style="width:16cqh;margin:0"></div>
+      <p class="lead up d2">让每一份价值，<span class="mark">遇见真正需要它的人</span>。</p>
+      <p class="sub up d3" style="max-width:46cqh">AI 原生的人生价值操作系统 —— 每个人一位专属 AI 伙伴「小天」，
+        把散落的资源、能力与愿望，变成可被发现、可被协商、可以落地的连接。</p>
+      <div class="up d4" style="display:flex;gap:1.4cqh;flex-wrap:wrap">
+        <span class="pill">🌳 人生价值图谱</span>
+        <span class="pill">🕊 Agent-to-Agent</span>
+        <span class="pill">🌉 现实成长闭环</span>
+      </div>
+    </div>
+    <div class="up d3" style="display:flex;justify-content:center">
+      <svg viewBox="0 0 340 340" style="width:100%;max-width:44cqh">
+        <defs>
+          <radialGradient id="c1" cx="50%" cy="50%"><stop offset="0" stop-color="#7FA8C9" stop-opacity=".38"/><stop offset="1" stop-color="#7FA8C9" stop-opacity="0"/></radialGradient>
+          <radialGradient id="c2" cx="50%" cy="50%"><stop offset="0" stop-color="#DD9A95" stop-opacity=".36"/><stop offset="1" stop-color="#DD9A95" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="120" cy="130" r="96" fill="url(#c1)"/>
+        <circle cx="220" cy="200" r="92" fill="url(#c2)"/>
+        <!-- 两岸 -->
+        <path d="M8 246 C34 236 58 240 76 248 L76 300 L8 300 Z" fill="#93B48B" opacity=".42"/>
+        <path d="M264 252 C284 242 312 244 332 250 L332 300 L264 300 Z" fill="#93B48B" opacity=".42"/>
+        <!-- 桥 -->
+        <path d="M70 250 C120 186 220 186 270 252" fill="none" stroke="#3F6E8C" stroke-width="4.2" stroke-linecap="round" class="draw"/>
+        <path d="M70 262 C120 200 220 200 270 264" fill="none" stroke="#33454F" stroke-width="2" stroke-linecap="round" opacity=".45" class="draw"/>
+        <g stroke="#33454F" stroke-width="1.7" opacity=".5">
+          <path d="M104 220v33M138 202v49M172 196v55M206 202v49M240 220v33"/>
+        </g>
+        <!-- 两个小天 -->
+        <g class="pop" style="animation-delay:1.5s;transform-origin:76px 214px">
+          <circle cx="76" cy="214" r="15" fill="#FFFDF7" stroke="#33454F" stroke-width="1.8"/>
+          <circle cx="71" cy="212" r="1.9" fill="#33454F"/><circle cx="82" cy="212" r="1.9" fill="#33454F"/>
+          <path d="M71 219q5 4 10 0" fill="none" stroke="#33454F" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M62 208q-9-9-3-15 5 5 6 12M90 208q9-9 3-15-5 5-6 12" fill="#FFFDF7" stroke="#33454F" stroke-width="1.5"/>
+        </g>
+        <g class="pop" style="animation-delay:1.8s;transform-origin:264px 216px">
+          <circle cx="264" cy="216" r="15" fill="#FFFDF7" stroke="#33454F" stroke-width="1.8"/>
+          <circle cx="259" cy="214" r="1.9" fill="#33454F"/><circle cx="270" cy="214" r="1.9" fill="#33454F"/>
+          <path d="M259 221q5 4 10 0" fill="none" stroke="#33454F" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M250 210q-9-9-3-15 5 5 6 12M278 210q9-9 3-15-5 5-6 12" fill="#FFFDF7" stroke="#33454F" stroke-width="1.5"/>
+        </g>
+        <circle cx="170" cy="176" r="6" fill="#D8B45E" class="pop" style="animation-delay:2.2s;transform-origin:170px 176px"/>
+      </svg>
+    </div>
+  </div>
+  <div class="foot">做彼此的天使 · angel.xxpeople.com</div>
+  <div class="grain"></div>
+</div>
+<!-- ══ 2 · 开场提问（What Is） ══ -->
+<div class="slide" data-note="25">
+  <div class="wash" style="width:60cqh;height:50cqh;left:18cqh;top:-16cqh;background:radial-gradient(closest-side,rgba(171,157,197,.42),transparent 72%)"></div>
+  <div class="head up"><span class="n">01</span><div class="eyebrow">开场</div></div>
+  <h2 class="up d1" style="max-width:78cqh">一个人同时有空房、产品能力、一个创业想法、<br>找合伙人的需求，和一个长期成长目标 ——</h2>
+  <p class="lead up d2" style="margin-top:2.6cqh">他为什么要分别打开五个 App，<span class="mark">再从头向每个平台解释一遍自己？</span></p>
+  <div class="grid4 stag" style="margin-top:4.4cqh">
+    <div class="card"><span class="ico">🏠</span><h3>空房</h3><p>挂到租房平台</p></div>
+    <div class="card"><span class="ico">🧰</span><h3>能力</h3><p>写进招聘简历</p></div>
+    <div class="card"><span class="ico">💡</span><h3>创意</h3><p>发到内容社区</p></div>
+    <div class="card"><span class="ico">🌱</span><h3>成长目标</h3><p>只留在脑子里</p></div>
+  </div>
+  <p class="tiny up d5" style="margin-top:3cqh">五个平台，五套资料，五次自我介绍 —— 没有一个平台看得到完整的你。</p>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 3 · 核心问题 ══ -->
+<div class="slide" data-note="30">
+  <div class="wash" style="width:50cqh;height:44cqh;right:-10cqh;top:8cqh;background:radial-gradient(closest-side,rgba(221,154,149,.44),transparent 72%)"></div>
+  <div class="head up"><span class="n">02</span><div class="eyebrow">问题</div></div>
+  <div class="split">
+    <div class="stack">
+      <h2 class="up d1">真实的需要，<br>常常跨越平台。</h2>
+      <div class="stag" style="display:flex;flex-direction:column;gap:1.5cqh;margin-top:1cqh">
+        <p>一处空房需要的可能不是最高出价者，而是<em>愿意共同维护社区的人</em>。</p>
+        <p>一个创意需要的不是普通员工，而是<em>信念相同、技能互补的合伙人</em>。</p>
+        <p>一项技能的回报不一定是钱，也可能是<em>另一项服务、一个机会</em>。</p>
+        <p>一个人缺的不是更多信息，而是<em>在机会关闭前被及时提醒</em>。</p>
+      </div>
+    </div>
+    <div class="card up d3">
+      <div class="tag t-rose">核心问题</div>
+      <p style="font-size:2.6cqh;color:var(--ink);margin-top:1.6cqh;line-height:1.62">
+        个体的<strong>资源、能力、需要、边界与愿望</strong>缺少统一、实时、受本人控制的表达方式，
+        导致社会价值仍主要依靠<strong>流量曝光、垂直搜索与熟人关系</strong>流动。</p>
+      <div class="rule"></div>
+      <div style="display:flex;gap:1cqh;flex-wrap:wrap">
+        <span class="tag t-sky">价值分散</span><span class="tag t-sky">意图难结构化</span>
+        <span class="tag t-sky">搜索是一次性的</span><span class="tag t-sky">匹配只优化一方</span>
+        <span class="tag t-sky">钱不是唯一媒介</span>
+      </div>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 4 · 解法一句话（What Could Be） ══ -->
+<div class="slide" data-note="25" style="justify-content:center;text-align:center;align-items:center">
+  <div class="wash" style="width:76cqh;height:60cqh;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(127,168,201,.4),transparent 70%)"></div>
+  <div class="wash" style="width:40cqh;height:34cqh;left:8cqh;bottom:2cqh;background:radial-gradient(closest-side,rgba(147,180,139,.42),transparent 72%)"></div>
+  <div class="eyebrow up">我们的解法</div>
+  <h2 class="up d1" style="font-size:7cqh;max-width:88cqh;margin-top:2cqh">
+    只跟<span style="color:var(--skyd)">一个人</span>说清楚你是谁 ——<br>你的「小天」，替你去找全世界。</h2>
+  <p class="lead up d3" style="max-width:76cqh;margin-top:3cqh">
+    小天持续理解「我拥有什么、我需要什么、愿意如何交换」，
+    主动发现并协商<strong>可信、双向有益</strong>的连接。</p>
+  <div class="up d4" style="margin-top:4cqh;display:flex;align-items:center;gap:2cqh;flex-wrap:wrap;justify-content:center">
+    <span class="pill" style="font-size:2.2cqh">🌳 人生价值图谱</span><span style="color:var(--ink3)">×</span>
+    <span class="pill" style="font-size:2.2cqh">🕊 AI 伙伴 小天</span><span style="color:var(--ink3)">×</span>
+    <span class="pill" style="font-size:2.2cqh">🔗 Agent 价值网络</span><span style="color:var(--ink3)">×</span>
+    <span class="pill" style="font-size:2.2cqh">🎮 现实成长游戏</span>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 5 · 生命树 ══ -->
+<div class="slide" data-note="30">
+  <div class="wash" style="width:52cqh;height:46cqh;left:-6cqh;bottom:-12cqh;background:radial-gradient(closest-side,rgba(147,180,139,.46),transparent 72%)"></div>
+  <div class="head up"><span class="n">03</span><div class="eyebrow">一棵生命树 · 我的人生价值图谱</div></div>
+  <div class="split" style="grid-template-columns:.92fr 1.08fr">
+    <div class="up d1" style="height:56cqh">
+      <svg viewBox="0 0 400 440" style="width:100%;height:100%;overflow:visible">
+        <defs><radialGradient id="cw" cx="50%" cy="42%">
+          <stop offset="0" stop-color="#93B48B" stop-opacity=".5"/><stop offset="1" stop-color="#93B48B" stop-opacity="0"/></radialGradient></defs>
+        <ellipse cx="200" cy="170" rx="168" ry="146" fill="url(#cw)"/>
+        <!-- 根 -->
+        <path d="M200 400 C176 414 150 418 126 430M200 400 C224 414 250 418 274 430M200 400v34" fill="none" stroke="#8A6A4B" stroke-width="2.6" stroke-linecap="round" opacity=".8" class="draw"/>
+        <!-- 干 -->
+        <path d="M200 400 C196 340 194 300 198 262" fill="none" stroke="#8A6A4B" stroke-width="11" stroke-linecap="round" class="draw"/>
+        <!-- 枝 -->
+        <g fill="none" stroke="#8A6A4B" stroke-width="5" stroke-linecap="round" class="draw">
+          <path d="M198 268 C160 244 132 222 112 190"/><path d="M198 268 C236 244 264 222 286 192"/>
+          <path d="M198 262 C186 216 184 180 192 140"/><path d="M198 276 C158 268 122 262 92 250"/>
+          <path d="M198 276 C240 268 274 262 306 252"/>
+        </g>
+        <!-- 叶片 -->
+        <g class="pop" style="animation-delay:1.3s">
+          <ellipse cx="112" cy="188" rx="26" ry="19" fill="#93B48B" opacity=".62" transform="rotate(-24 112 188)"/>
+          <ellipse cx="288" cy="190" rx="26" ry="19" fill="#7FA8C9" opacity=".6" transform="rotate(22 288 190)"/>
+          <ellipse cx="192" cy="136" rx="28" ry="20" fill="#AB9DC5" opacity=".58"/>
+          <ellipse cx="90" cy="248" rx="24" ry="17" fill="#E8B078" opacity=".6" transform="rotate(-12 90 248)"/>
+          <ellipse cx="308" cy="250" rx="24" ry="17" fill="#DD9A95" opacity=".6" transform="rotate(14 308 250)"/>
+        </g>
+        <!-- 花与果 -->
+        <g class="pop" style="animation-delay:1.8s">
+          <g transform="translate(150 210)"><g fill="#DD9A95" opacity=".9">
+            <ellipse rx="7" ry="4"/><ellipse rx="7" ry="4" transform="rotate(60)"/><ellipse rx="7" ry="4" transform="rotate(120)"/></g>
+            <circle r="2.6" fill="#D8B45E"/></g>
+          <g transform="translate(252 226)"><g fill="#AB9DC5" opacity=".9">
+            <ellipse rx="7" ry="4"/><ellipse rx="7" ry="4" transform="rotate(60)"/><ellipse rx="7" ry="4" transform="rotate(120)"/></g>
+            <circle r="2.6" fill="#D8B45E"/></g>
+          <circle cx="222" cy="164" r="7.5" fill="#D8B45E" opacity=".92"/>
+          <circle cx="132" cy="252" r="6.5" fill="#D8B45E" opacity=".85"/>
+        </g>
+        <!-- 空缺 -->
+        <g class="pop" style="animation-delay:2.2s">
+          <circle cx="268" cy="160" r="13" fill="none" stroke="#93A2A8" stroke-width="1.8" stroke-dasharray="4 4"/>
+          <circle cx="122" cy="150" r="11" fill="none" stroke="#93A2A8" stroke-width="1.8" stroke-dasharray="4 4"/>
+        </g>
+      </svg>
+    </div>
+    <div class="stack">
+      <p class="sub up d1">生命树不是装饰性主页，而是用户理解自身人生资源的<strong>可视界面</strong>。</p>
+      <div class="grid2 stag" style="gap:1.5cqh">
+        <div class="card" style="padding:1.9cqh"><h3 style="font-size:2.4cqh">🪵 根 / 干</h3><p>价值观、边界、身份与长期能力</p></div>
+        <div class="card" style="padding:1.9cqh"><h3 style="font-size:2.4cqh">🌿 枝条</h3><p>事业、财富、关系、健康、创造、生活</p></div>
+        <div class="card" style="padding:1.9cqh"><h3 style="font-size:2.4cqh">🍃 叶片</h3><p>正在拥有、能够提供的价值节点</p></div>
+        <div class="card" style="padding:1.9cqh"><h3 style="font-size:2.4cqh">🌸 花 / 🍎 果</h3><p>成长中的能力，与已完成的交换</p></div>
+      </div>
+      <p class="tiny up d5">虚线圆圈是「空缺」：当前想补齐的资源、能力与关系。
+        公开主页只展示你主动选择的部分，<strong>完整生命树始终属于你自己</strong>。</p>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+<!-- ══ 6 · 统一价值模型 ══ -->
+<div class="slide" data-note="30">
+  <div class="wash" style="width:56cqh;height:44cqh;right:-12cqh;top:-10cqh;background:radial-gradient(closest-side,rgba(127,168,201,.42),transparent 72%)"></div>
+  <div class="head up"><span class="n">04</span><div class="eyebrow">统一价值模型 · 一套底层对象容纳所有人生场景</div></div>
+  <div class="split" style="grid-template-columns:1.15fr .85fr;align-items:start">
+    <div class="stack">
+      <p class="sub up d1">房屋、技能、伙伴、新闻不是四套产品，它们共享同一个 <strong>Intent</strong>，
+        只调用不同的认证、排序与履约规则。</p>
+      <div class="grid3 stag" style="gap:1.4cqh">
+        <div class="card" style="padding:1.6cqh"><h3 style="font-size:2.2cqh">📦 物品资产</h3><p style="font-size:1.85cqh">相机、车辆、设备</p></div>
+        <div class="card" style="padding:1.6cqh"><h3 style="font-size:2.2cqh">🏡 空间</h3><p style="font-size:1.85cqh">房间、工作室、场地</p></div>
+        <div class="card" style="padding:1.6cqh"><h3 style="font-size:2.2cqh">🛠 能力服务</h3><p style="font-size:1.85cqh">开发、设计、咨询</p></div>
+        <div class="card" style="padding:1.6cqh"><h3 style="font-size:2.2cqh">🚀 项目机会</h3><p style="font-size:1.85cqh">岗位、合伙邀请</p></div>
+        <div class="card" style="padding:1.6cqh"><h3 style="font-size:2.2cqh">🤝 关系意图</h3><p style="font-size:1.85cqh">伙伴、导师、同行者</p></div>
+        <div class="card" style="padding:1.6cqh"><h3 style="font-size:2.2cqh">📡 信息关注</h3><p style="font-size:1.85cqh">行情、政策、事件</p></div>
+      </div>
+      <div class="card up d5" style="padding:2cqh;background:rgba(255,253,247,.7)">
+        <p style="font-size:2cqh"><strong>七种交换模式：</strong>
+        <span class="tag t-gold">货币</span> <span class="tag t-gold">物物</span>
+        <span class="tag t-moss">时间</span> <span class="tag t-moss">能力</span>
+        <span class="tag t-sky">合作</span> <span class="tag t-rose">善意</span>
+        <span class="tag t-lilac">关系</span></p>
+      </div>
+      <p class="tiny up d5">首版不发行内部货币或通证 —— 先把真实约定与结果记录清楚。</p>
+    </div>
+    <div class="card up d3" style="padding:2.2cqh">
+      <div class="tag t-sky">Intent · 统一意图结构</div>
+      <pre style="font-family:ui-monospace,Menlo,monospace;font-size:1.62cqh;line-height:1.78;color:var(--ink2);margin-top:1.4cqh;white-space:pre-wrap">direction   提供/寻找/交换/关注/共创
+value_type  物·空间·能力·机会·关系·信息
+outcome     真正希望发生的结果
+offer       我愿意提供什么
+need        我希望得到什么
+exchange    钱·物·时间·技能·合作·赠予
+constraints 时间·地点·预算·资格
+boundaries  不可接受条件与隐私边界
+evidence    身份·产权·作品·经历
+visibility  自己·Agent·匿名·指定·公开
+risk_level  普通·需认证·人工确认</pre>
+      <div class="rule"></div>
+      <p class="tiny">⚠️ <strong>人不是资源。</strong>人可以自主授权其时间、能力与合作意愿参与匹配，
+        但永远不被交易或排序。</p>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 7 · 产品体验（真实截图） ══ -->
+<div class="slide" data-note="35">
+  <div class="wash" style="width:50cqh;height:42cqh;left:-8cqh;top:14cqh;background:radial-gradient(closest-side,rgba(232,176,120,.42),transparent 72%)"></div>
+  <div class="head up"><span class="n">05</span><div class="eyebrow">产品体验 · 已上线可体验</div></div>
+  <div style="display:grid;grid-template-columns:.62fr .62fr 1.05fr;gap:2.6cqh;align-items:center">
+    <div class="up d1" style="text-align:center">
+      <img src="产品设计/1.png" alt="小天对话界面" style="width:100%;max-height:52cqh;object-fit:contain;
+        border-radius:2.2cqh;border:1.6px solid var(--line);box-shadow:.6cqh .8cqh 0 rgba(51,69,79,.08)">
+      <p class="tiny" style="margin-top:1.2cqh"><strong>与小天对话</strong> · 一段话生成节点</p>
+    </div>
+    <div class="up d2" style="text-align:center">
+      <img src="产品设计/3.png" alt="生命树界面" style="width:100%;max-height:52cqh;object-fit:contain;
+        border-radius:2.2cqh;border:1.6px solid var(--line);box-shadow:.6cqh .8cqh 0 rgba(51,69,79,.08)">
+      <p class="tiny" style="margin-top:1.2cqh"><strong>我的生命树</strong> · 资源与成长一目了然</p>
+    </div>
+    <div class="stack up d3">
+      <h3 style="font-size:3.2cqh">从「填表」到「聊天」</h3>
+      <div class="stag" style="display:flex;flex-direction:column;gap:1.3cqh">
+        <p>① 粘贴一段自我介绍 / 房源 / 作品链接，小天自动拆成多个价值节点；</p>
+        <p>② 只追问<strong>真正影响匹配</strong>的信息，其余不打扰；</p>
+        <p>③ 每个节点都必须<strong>经你确认</strong>才生效，可见范围由你决定。</p>
+      </div>
+      <div class="rule"></div>
+      <div style="display:flex;gap:1.2cqh;flex-wrap:wrap">
+        <span class="pill">🎙 语音输入</span><span class="pill">🔗 链接解析</span><span class="pill">🖼 图片识别</span>
+      </div>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 8 · 一座桥 · Match Proof ══ -->
+<div class="slide" data-note="35">
+  <div class="wash" style="width:58cqh;height:46cqh;left:50%;top:-14cqh;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(171,157,197,.4),transparent 72%)"></div>
+  <div class="head up"><span class="n">06</span><div class="eyebrow">一座桥 · 不给分数，给可核对的证据</div></div>
+  <div class="split" style="grid-template-columns:1fr 1fr;align-items:start">
+    <div class="card up d1">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="tag t-sky">Match Proof · 匹配证明</div>
+        <span class="tiny">案例 A · 物与空间</span>
+      </div>
+      <div style="margin-top:1.8cqh;display:flex;flex-direction:column;gap:1.2cqh">
+        <p style="font-size:2.1cqh">你需要的 &nbsp;←&nbsp; 对方能提供的<br>
+          <span style="color:var(--ink)">品牌拍摄</span> ← <span style="color:var(--skyd)">两天品牌摄影服务</span></p>
+        <div class="dash"></div>
+        <p style="font-size:2.1cqh">你能提供 &nbsp;→&nbsp; 对方需要的<br>
+          <span style="color:var(--ink)">周末闲置工作室</span> → <span style="color:var(--skyd)">两天拍摄场地</span></p>
+      </div>
+      <div class="rule"></div>
+      <p style="font-size:1.95cqh"><span class="tag t-moss">已满足</span> 时间重叠 · 同城 3km · 双方均有明确收益</p>
+      <p style="font-size:1.95cqh;margin-top:.9cqh"><span class="tag t-gold">待确认</span> 场地保险 · 成片使用授权范围</p>
+      <p style="font-size:1.95cqh;margin-top:.9cqh"><span class="tag t-rose">未知项</span> 对方是否需要灯光设备</p>
+      <div class="rule"></div>
+      <p style="font-size:2.05cqh;color:var(--ink)">🕊 小天建议第一步：<strong>周六 14:00 线上看场地 20 分钟</strong></p>
+    </div>
+    <div class="stack">
+      <p class="sub up d1">系统<strong>不展示</strong>未经校准的「98% 灵魂匹配」。一座桥必须回答六个问题：</p>
+      <div class="grid2 stag" style="gap:1.4cqh">
+        <div class="card" style="padding:1.7cqh"><p style="font-size:2cqh"><strong>你为什么需要对方</strong></p></div>
+        <div class="card" style="padding:1.7cqh"><p style="font-size:2cqh"><strong>对方为什么需要你</strong></p></div>
+        <div class="card" style="padding:1.7cqh"><p style="font-size:2cqh"><strong>哪些条件已满足</strong></p></div>
+        <div class="card" style="padding:1.7cqh"><p style="font-size:2cqh"><strong>哪些信息未确定</strong></p></div>
+        <div class="card" style="padding:1.7cqh"><p style="font-size:2cqh"><strong>双方各需公开什么</strong></p></div>
+        <div class="card" style="padding:1.7cqh"><p style="font-size:2cqh"><strong>最小下一步是什么</strong></p></div>
+      </div>
+      <div class="card up d5" style="padding:1.9cqh;background:rgba(255,253,247,.7)">
+        <p class="tiny" style="font-family:ui-monospace,Menlo,monospace;font-size:1.7cqh;color:var(--ink)">
+          MatchScore = HardGate × ReciprocalUtility<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× TrustConfidence × Freshness</p>
+        <p class="tiny" style="margin-top:1cqh">双向效用取<strong>调和平均</strong> —— 一边不划算，这座桥就不成立。
+          付费金额<strong>不进入</strong>相关性得分。</p>
+      </div>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+<!-- ══ 9 · Agent-to-Agent 协商 ══ -->
+<div class="slide" data-note="35">
+  <div class="wash" style="width:54cqh;height:44cqh;right:-10cqh;bottom:-12cqh;background:radial-gradient(closest-side,rgba(127,168,201,.44),transparent 72%)"></div>
+  <div class="head up"><span class="n">07</span><div class="eyebrow">Agent-to-Agent · 两个小天先谈，人再决定</div></div>
+  <div class="stack">
+    <p class="sub up d1">发现候选时不立即暴露双方资料。两个 Agent 先在<strong>授权边界内</strong>交换最小必要信息，通过初筛才惊动主人。</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1.6cqh;align-items:stretch;margin-top:2.4cqh" class="stag">
+      <div class="card" style="padding:1.9cqh"><span class="ico">🕊</span><h3 style="font-size:2.15cqh">Agent 初筛</h3><p style="font-size:1.8cqh">硬条件是否满足？双方是否都有可见收益？</p></div>
+      <div class="card" style="padding:1.9cqh"><span class="ico">❓</span><h3 style="font-size:2.15cqh">澄清一问</h3><p style="font-size:1.8cqh">只问那个真正卡住匹配的问题</p></div>
+      <div class="card" style="padding:1.9cqh"><span class="ico">🙋</span><h3 style="font-size:2.15cqh">单方确认</h3><p style="font-size:1.8cqh">主人决定是否进一步披露与联系</p></div>
+      <div class="card" style="padding:1.9cqh"><span class="ico">🤝</span><h3 style="font-size:2.15cqh">双方确认</h3><p style="font-size:1.8cqh">渐进披露，逐步开放信息</p></div>
+      <div class="card" style="padding:1.9cqh;border-color:rgba(63,110,140,.5)"><span class="ico">📜</span><h3 style="font-size:2.15cqh">生成桥约</h3><p style="font-size:1.8cqh">交换内容、首次行动、退出节点</p></div>
+    </div>
+    <div class="split up d5" style="margin-top:2.8cqh;grid-template-columns:1fr 1fr;align-items:start">
+      <div class="card" style="padding:2cqh">
+        <div class="tag t-lilac">Agent 权限阶梯</div>
+        <p style="font-size:1.95cqh;margin-top:1.2cqh;line-height:1.85">
+          <strong>L0 记忆</strong> 只整理不搜索 &nbsp;·&nbsp; <strong>L1 建议</strong> 可搜索推荐<br>
+          <strong>L2 草拟</strong> 生成询问与桥约，发送前确认<br>
+          <strong>L3 代办</strong> 规则内自动发低风险请求<br>
+          <strong>L4 托管</strong> 特定愿望持续执行，关键动作仍需确认</p>
+        <p class="tiny" style="margin-top:1.2cqh">房屋、工作、关系、资金等高风险领域<strong>默认停在 L1–L2</strong>。</p>
+      </div>
+      <div class="card" style="padding:2cqh">
+        <div class="tag t-moss">分领域认证，不做统一信用分</div>
+        <p style="font-size:1.95cqh;margin-top:1.2cqh;line-height:1.8">
+          房屋看产权授权，招聘看企业主体，服务看作品案例，关系连接看成年与自愿认证。<br>
+          <strong>婚姻状态不影响招聘排序，健康信息不流向投资人。</strong></p>
+        <p class="tiny" style="margin-top:1.2cqh">这些限制不是削弱愿景，而是让用户敢把真实人生交给小天。</p>
+      </div>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 10 · 三个案例证明通用性 ══ -->
+<div class="slide" data-note="35">
+  <div class="wash" style="width:48cqh;height:40cqh;left:24cqh;bottom:-14cqh;background:radial-gradient(closest-side,rgba(147,180,139,.42),transparent 72%)"></div>
+  <div class="head up"><span class="n">08</span><div class="eyebrow">通用性验证 · 同一个引擎跑三种价值</div></div>
+  <div class="grid3 stag">
+    <div class="card">
+      <div class="tag t-gold">案例 A · 物与空间</div>
+      <p style="margin-top:1.5cqh;font-size:2.05cqh"><strong>A</strong> 有周末闲置工作室，需要品牌拍摄<br>
+        <strong>B</strong> 需要两天场地，能提供品牌摄影</p>
+      <div class="dash" style="margin:1.5cqh 0"></div>
+      <p style="font-size:2.05cqh;color:var(--ink)">🌉 桥约：<strong>空间使用权 ⇄ 拍摄服务</strong></p>
+    </div>
+    <div class="card">
+      <div class="tag t-sky">案例 B · 能力与机会</div>
+      <p style="margin-top:1.5cqh;font-size:2.05cqh"><strong>A</strong> 有产品运营能力，需要技术伙伴<br>
+        <strong>B</strong> 有开发能力，想加入有真实用户的项目</p>
+      <div class="dash" style="margin:1.5cqh 0"></div>
+      <p style="font-size:2.05cqh;color:var(--ink)">🌉 桥约：<strong>60 分钟原型验证</strong></p>
+    </div>
+    <div class="card">
+      <div class="tag t-rose">案例 C · 志趣与成长</div>
+      <p style="margin-top:1.5cqh;font-size:2.05cqh"><strong>A</strong> 想练英语演讲，能教摄影<br>
+        <strong>B</strong> 想学摄影，能提供英语陪练</p>
+      <div class="dash" style="margin:1.5cqh 0"></div>
+      <p style="font-size:2.05cqh;color:var(--ink)">🌉 桥约：<strong>每周一次 · 四周复盘</strong></p>
+    </div>
+  </div>
+  <div class="card up d4" style="margin-top:3cqh;padding:2.2cqh;text-align:center;background:rgba(255,253,247,.72)">
+    <p class="lead">三个案例共享<strong>同一套数据结构、匹配流程、双向确认与桥约组件</strong>。</p>
+    <p class="sub" style="margin-top:.8cqh">你看到的不是三个假功能，而是<span class="mark">一个通用引擎处理三种价值</span>。</p>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 11 · 差异化对比 ══ -->
+<div class="slide" data-note="30">
+  <div class="wash" style="width:52cqh;height:42cqh;right:-12cqh;top:-8cqh;background:radial-gradient(closest-side,rgba(221,154,149,.4),transparent 72%)"></div>
+  <div class="head up"><span class="n">09</span><div class="eyebrow">差异化 · 我们重构的是所有平台的上游</div></div>
+  <div class="card up d1" style="padding:2.4cqh 2.8cqh">
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr style="border-bottom:1.8px solid var(--line)">
+        <th style="text-align:left;padding:1cqh .8cqh;font-size:2cqh;color:var(--ink3);font-weight:400">产品类型</th>
+        <th style="text-align:left;padding:1cqh .8cqh;font-size:2cqh;color:var(--ink3);font-weight:400">核心对象</th>
+        <th style="text-align:left;padding:1cqh .8cqh;font-size:2cqh;color:var(--ink3);font-weight:400">优化目标</th>
+        <th style="text-align:left;padding:1cqh .8cqh;font-size:2cqh;color:var(--ink3);font-weight:400">天使桥的不同</th>
+      </tr></thead>
+      <tbody class="stag">
+        <tr style="border-bottom:1px dashed var(--line)">
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">短视频 / 内容社区</td><td style="padding:1.15cqh .8cqh;font-size:2cqh">内容</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">停留与传播</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh;color:var(--ink)">以人生意图与现实结果为中心，不建无限流</td></tr>
+        <tr style="border-bottom:1px dashed var(--line)">
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">电商 / 闲置交易</td><td style="padding:1.15cqh .8cqh;font-size:2cqh">商品</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">成交 GMV</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh;color:var(--ink)">支持跨类型、非货币交换与 Agent 协商</td></tr>
+        <tr style="border-bottom:1px dashed var(--line)">
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">招聘平台</td><td style="padding:1.15cqh .8cqh;font-size:2cqh">岗位与简历</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">招聘转化</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh;color:var(--ink)">项目、能力、时间、价值观进同一张图谱</td></tr>
+        <tr style="border-bottom:1px dashed var(--line)">
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">通用 AI 助手</td><td style="padding:1.15cqh .8cqh;font-size:2cqh">对话</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh">完成单次任务</td>
+          <td style="padding:1.15cqh .8cqh;font-size:2cqh;color:var(--ink)">持续维护价值图谱，并连接另一端的真实意图</td></tr>
+        <tr style="background:rgba(127,168,201,.13)">
+          <td style="padding:1.3cqh .8cqh;font-size:2.05cqh;font-weight:700;color:var(--skyd)">天使桥</td>
+          <td style="padding:1.3cqh .8cqh;font-size:2.05cqh;color:var(--ink)">Value Node · Intent · Bridge</td>
+          <td style="padding:1.3cqh .8cqh;font-size:2.05cqh;color:var(--ink)">价值流动与个人成长</td>
+          <td style="padding:1.3cqh .8cqh;font-size:2.05cqh;font-weight:700;color:var(--skyd)">个人 Agent 驱动的多边价值网络</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tiny up d4" style="margin-top:2cqh">技术路线对齐开放标准：Google A2A 的 Agent Card 与任务生命周期、MCP 的外部工具接入、
+    ACP 的「支付不影响自然排名」原则 —— 先在产品内实现同样的逻辑，后续兼容开放协议。</p>
+  <div class="grain"></div>
+</div>
+<!-- ══ 12 · 技术架构 ══ -->
+<div class="slide" data-note="25">
+  <div class="wash" style="width:50cqh;height:40cqh;left:-10cqh;bottom:-10cqh;background:radial-gradient(closest-side,rgba(171,157,197,.38),transparent 72%)"></div>
+  <div class="head up"><span class="n">10</span><div class="eyebrow">技术架构 · AI 负责表达，确定性系统负责事实</div></div>
+  <div class="split" style="grid-template-columns:1.25fr .75fr;align-items:start">
+    <div class="card up d1" style="padding:2.4cqh">
+      <svg viewBox="0 0 720 300" style="width:100%;height:auto">
+        <style>
+          .bx{fill:#FFFDF7;stroke:#33454F;stroke-width:1.6;rx:10}
+          .bt{font:600 15px 'LXGW WenKai',sans-serif;fill:#33454F}
+          .bs{font:12px 'LXGW WenKai',sans-serif;fill:#5C6F79}
+          .ar{fill:none;stroke:#5C6F79;stroke-width:1.6;marker-end:url(#a)}
+        </style>
+        <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+          <path d="M0 0l7 4-7 4z" fill="#5C6F79"/></marker></defs>
+        <rect class="bx" x="8" y="122" width="96" height="52" fill="#F4EAD7"/>
+        <text class="bt" x="56" y="146" text-anchor="middle">用户</text>
+        <text class="bs" x="56" y="164" text-anchor="middle">App / PWA</text>
+        <rect class="bx" x="140" y="112" width="118" height="72" fill="rgba(127,168,201,.2)"/>
+        <text class="bt" x="199" y="140" text-anchor="middle">小天</text>
+        <text class="bs" x="199" y="158" text-anchor="middle">Orchestrator</text>
+        <text class="bs" x="199" y="174" text-anchor="middle">私有记忆 · Intent</text>
+        <rect class="bx" x="294" y="18" width="126" height="50"/>
+        <text class="bt" x="357" y="40" text-anchor="middle">Value Graph</text>
+        <text class="bs" x="357" y="57" text-anchor="middle">PG + pgvector</text>
+        <rect class="bx" x="294" y="88" width="126" height="50"/>
+        <text class="bt" x="357" y="110" text-anchor="middle">双向召回</text>
+        <text class="bs" x="357" y="127" text-anchor="middle">Give / Need 向量</text>
+        <rect class="bx" x="294" y="158" width="126" height="50"/>
+        <text class="bt" x="357" y="180" text-anchor="middle">领域 Gate</text>
+        <text class="bs" x="357" y="197" text-anchor="middle">硬约束 · 权限</text>
+        <rect class="bx" x="294" y="228" width="126" height="50"/>
+        <text class="bt" x="357" y="250" text-anchor="middle">双向效用评分</text>
+        <text class="bs" x="357" y="267" text-anchor="middle">证据 · 新鲜度</text>
+        <rect class="bx" x="456" y="112" width="112" height="72" fill="rgba(221,154,149,.18)"/>
+        <text class="bt" x="512" y="140" text-anchor="middle">Match Proof</text>
+        <text class="bs" x="512" y="158" text-anchor="middle">证据 · 冲突</text>
+        <text class="bs" x="512" y="174" text-anchor="middle">未知 · 下一步</text>
+        <rect class="bx" x="600" y="26" width="112" height="52" fill="rgba(147,180,139,.2)"/>
+        <text class="bt" x="656" y="48" text-anchor="middle">双方确认</text>
+        <text class="bs" x="656" y="66" text-anchor="middle">渐进披露</text>
+        <rect class="bx" x="600" y="118" width="112" height="52" fill="rgba(216,180,94,.22)"/>
+        <text class="bt" x="656" y="140" text-anchor="middle">桥约</text>
+        <text class="bs" x="656" y="158" text-anchor="middle">首次行动</text>
+        <rect class="bx" x="600" y="210" width="112" height="52"/>
+        <text class="bt" x="656" y="232" text-anchor="middle">结果复盘</text>
+        <text class="bs" x="656" y="250" text-anchor="middle">写回生命树</text>
+        <path class="ar" d="M104 148h32"/>
+        <path class="ar" d="M258 140 C274 130 278 70 292 46"/>
+        <path class="ar" d="M258 148h32"/>
+        <path class="ar" d="M258 158 C274 168 278 176 292 182"/>
+        <path class="ar" d="M258 168 C276 200 278 240 292 252"/>
+        <path class="ar" d="M420 148h32"/>
+        <path class="ar" d="M568 138 C582 110 584 74 596 56"/>
+        <path class="ar" d="M712 52 C724 78 722 100 714 140" stroke-dasharray="4 3"/>
+        <path class="ar" d="M656 170v36"/>
+        <path class="ar" d="M600 240 C420 300 240 250 210 188"/>
+        <text class="bs" x="200" y="98" text-anchor="middle" font-style="italic">↕ 与其他小天交换最小必要信息</text>
+      </svg>
+    </div>
+    <div class="stack">
+      <div class="card up d2" style="padding:1.9cqh">
+        <div class="tag t-sky">分工原则</div>
+        <p style="font-size:1.95cqh;margin-top:1cqh;line-height:1.75">
+          <strong>LLM</strong> 负责理解自然语言、跨类别价值翻译、生成解释草稿；<br>
+          <strong>确定性系统</strong> 负责 Schema 校验、权限与可见范围、双向公式、付费隔离、状态机。</p>
+      </div>
+      <div class="card up d3" style="padding:1.9cqh">
+        <div class="tag t-moss">技术栈</div>
+        <p style="font-size:1.9cqh;margin-top:1cqh;line-height:1.7">
+          Next.js + TypeScript + Tailwind · Supabase Auth / PostgreSQL / pgvector / Realtime ·
+          Zod 结构化输出 · SQL 硬过滤 + 双向向量召回 · Vercel 部署</p>
+      </div>
+      <p class="tiny up d4">首版把能力放在<strong>一个编排式 Agent</strong> 中 ——
+        不为了展示概念而拆出不可调试的多 Agent。</p>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 13 · 商业模式与北极星 ══ -->
+<div class="slide" data-note="25">
+  <div class="wash" style="width:54cqh;height:42cqh;right:-10cqh;top:10cqh;background:radial-gradient(closest-side,rgba(216,180,94,.36),transparent 72%)"></div>
+  <div class="head up"><span class="n">11</span><div class="eyebrow">商业模式 · 为 Agent 能力付费，不为曝光特权付费</div></div>
+  <div class="grid4 stag">
+    <div class="card"><span class="ico">🌱</span><h3>免费层</h3><p>基础生命树 · 少量愿望 · 每日一次扫描 · 基础 Match Proof</p></div>
+    <div class="card" style="border-color:rgba(63,110,140,.5)"><span class="ico">🕊</span><h3>个人 Pro</h3><p>更多并行愿望 · 实时扫描 · 外部来源 · 多轮 Agent 协商 · 深度复盘</p></div>
+    <div class="card"><span class="ico">🏢</span><h3>商家与组织</h3><p>认证节点 · 批量发布真实机会 · 匿名需求洞察 · Agent 接待预约</p></div>
+    <div class="card"><span class="ico">🏘</span><h3>社区与园区</h3><p>高校、共居、创业营的私域价值网络 · 管理与统计工具</p></div>
+  </div>
+  <div class="split up d5" style="margin-top:3.2cqh;grid-template-columns:1.05fr .95fr;align-items:stretch">
+    <div class="card" style="padding:2.2cqh">
+      <div class="tag t-rose">商业底线</div>
+      <p style="font-size:1.98cqh;margin-top:1.1cqh;line-height:1.8">
+        自然匹配不竞价 · 付费推广必须标识 · 付费不能绕过认证与双向意愿 ·
+        不出售用户完整生命树 · <strong>不用「充值更多」决定婚恋、招聘或公共资源优先权</strong></p>
+    </div>
+    <div class="card" style="padding:2.2cqh;background:rgba(127,168,201,.14)">
+      <div class="tag t-sky">北极星指标</div>
+      <p class="lead" style="margin-top:1.1cqh;color:var(--ink)"><strong>有效成桥数</strong></p>
+      <p style="font-size:1.98cqh;margin-top:.6cqh">双方确认桥约、并<strong>开始第一次现实行动</strong>的连接数量。</p>
+      <p class="tiny" style="margin-top:1cqh">不看停留时长，不看点击率 —— 只看真实价值是否流动。</p>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+<!-- ══ 14 · CTA ══ -->
+<div class="slide" data-note="25">
+  <div class="wash" style="width:62cqh;height:52cqh;left:-14cqh;top:-14cqh;background:radial-gradient(closest-side,rgba(127,168,201,.5),transparent 72%)"></div>
+  <div class="wash" style="width:52cqh;height:44cqh;right:-10cqh;bottom:-14cqh;background:radial-gradient(closest-side,rgba(232,176,120,.48),transparent 72%)"></div>
+  <div class="wash" style="width:38cqh;height:32cqh;right:34cqh;top:-8cqh;background:radial-gradient(closest-side,rgba(221,154,149,.4),transparent 72%)"></div>
+  <div class="split" style="grid-template-columns:1.14fr .86fr">
+    <div class="stack">
+      <div class="eyebrow up">现在就能体验</div>
+      <h2 class="up d1" style="font-size:5.6cqh">世界上不缺资源，<br>也不缺愿望。</h2>
+      <p class="lead up d2" style="max-width:52cqh">缺的是一种<span class="mark">让每个人都能被真正理解</span>、
+        让每份价值都能找到去处的共同语言。</p>
+      <div class="rule up d2" style="width:14cqh;margin:.6cqh 0"></div>
+      <p class="sub up d3" style="max-width:52cqh">天使桥想给每个人一位站在自己这边的小天，
+        也让我们在彼此需要的时候，<strong>真正成为彼此的天使</strong>。</p>
+      <div class="up d4" style="display:flex;align-items:center;gap:1.6cqh;flex-wrap:wrap;margin-top:1.4cqh">
+        <a href="https://angel.xxpeople.com/" target="_blank" rel="noopener"
+           style="text-decoration:none;display:inline-flex;align-items:center;gap:.6em;padding:.62em 1.5em;
+           border:2px solid var(--skyd);border-radius:2em;color:var(--skyd);font-size:2.35cqh;font-weight:700;
+           background:rgba(255,253,247,.8)">🌉 angel.xxpeople.com</a>
+        <span class="pill">软件应用赛道 · 滴水穿石</span>
+      </div>
+    </div>
+    <div class="up d3" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6cqh">
+      <div class="card" style="padding:2.4cqh;border-radius:2cqh">
+        <svg viewBox="0 0 330 330" style="width:30cqh;height:30cqh;display:block">
+          <rect width="330" height="330" fill="#FFFDF7"/>
+          <path transform="scale(10)" stroke="#33454F" d="M2 2.5h7m3 0h3m1 0h1m1 0h1m1 0h1m3 0h7m-29 1h1m5 0h1m1 0h2m1 0h2m2 0h2m1 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h4m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m4 0h1m2 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h3m5 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m6 0h1m2 0h1m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h1m1 0h3m2 0h2m1 0h1m-19 1h3m1 0h2m5 0h1m2 0h2m9 0h2m-28 1h3m1 0h2m12 0h2m1 0h2m1 0h2m2 0h1m-26 1h1m2 0h1m2 0h1m1 0h2m1 0h5m3 0h1m2 0h3m-28 1h1m2 0h3m2 0h1m1 0h1m1 0h5m1 0h3m2 0h1m4 0h1m-29 1h1m1 0h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h3m-29 1h4m1 0h1m1 0h1m7 0h2m2 0h1m2 0h2m1 0h2m1 0h1m-28 1h1m3 0h4m3 0h2m1 0h1m1 0h5m1 0h3m1 0h2m-26 1h3m8 0h1m1 0h3m2 0h2m1 0h2m1 0h1m-28 1h5m1 0h2m1 0h4m3 0h3m1 0h2m1 0h3m-25 1h2m1 0h1m3 0h3m1 0h2m2 0h2m2 0h1m2 0h1m2 0h1m-27 1h1m5 0h1m1 0h1m3 0h1m2 0h2m3 0h1m1 0h1m1 0h3m-25 1h2m4 0h2m3 0h1m3 0h1m1 0h1m1 0h2m1 0h5m-28 1h1m1 0h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m2 0h5m1 0h1m-19 1h5m3 0h1m1 0h1m1 0h1m3 0h2m2 0h1m-29 1h7m3 0h5m2 0h1m1 0h2m1 0h1m1 0h1m1 0h2m-28 1h1m5 0h1m1 0h1m1 0h2m4 0h1m1 0h1m1 0h1m3 0h1m3 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h2m5 0h1m1 0h9m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h2m4 0h1m1 0h2m-28 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h5m1 0h1m2 0h1m1 0h1m2 0h1m-29 1h1m5 0h1m1 0h3m3 0h1m1 0h1m1 0h1m1 0h2m2 0h2m1 0h1m-28 1h7m2 0h1m2 0h1m1 0h3m1 0h6m3 0h1"/>
+        </svg>
+      </div>
+      <p class="sub" style="text-align:center;color:var(--ink)"><strong>扫码即刻体验</strong></p>
+      <p class="tiny" style="text-align:center;max-width:30cqh">现场可注册，与你自己的小天说第一句话，
+        看看它能不能读懂你手上的价值。</p>
+    </div>
+  </div>
+  <div class="grain"></div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="timer" id="timer">⏱ 00:00 / 05:00 &nbsp;·&nbsp; 按 <b>N</b> 看讲稿 · <b>F</b> 全屏 · <b>R</b> 重计时</div>
+
+<!-- 演讲者讲稿浮层 -->
+<div id="notes" style="position:fixed;left:0;right:0;bottom:0;z-index:98;display:none;
+  background:rgba(30,42,48,.94);color:#F4EAD7;padding:2.2cqh 3cqh;backdrop-filter:blur(6px);
+  border-top:2px solid rgba(244,234,215,.25)">
+  <div style="display:flex;align-items:baseline;gap:1.6cqh;margin-bottom:.9cqh">
+    <span id="nTitle" style="font-family:var(--fh);font-size:2.9cqh;color:#F4EAD7"></span>
+    <span id="nTime" style="font-size:1.85cqh;color:#C9B99A;font-variant-numeric:tabular-nums"></span>
+  </div>
+  <p id="nBody" style="font-size:2.05cqh;line-height:1.6;color:#EDE3D0;max-width:150cqh"></p>
+</div>
+<div class="nav">
+  <button onclick="go(cur-1);event.stopPropagation()" aria-label="上一页">←</button>
+  <span class="cnt"><span id="c">1</span>/<span id="t">14</span></span>
+  <button onclick="go(cur+1);event.stopPropagation()" aria-label="下一页">→</button>
+</div>
+
+<script>
+const S=[...document.querySelectorAll('.slide')],N=S.length;let cur=1;
+document.getElementById('t').textContent=N;
+function go(n){
+  n=Math.max(1,Math.min(N,n));cur=n;
+  S.forEach((s,i)=>s.classList.toggle('active',i===n-1));
+  document.getElementById('c').textContent=n;
+  document.getElementById('bar').style.width=(n/N*100)+'%';
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}
+  if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();go(cur-1)}
+  if(e.key==='Home')go(1); if(e.key==='End')go(N);
+  if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+  if(e.key==='r'||e.key==='R'){t0=Date.now();run=true}
+});
+addEventListener('click',e=>{if(!e.target.closest('.nav')&&!e.target.closest('a'))go(cur+1)});
+// 计时器：首次翻页自动启动，R 重置
+let t0=null,run=false;
+const tEl=document.getElementById('timer');
+function pad(n){return String(n).padStart(2,'0')}
+setInterval(()=>{
+  if(!run)return;
+  const s=Math.floor((Date.now()-t0)/1000);
+  tEl.textContent='⏱ '+pad(Math.floor(s/60))+':'+pad(s%60)+' / 05:00';
+  tEl.style.color = s>300?'#C4645E' : s>270?'#B07A2A' : 'var(--ink3)';
+},500);
+const _go=go;go=function(n){if(!run&&n>1){run=true;t0=Date.now()}_go(n);
+  history.replaceState(null,'','#p='+n)};
+const h=parseInt((location.hash.match(/p=(\d+)/)||[])[1]||1,10);
+_go(h);cur=h;
+if(location.search.includes('print')){document.querySelectorAll('.up,.stag>*,.pop,.draw')
+  .forEach(e=>{e.style.animation='none';e.style.opacity='1';e.style.strokeDashoffset='0'})}
+</script>
+</body>
+</html>
+

@@ -1,0 +1,8 @@
+{
+  "route": "idle",
+  "name": "闲置",
+  "nav_type": "stack",
+  "order_index": 22,
+  "icon": "recycle",
+  "summary": "闲置流转内容流"
+}

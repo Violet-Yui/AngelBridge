@@ -1,0 +1,8 @@
+{
+  "route": "things",
+  "name": "找物",
+  "nav_type": "stack",
+  "order_index": 20,
+  "icon": "package",
+  "summary": "找物需求内容流"
+}

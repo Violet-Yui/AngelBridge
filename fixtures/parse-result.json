@@ -1,0 +1,50 @@
+{
+  "personaId": "persona-a",
+  "sourceText": "我可以提供产品策划，希望找到能开发网页原型的伙伴，接受技能互换。",
+  "source": "fixture",
+  "nodes": [
+    {
+      "id": "node-a-offer-product",
+      "personaId": "persona-a",
+      "direction": "offer",
+      "domain": "skill",
+      "title": "产品策划",
+      "description": "提供 MVP 范围收束与产品叙事梳理。",
+      "keywords": ["产品策划", "MVP"],
+      "deliverables": ["一份 MVP 产品方案"],
+      "visibility": "match_only",
+      "evidenceCompleteness": 0.9,
+      "updatedAt": "2026-08-26T10:00:00.000Z",
+      "isSynthetic": true,
+      "datasetVersion": "v1"
+    },
+    {
+      "id": "node-a-need-web",
+      "personaId": "persona-a",
+      "direction": "need",
+      "domain": "skill",
+      "title": "网页原型开发",
+      "description": "需要一位伙伴完成可演示的网页原型。",
+      "keywords": ["网页开发", "MVP"],
+      "deliverables": [],
+      "visibility": "match_only",
+      "evidenceCompleteness": 0.8,
+      "updatedAt": "2026-08-26T10:00:00.000Z",
+      "isSynthetic": true,
+      "datasetVersion": "v1"
+    }
+  ],
+  "intent": {
+    "offerNodeIds": ["node-a-offer-product"],
+    "needNodeIds": ["node-a-need-web"],
+    "goalNodeIds": [],
+    "acceptedExchangeModes": ["skill_swap", "collaboration"],
+    "constraints": {
+      "locations": ["线上"],
+      "availability": ["周末"]
+    },
+    "status": "active"
+  },
+  "isSynthetic": true,
+  "datasetVersion": "v1"
+}

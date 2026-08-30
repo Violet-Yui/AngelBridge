@@ -1,0 +1,8 @@
+{
+  "route": "me",
+  "name": "我",
+  "nav_type": "tab",
+  "order_index": 5,
+  "icon": "user",
+  "summary": "个人画像：资源/需求/成长"
+}

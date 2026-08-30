@@ -1,0 +1,9 @@
+{
+  "route": "bridge/detail",
+  "name": "一座桥",
+  "nav_type": "stack",
+  "parent": "xiaotian/bridging",
+  "order_index": 13,
+  "icon": "bridge",
+  "summary": "查看这座桥的交换详情与适配理由"
+}

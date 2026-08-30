@@ -1,0 +1,9 @@
+{
+  "route": "pets",
+  "name": "灵宠选择",
+  "nav_type": "stack",
+  "parent": "",
+  "order_index": 20,
+  "icon": "bot",
+  "summary": "选择十二生肖灵宠智能体"
+}

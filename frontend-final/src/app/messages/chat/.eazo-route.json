@@ -1,0 +1,9 @@
+{
+  "route": "messages/chat",
+  "name": "聊天详情",
+  "nav_type": "stack",
+  "parent": "messages",
+  "order_index": 6,
+  "icon": "message-circle",
+  "summary": "好友聊天详情页"
+}

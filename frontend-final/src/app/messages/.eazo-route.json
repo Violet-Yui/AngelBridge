@@ -1,0 +1,8 @@
+{
+  "route": "messages",
+  "name": "消息",
+  "nav_type": "tab",
+  "order_index": 2,
+  "icon": "message-circle",
+  "summary": "消息三分区：好友/陌生人/小天AI"
+}

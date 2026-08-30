@@ -1,0 +1,9 @@
+{
+  "route": "xiaotian/intent",
+  "name": "意图确认",
+  "nav_type": "stack",
+  "parent": "xiaotian/chat",
+  "order_index": 11,
+  "icon": "clipboard-check",
+  "summary": "确认Offer、Need、Exchange、Constraints与Boundary"
+}

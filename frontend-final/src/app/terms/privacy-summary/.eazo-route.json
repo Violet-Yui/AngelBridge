@@ -1,0 +1,9 @@
+{
+  "route": "terms/privacy-summary",
+  "name": "隐私政策概要",
+  "nav_type": "stack",
+  "parent": "auth",
+  "order_index": 23,
+  "icon": "shield",
+  "summary": "天使桥隐私政策概要阅读页"
+}

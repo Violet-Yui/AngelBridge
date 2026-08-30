@@ -1,14 +1,30 @@
-# AngelBridge｜天使桥
+# 天使桥 AngelBridge
 
-AngelBridge 团队协作仓库。
+天使桥是一个 AI 原生价值交换与互助平台：用户填写人生树意图，获得可解释匹配，双方确认后通过聊天完成桥约，并记录成长值。
 
-## 当前状态
+## 在线体验
 
-产品范围、页面、交互和技术方案仍在团队讨论中，尚未形成统一共识。默认分支暂时只保留仓库基础文件，不将个人草案作为团队开发约束。
+- 生产站点：https://angel.xxpeople.com/
+- 项目展示页：https://violet-yui.github.io/AngelBridge/
 
-## 分支
+## 技术栈
 
-- `main`：团队共同基线；
-- `backend`：后端负责人当前的产品、PRD、设计评审、Deck、AI/后端与部署方案草案，内容仅供讨论，尚未经过团队确认。
+前端采用 Next.js、React、TypeScript 与 CSS；后端采用 Node.js、TypeScript 和 HTTP/SSE API；PostgreSQL 持久化账号、资料、匹配、聊天及桥约；Zod 负责接口数据校验；豆包 Ark 提供 AI 匹配与小天对话；Docker Compose + Nginx 用于生产部署。
 
-团队达成共识后，再通过 Pull Request 将确认过的文档和代码合并到 `main`。
+## 目录
+
+- `frontend-final/`：当前生产前端
+- `src/`：后端领域逻辑、认证、匹配、聊天与桥约服务
+- `database/`：数据库迁移与种子数据
+- `tests/`：后端领域和 API 测试
+- `docs/`：产品、工程与演示文档
+
+## 本地运行
+
+```bash
+npm install
+npm run typecheck
+npm run api:dev
+```
+
+前端进入 `frontend-final/` 后执行 `npm install && npm run dev`。

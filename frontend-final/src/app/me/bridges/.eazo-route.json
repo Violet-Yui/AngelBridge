@@ -1,0 +1,9 @@
+{
+  "route": "me/bridges",
+  "name": "完成桥约",
+  "nav_type": "stack",
+  "parent": "me",
+  "order_index": 31,
+  "icon": "heart-handshake",
+  "summary": "用户参与完成闭环的桥约行动"
+}

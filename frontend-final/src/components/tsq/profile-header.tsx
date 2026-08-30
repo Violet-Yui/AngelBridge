@@ -3,6 +3,7 @@
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Camera, Check, MapPin, PenLine, Settings, X } from "lucide-react";
+import { toast } from "sonner";
 import { useProfileStore } from "@/stores/profile-store";
 import { angelbridgeApi } from "@/lib/angelbridge-api";
 import type { AngelBridgeSession } from "@/lib/angelbridge-session";
@@ -29,6 +30,8 @@ export function ProfileHeader() {
   const [account, setAccount] = useState<AngelBridgeSession | null>(null);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [pendingAvatar, setPendingAvatar] = useState<string | null>(null);
+  const [pendingAvatarFile, setPendingAvatarFile] = useState<File | null>(null);
+  const [savingAvatar, setSavingAvatar] = useState(false);
 
   useEffect(() => {
     angelbridgeApi.getAccount().then(setAccount).catch(() => undefined);
@@ -36,7 +39,7 @@ export function ProfileHeader() {
 
   const avatar = account?.avatarUrl || persona?.avatar || "🌳";
   const previewAvatar = pendingAvatar ?? avatar;
-  const isImg = previewAvatar.startsWith("http") || previewAvatar.startsWith("blob:") || previewAvatar.startsWith("data:");
+  const isImg = previewAvatar.startsWith("http") || previewAvatar.startsWith("/api/media/") || previewAvatar.startsWith("blob:") || previewAvatar.startsWith("data:");
   const name = account?.nickname || persona?.nickname || "";
   const matureShowcase = isMatureShowcaseSession(account);
   const showcaseProfile = account?.nickname === "摄影师小林"
@@ -52,15 +55,26 @@ export function ProfileHeader() {
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file || !file.type.startsWith("image/")) return;
-    const reader = new FileReader();
-    reader.onload = () => typeof reader.result === "string" && setPendingAvatar(reader.result);
-    reader.readAsDataURL(file);
+    setPendingAvatarFile(file);
+    setPendingAvatar(URL.createObjectURL(file));
   }
 
-  function saveAvatar() {
-    if (!pendingAvatar) return;
-    setPersona({ ...(persona ?? {}), avatar: pendingAvatar });
-    setPendingAvatar(null);
+  async function saveAvatar() {
+    if (!pendingAvatarFile || savingAvatar) return;
+    setSavingAvatar(true);
+    try {
+      const uploaded = await angelbridgeApi.uploadImage(pendingAvatarFile);
+      const updated = await angelbridgeApi.updateAccount({ avatarUrl: uploaded.url });
+      setAccount(updated);
+      setPersona({ ...(persona ?? {}), avatar: uploaded.url });
+      setPendingAvatar(null);
+      setPendingAvatarFile(null);
+      toast.success("头像已保存");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "头像保存失败");
+    } finally {
+      setSavingAvatar(false);
+    }
   }
 
   return (
@@ -98,7 +112,7 @@ export function ProfileHeader() {
         </div>
       </div>
 
-      {pendingAvatar && <div className="fixed inset-0 z-[70] mx-auto flex w-full max-w-[var(--app-max-width)] items-end bg-black/30 px-4 pb-[max(18px,env(safe-area-inset-bottom,0px))]"><div className="w-full rounded-[28px] border border-white/70 bg-white p-5 text-center shadow-[0_20px_60px_rgba(0,0,0,.18)]"><div className="mx-auto grid h-24 w-24 place-items-center overflow-hidden rounded-full border-[4px] border-[#edf6e6] bg-white shadow-[0_10px_24px_rgba(55,95,42,.14)]"><img src={pendingAvatar} alt="新头像预览" className="h-full w-full object-cover" /></div><h2 className="mt-4 text-[18px] font-black text-[#20351d]">保存这张头像吗？</h2><p className="mt-1 text-[13px] leading-relaxed text-[#758274]">保存后，个人主页会立即使用这张新头像。</p><div className="mt-5 grid grid-cols-2 gap-3"><button type="button" onClick={() => setPendingAvatar(null)} className="flex items-center justify-center gap-1.5 rounded-full border border-[#dce8d6] bg-white py-3 text-[14px] font-bold text-[#758274] active:scale-95"><X className="h-4 w-4" />取消</button><button type="button" onClick={saveAvatar} className="flex items-center justify-center gap-1.5 rounded-full bg-[#62A75C] py-3 text-[14px] font-bold text-white shadow-[0_10px_22px_rgba(98,167,92,.24)] active:scale-95"><Check className="h-4 w-4" />保存头像</button></div></div></div>}
+      {pendingAvatar && <div className="fixed inset-0 z-[70] mx-auto flex w-full max-w-[var(--app-max-width)] items-end bg-black/30 px-4 pb-[max(18px,env(safe-area-inset-bottom,0px))]"><div className="w-full rounded-[28px] border border-white/70 bg-white p-5 text-center shadow-[0_20px_60px_rgba(0,0,0,.18)]"><div className="mx-auto grid h-24 w-24 place-items-center overflow-hidden rounded-full border-[4px] border-[#edf6e6] bg-white shadow-[0_10px_24px_rgba(55,95,42,.14)]"><img src={pendingAvatar} alt="新头像预览" className="h-full w-full object-cover" /></div><h2 className="mt-4 text-[18px] font-black text-[#20351d]">保存这张头像吗？</h2><p className="mt-1 text-[13px] leading-relaxed text-[#758274]">保存后，个人主页会立即使用这张新头像。</p><div className="mt-5 grid grid-cols-2 gap-3"><button type="button" disabled={savingAvatar} onClick={() => { setPendingAvatar(null); setPendingAvatarFile(null); }} className="flex items-center justify-center gap-1.5 rounded-full border border-[#dce8d6] bg-white py-3 text-[14px] font-bold text-[#758274] active:scale-95 disabled:opacity-50"><X className="h-4 w-4" />取消</button><button type="button" disabled={savingAvatar} onClick={() => void saveAvatar()} className="flex items-center justify-center gap-1.5 rounded-full bg-[#62A75C] py-3 text-[14px] font-bold text-white shadow-[0_10px_22px_rgba(98,167,92,.24)] active:scale-95 disabled:opacity-50"><Check className="h-4 w-4" />{savingAvatar ? "保存中…" : "保存头像"}</button></div></div></div>}
     </section>
   );
 }

@@ -146,18 +146,20 @@ export function CreateScreen() {
       const makeValue = (value: string, withImages: boolean) => ({
         domain: domainByChannel[current.key] ?? "service",
         title: value.slice(0, 80),
-        description: value,
-        keywords: [current.label, ...value.split(/[，。；、\s]+/).filter(Boolean).slice(0, 4)],
-        deliverables: standard ? [standard] : [],
+        description: value.slice(0, 500),
+        keywords: [current.label, ...value.split(/[，。；、\s]+/).filter(Boolean).slice(0, 4)]
+          .map((keyword) => keyword.slice(0, 30)),
+        deliverables: standard ? [standard.slice(0, 120)] : [],
         visibility: "match_only",
         images: withImages ? attachments : [],
       });
       const offers = provideOrOffer ? [makeValue(provideOrOffer, intent === "have")] : [];
       const needs = needOrReceive ? [makeValue(needOrReceive, intent === "want")] : [];
       const created = await angelbridgeApi.createPublication({
+        title,
         category: categoryByChannel[current.key] ?? "other",
         kind: offers.length > 0 && needs.length > 0 ? "exchange" : intent === "have" ? "offer" : "need",
-        bio: text,
+        bio: text.slice(0, 500),
         offers,
         needs,
         goals: [],
@@ -168,7 +170,12 @@ export function CreateScreen() {
           contactDisclosure: "after_mutual_consent",
           exactLocationDisclosure: "after_pact_active",
         },
-        proposedPactTerms: firstAction && standard && exit ? { firstAction, completionCriteria: standard, exitRule: exit, otherNotes: notes ?? "" } : null,
+        proposedPactTerms: firstAction && standard && exit ? {
+          firstAction: firstAction.slice(0, 200),
+          completionCriteria: standard.slice(0, 300),
+          exitRule: exit.slice(0, 200),
+          otherNotes: (notes ?? "").slice(0, 500),
+        } : null,
       });
       await angelbridgeApi.publishPublication(created.publicationId);
       await angelbridgeApi.runPublicationMatching(created.publicationId);

@@ -165,7 +165,28 @@ describe("real account personalization and media", () => {
     const attachment = (await uploaded.json() as any).data;
     expect(attachment).toMatchObject({ mimeType: "image/png", fileName: "avatar.png" });
 
-    const served = await handle(new Request(`http://local.test${attachment.url}`));
+    const saved = await requestJson(handle, "/api/me/account", {
+      method: "PATCH",
+      token: session.token,
+      body: { avatarUrl: attachment.url },
+    });
+    expect(saved.response.status).toBe(200);
+    expect(saved.body.data.avatarUrl).toBe(attachment.url);
+
+    const restored = createApiHandler(
+      new AngelBridgeApplication(),
+      undefined,
+      accounts,
+      new InMemoryMatchPoolStateRepository(),
+      undefined,
+      undefined,
+      undefined,
+      new FileSystemImageStore(directory),
+    );
+    const account = await requestJson(restored, "/api/me/account", { token: session.token });
+    expect(account.body.data.avatarUrl).toBe(attachment.url);
+
+    const served = await restored(new Request(`http://local.test${attachment.url}`));
     expect(served.status).toBe(200);
     expect(served.headers.get("content-type")).toBe("image/png");
     expect([...new Uint8Array(await served.arrayBuffer())]).toEqual([137, 80, 78, 71]);

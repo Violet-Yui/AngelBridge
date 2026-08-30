@@ -3,12 +3,14 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { ImageAttachmentSchema, type ImageAttachment } from "./contracts";
 
-const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
 const allowedMimeTypes = new Set([
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/gif",
+  "image/heic",
+  "image/heif",
 ]);
 
 export interface ImageStore {
@@ -24,7 +26,7 @@ export class FileSystemImageStore implements ImageStore {
       throw new Error("unsupported image type");
     }
     if (file.size <= 0 || file.size > MAX_IMAGE_BYTES) {
-      throw new Error("image must be between 1 byte and 8 MB");
+      throw new Error("image must be between 1 byte and 20 MB");
     }
     const id = randomUUID();
     const attachment = ImageAttachmentSchema.parse({

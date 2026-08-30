@@ -17,13 +17,15 @@
 
 ## 产品预览
 
+以下截图由 OpenCLI 控制 Edge 访问[真实生产环境](https://angel.xxpeople.com/)采集；点击图片可直接打开对应线上页面。
+
 | 人生树与价值入口 | AI 匹配与发现 |
 | --- | --- |
-| ![天使桥首页](frontend-final/public/design-frames/01-home.png) | ![发现页](frontend-final/public/design-frames/02-discover.png) |
+| [![生产环境人生树首页](frontend-final/public/product-preview/production-home.png)](https://angel.xxpeople.com/) | [![生产环境发现页](frontend-final/public/product-preview/production-discover.png)](https://angel.xxpeople.com/discover) |
 
 | 发布真实意图 | 桥约履约闭环 |
 | --- | --- |
-| ![发布页](frontend-final/public/design-frames/03-create.png) | ![桥约页](frontend-final/public/design-frames/08-bridge.png) |
+| [![生产环境发布页](frontend-final/public/product-preview/production-create.png)](https://angel.xxpeople.com/create) | [![生产环境桥约页](frontend-final/public/product-preview/production-bridge.png)](https://angel.xxpeople.com/bridge) |
 
 ## 已实现能力
 

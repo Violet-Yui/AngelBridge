@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { MatchingProfile } from "../domain/contracts";
+import { MatchReasonSchema, type MatchingProfile } from "../domain/contracts";
 
 export const SemanticRelationSchema = z.enum([
   "exact",
@@ -27,6 +27,48 @@ export const AiAssessmentConfidenceSchema = z.enum([
   "low",
 ]);
 
+export const BridgeTierSchema = z.enum([
+  "ideal",
+  "feasible",
+  "conditional",
+]);
+
+export const RelationshipPatternSchema = z.enum([
+  "supply_demand",
+  "transactional",
+  "reciprocal_exchange",
+  "criteria_fit",
+  "collaboration",
+  "mutual_affinity",
+  "gift_support",
+]);
+
+export const BenefitBasisSchema = z.enum([
+  "resource",
+  "money",
+  "opportunity",
+  "criteria_satisfaction",
+  "shared_goal",
+  "relationship_value",
+  "altruistic_goal",
+]);
+
+export const PartyBenefitSchema = z.object({
+  partyId: z.string().min(1),
+  strength: SemanticRelationSchema,
+  basis: BenefitBasisSchema,
+  reason: z.string().trim().min(1).max(160),
+  evidenceNodeIds: z.array(z.string().min(1)).min(1).max(6),
+  unknowns: z.array(z.string().trim().min(1).max(100)).max(6),
+});
+
+export const ExecutionAssessmentSchema = z.object({
+  level: DeliverabilitySchema,
+  reason: z.string().trim().min(1).max(160),
+  evidenceNodeIds: z.array(z.string().min(1)).max(6),
+  unknowns: z.array(z.string().trim().min(1).max(100)).max(6),
+});
+
 export const DirectionalMatchAssessmentSchema = z.object({
   semanticRelation: SemanticRelationSchema,
   deliverability: DeliverabilitySchema,
@@ -41,15 +83,32 @@ export const DirectionalMatchAssessmentSchema = z.object({
 export const AiMatchAssessmentSchema = z.object({
   viewerId: z.string().min(1),
   candidateId: z.string().min(1),
-  viewerToCandidate: DirectionalMatchAssessmentSchema,
-  candidateToViewer: DirectionalMatchAssessmentSchema,
+  viewerToCandidate: DirectionalMatchAssessmentSchema.optional(),
+  candidateToViewer: DirectionalMatchAssessmentSchema.optional(),
+  primaryPattern: RelationshipPatternSchema.optional(),
+  supportingPatterns: z.array(RelationshipPatternSchema).max(3).default([]),
+  partyBenefits: z.array(PartyBenefitSchema).length(2).optional(),
+  executionFit: ExecutionAssessmentSchema.optional(),
+  conflicts: z.array(z.string().trim().min(1).max(100)).max(6).default([]),
+  matchReasons: z.array(MatchReasonSchema).max(3).default([]),
   confidence: AiAssessmentConfidenceSchema,
   assessmentMode: z.enum(["fixture", "live_ai"]),
   model: z.string().min(1),
   promptVersion: z.string().min(1),
   generatedAt: z.string().datetime(),
-  isSynthetic: z.literal(true),
+  isSynthetic: z.boolean(),
   datasetVersion: z.string().min(1),
+}).superRefine((value, context) => {
+  const hasLegacy = Boolean(value.viewerToCandidate && value.candidateToViewer);
+  const hasRelationship = Boolean(
+    value.primaryPattern && value.partyBenefits && value.executionFit,
+  );
+  if (!hasLegacy && !hasRelationship) {
+    context.addIssue({
+      code: "custom",
+      message: "assessment requires either directional pairs or relationship benefits",
+    });
+  }
 });
 
 export const DirectionScoreBreakdownSchema = z.object({
@@ -63,12 +122,14 @@ export const HybridScoreBreakdownSchema = z.object({
   viewerToCandidate: DirectionScoreBreakdownSchema,
   candidateToViewer: DirectionScoreBreakdownSchema,
   bilateralValue: z.number().min(0).max(1),
+  balanceFactor: z.number().min(0).max(1).optional(),
   evidenceCompleteness: z.number().min(0).max(1),
   aiConfidence: z.number().min(0).max(1),
   freshness: z.number().min(0).max(1),
   overallConfidence: z.number().min(0).max(1),
   bridgeIndex: z.number().min(0).max(100),
-  algorithmVersion: z.literal("hybrid-v0.2"),
+  tier: BridgeTierSchema.optional(),
+  algorithmVersion: z.enum(["hybrid-v0.2", "semantic-bridge-v0.3"]),
 });
 
 export type AiMatchAssessmentInput = {
@@ -82,6 +143,9 @@ export type SoftConstraintRisk = z.infer<typeof SoftConstraintRiskSchema>;
 export type AiAssessmentConfidence = z.infer<
   typeof AiAssessmentConfidenceSchema
 >;
+export type BridgeTier = z.infer<typeof BridgeTierSchema>;
+export type RelationshipPattern = z.infer<typeof RelationshipPatternSchema>;
+export type PartyBenefit = z.infer<typeof PartyBenefitSchema>;
 export type DirectionalMatchAssessment = z.infer<
   typeof DirectionalMatchAssessmentSchema
 >;

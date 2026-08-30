@@ -176,6 +176,18 @@ export class FixtureAiMatchAssessmentProvider
         input.candidate,
         input.viewer,
       ),
+      matchReasons: [
+        {
+          type: "value_to_you",
+          text: assessmentFor(viewerToCandidate, input.viewer, input.candidate).reason,
+          evidenceNodeIds: [viewerToCandidate.need.id, viewerToCandidate.offer.id],
+        },
+        {
+          type: "value_to_other",
+          text: assessmentFor(candidateToViewer, input.candidate, input.viewer).reason,
+          evidenceNodeIds: [candidateToViewer.need.id, candidateToViewer.offer.id],
+        },
+      ],
       confidence: confidenceFor(evidenceNodes),
       assessmentMode: "fixture",
       model: "fixture-hybrid-v1",

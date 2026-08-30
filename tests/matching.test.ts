@@ -23,6 +23,7 @@ const node = (
   updatedAt: "2026-08-26T10:00:00.000Z",
   isSynthetic: true,
   datasetVersion: "v1",
+  images: [],
 });
 
 const profile = (
@@ -34,6 +35,8 @@ const profile = (
 ): MatchingProfile => ({
   personaId,
   displayName,
+  personalityTags: [],
+  interestTags: [],
   nodes: [
     node(
       personaId,

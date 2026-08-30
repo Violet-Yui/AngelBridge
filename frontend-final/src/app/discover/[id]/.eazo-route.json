@@ -1,0 +1,10 @@
+{
+  "route": "discover/[id]",
+  "name": "帖子详情",
+  "nav_type": "stack",
+  "parent": "discover",
+  "order_index": 10,
+  "icon": "file-text",
+  "summary": "帖子详情：点赞/收藏/评论/投诉",
+  "preview_route": "discover/p1"
+}

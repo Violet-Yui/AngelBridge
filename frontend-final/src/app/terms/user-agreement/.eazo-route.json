@@ -1,0 +1,9 @@
+{
+  "route": "terms/user-agreement",
+  "name": "用户协议",
+  "nav_type": "stack",
+  "parent": "auth",
+  "order_index": 21,
+  "icon": "file-text",
+  "summary": "天使桥用户服务协议阅读页"
+}

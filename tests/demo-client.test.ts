@@ -56,7 +56,7 @@ describe("AngelBridgeDemoClient", () => {
     const { client, session, transport } = setup();
     const bootstrap = await client.startDemo();
 
-    expect(Object.keys(session.get().rolesByPersonaId)).toHaveLength(4);
+    expect(Object.keys(session.get().rolesByPersonaId)).toHaveLength(6);
     expect((await client.getDashboard()).stage).toBe("created");
 
     const parsed = await client.organizeWish("我有工作室，需要品牌摄影");

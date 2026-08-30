@@ -1,0 +1,9 @@
+{
+  "route": "bridge/schedule",
+  "name": "桥约日程",
+  "nav_type": "stack",
+  "parent": "bridge/confirm",
+  "order_index": 15,
+  "icon": "calendar-check",
+  "summary": "确认桥约并收入日程，开始行动"
+}

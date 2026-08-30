@@ -56,14 +56,43 @@ describe("hybrid AI matching", () => {
         createProvider(),
       );
 
+      expect(matches).toHaveLength(3);
       expect(matches[0].candidateId).toBe(scenario.expectedCandidateId);
+      expect(matches[0].internalScore).toBeGreaterThanOrEqual(90);
+      expect(matches[0].internalScore).toBeLessThanOrEqual(95);
+      expect(matches[1].internalScore).toBeGreaterThanOrEqual(76);
+      expect(matches[1].internalScore).toBeLessThanOrEqual(86);
+      expect(matches[2].internalScore).toBeGreaterThanOrEqual(64);
+      expect(matches[2].internalScore).toBeLessThanOrEqual(74);
+      expect(matches[0].internalScore).toBeGreaterThan(matches[1].internalScore);
+      expect(matches[1].internalScore).toBeGreaterThan(matches[2].internalScore);
+      expect(matches[1].proof.unknowns.length).toBeGreaterThan(0);
+      expect(matches[2].proof.unknowns.length).toBeGreaterThan(0);
+
+      const viewer = scenario.profiles.find(
+        (profile) => profile.personaId === scenario.viewerPersonaId,
+      )!;
+      const lowCandidate = scenario.profiles.find(
+        (profile) => profile.personaId.endsWith("-e"),
+      )!;
+      const lowEvaluation = await evaluateHybridMatch(
+        viewer,
+        lowCandidate,
+        createProvider(),
+        fixedNow,
+      );
+      expect(lowEvaluation.eligible).toBe(false);
+      expect(
+        matches.some((match) => match.candidateId === lowCandidate.personaId),
+      ).toBe(false);
       expect(matches[0].assessment).toMatchObject({
         assessmentMode: "fixture",
         model: "fixture-hybrid-v1",
         isSynthetic: true,
       });
       expect(matches[0].scoreBreakdown).toMatchObject({
-        algorithmVersion: "hybrid-v0.2",
+        algorithmVersion: "semantic-bridge-v0.3",
+        tier: "ideal",
         bridgeIndex: matches[0].internalScore,
       });
       expect(matches[0].proof.evidence.length).toBeGreaterThanOrEqual(4);
@@ -106,10 +135,10 @@ describe("hybrid AI matching", () => {
     const invalidProvider: AiMatchAssessmentProvider = {
       async assess(input) {
         const assessment = await baseProvider.assess(input);
-        assessment.viewerToCandidate.needNodeId = "invented:need:node";
-        assessment.viewerToCandidate.evidenceNodeIds = [
+        assessment.viewerToCandidate!.needNodeId = "invented:need:node";
+        assessment.viewerToCandidate!.evidenceNodeIds = [
           "invented:need:node",
-          assessment.viewerToCandidate.offerNodeId,
+          assessment.viewerToCandidate!.offerNodeId,
         ];
         return assessment;
       },
@@ -156,16 +185,16 @@ describe("hybrid AI matching", () => {
     });
     const nodes = [
       scenario.profiles[0].nodes.find(
-        (node) => node.id === assessment.viewerToCandidate.needNodeId,
+        (node) => node.id === assessment.viewerToCandidate!.needNodeId,
       )!,
       scenario.profiles[1].nodes.find(
-        (node) => node.id === assessment.viewerToCandidate.offerNodeId,
+        (node) => node.id === assessment.viewerToCandidate!.offerNodeId,
       )!,
       scenario.profiles[1].nodes.find(
-        (node) => node.id === assessment.candidateToViewer.needNodeId,
+        (node) => node.id === assessment.candidateToViewer!.needNodeId,
       )!,
       scenario.profiles[0].nodes.find(
-        (node) => node.id === assessment.candidateToViewer.offerNodeId,
+        (node) => node.id === assessment.candidateToViewer!.offerNodeId,
       )!,
     ];
 
@@ -178,37 +207,41 @@ describe("hybrid AI matching", () => {
     const scenario = demoScenarios[0];
     const viewer = scenario.profiles[0];
     const candidate = scenario.profiles[1];
+    const viewerNeed = viewer.nodes.find((node) => node.direction === "need")!;
+    const candidateOffer = candidate.nodes.find((node) => node.direction === "offer")!;
     const toolArguments = {
-      viewerToCandidate: {
-        semanticRelation: "exact",
-        deliverability: "clear",
-        softConstraintRisk: "none",
-        needNodeId: viewer.nodes.find((node) => node.direction === "need")!.id,
-        offerNodeId: candidate.nodes.find(
-          (node) => node.direction === "offer",
-        )!.id,
-        reason: "摄影服务可以回应品牌图片需求",
-        unknowns: [],
-        evidenceNodeIds: [
-          viewer.nodes.find((node) => node.direction === "need")!.id,
-          candidate.nodes.find((node) => node.direction === "offer")!.id,
-        ],
+      primaryPattern: "supply_demand",
+      supportingPatterns: ["transactional"],
+      partyBenefits: [
+        {
+          partyId: viewer.personaId,
+          strength: "exact",
+          basis: "resource",
+          reason: "摄影服务可以回应品牌图片需求",
+          evidenceNodeIds: [viewerNeed.id, candidateOffer.id],
+          unknowns: [],
+        },
+        {
+          partyId: candidate.personaId,
+          strength: "strong",
+          basis: "money",
+          reason: "摄影师可以获得合理服务回报",
+          evidenceNodeIds: [candidateOffer.id],
+          unknowns: ["费用需要确认"],
+        },
+      ],
+      executionFit: {
+        level: "partial",
+        reason: "双方需要确认拍摄清单和时间",
+        evidenceNodeIds: [viewerNeed.id, candidateOffer.id],
+        unknowns: ["拍摄时间"],
       },
-      candidateToViewer: {
-        semanticRelation: "exact",
-        deliverability: "clear",
-        softConstraintRisk: "none",
-        needNodeId: candidate.nodes.find((node) => node.direction === "need")!
-          .id,
-        offerNodeId: viewer.nodes.find((node) => node.direction === "offer")!
-          .id,
-        reason: "工作室可以回应拍摄空间需求",
-        unknowns: [],
-        evidenceNodeIds: [
-          candidate.nodes.find((node) => node.direction === "need")!.id,
-          viewer.nodes.find((node) => node.direction === "offer")!.id,
-        ],
-      },
+      matchReasons: [{
+        type: "value_to_you",
+        text: "摄影服务回应品牌图片需求",
+        evidenceNodeIds: [viewerNeed.id, candidateOffer.id],
+      }],
+      conflicts: [],
       confidence: "high",
     };
     const fetchMock = vi.fn(
@@ -220,7 +253,7 @@ describe("hybrid AI matching", () => {
                 tool_calls: [
                   {
                     function: {
-                      name: "assess_bilateral_value_match",
+                      name: "assess_value_connection",
                       arguments: JSON.stringify(toolArguments),
                     },
                   },
@@ -248,8 +281,10 @@ describe("hybrid AI matching", () => {
     });
     const body = JSON.parse(fetchMock.mock.calls[0][1]!.body as string);
     expect(body.temperature).toBe(0);
+    expect(body.messages[0].content).toContain("关系模式");
+    expect(body.messages[0].content).toContain("双向价值不是双方必须互换非金钱资源");
     expect(body.tool_choice.function.name).toBe(
-      "assess_bilateral_value_match",
+      "assess_value_connection",
     );
   });
 });

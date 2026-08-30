@@ -10,13 +10,16 @@
     "api:start": "tsx scripts/run-api.ts",
     "db:migrate": "tsx scripts/migrate-db.ts",
     "db:seed": "tsx scripts/seed-db.ts",
+    "demo:reset-showcase": "tsx scripts/reset-showcase-demo.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run tests",
+    "test": "vitest run tests --pool=threads --maxWorkers=1",
     "test:watch": "vitest tests",
     "verify:fixtures": "tsx scripts/verify-fixtures.ts",
     "verify": "npm run typecheck && npm run test && npm run verify:fixtures"
   },
   "dependencies": {
+    "@alicloud/dysmsapi20170525": "^4.6.0",
+    "@alicloud/openapi-client": "^0.4.15",
     "pg": "^8.16.3",
     "zod": "4.4.3"
   },

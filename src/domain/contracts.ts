@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ImageAttachmentSchema } from "../media/contracts";
 
 export const DirectionSchema = z.enum(["offer", "need", "goal"]);
 export const DataSourceSchema = z.enum(["fixture", "live_ai"]);
@@ -37,6 +38,7 @@ export const ValueNodeSchema = z.object({
   updatedAt: z.string().datetime(),
   isSynthetic: z.boolean(),
   datasetVersion: z.string().min(1),
+  images: z.array(ImageAttachmentSchema).max(6).default([]),
 });
 
 export const MatchConstraintsSchema = z.object({
@@ -127,6 +129,12 @@ export const ParseResultSchema = z
     }
   });
 
+export const MatchReasonSchema = z.object({
+  type: z.enum(["value_to_you", "value_to_other", "execution_fit"]),
+  text: z.string().trim().min(1).max(90),
+  evidenceNodeIds: z.array(z.string().min(1)).max(4),
+});
+
 export const MatchProofSchema = z.object({
   matchId: z.string().min(1),
   viewerId: z.string().min(1),
@@ -139,6 +147,7 @@ export const MatchProofSchema = z.object({
   ]),
   valueToViewer: z.array(z.string().min(1)).min(1),
   valueToCandidate: z.array(z.string().min(1)).min(1),
+  matchReasons: z.array(MatchReasonSchema).min(1).max(3).default([]),
   satisfiedConstraints: z.array(z.string().min(1)),
   conflicts: z.array(z.string().min(1)),
   unknowns: z.array(z.string().min(1)),
@@ -149,7 +158,7 @@ export const MatchProofSchema = z.object({
     }),
   ),
   generatedAt: z.string().datetime(),
-  isSynthetic: z.literal(true),
+  isSynthetic: z.boolean(),
   datasetVersion: z.string().min(1),
 });
 
@@ -198,7 +207,9 @@ export const OutcomeSchema = z.object({
 export const MatchingProfileSchema = z.object({
   personaId: z.string().min(1),
   displayName: z.string().min(1),
-  nodes: z.array(ValueNodeSchema).min(2),
+  personalityTags: z.array(z.string().min(1)).max(15).default([]),
+  interestTags: z.array(z.string().min(1)).max(5).default([]),
+  nodes: z.array(ValueNodeSchema).min(1),
   acceptedExchangeModes: z.array(ExchangeModeSchema).min(1),
   constraints: MatchConstraintsSchema,
 });
@@ -208,6 +219,7 @@ export type Intent = z.infer<typeof IntentSchema>;
 export type DisclosurePolicy = z.infer<typeof DisclosurePolicySchema>;
 export type ParseResult = z.infer<typeof ParseResultSchema>;
 export type MatchProof = z.infer<typeof MatchProofSchema>;
+export type MatchReason = z.infer<typeof MatchReasonSchema>;
 export type BridgePact = z.infer<typeof BridgePactSchema>;
 export type Outcome = z.infer<typeof OutcomeSchema>;
 export type MatchingProfile = z.infer<typeof MatchingProfileSchema>;

@@ -1,0 +1,9 @@
+{
+  "route": "auth",
+  "name": "注册登录流程",
+  "nav_type": "stack",
+  "parent": "",
+  "order_index": 20,
+  "icon": "log-in",
+  "summary": "天使桥注册登录全流程可交互原型"
+}

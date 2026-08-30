@@ -1,0 +1,8 @@
+{
+  "route": "eazo-cover-preview",
+  "name": "封面预览",
+  "nav_type": "hidden",
+  "order_index": 99,
+  "icon": "image",
+  "summary": "封面自动演示"
+}

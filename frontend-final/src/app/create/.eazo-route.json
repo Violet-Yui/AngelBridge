@@ -1,0 +1,8 @@
+{
+  "route": "create",
+  "name": "创建",
+  "nav_type": "tab",
+  "order_index": 3,
+  "icon": "plus",
+  "summary": "发布拥有的资源或心愿"
+}

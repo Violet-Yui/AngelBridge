@@ -1,0 +1,10 @@
+{
+  "route": "follow/[id]",
+  "name": "关注帖子详情",
+  "nav_type": "stack",
+  "parent": "follow",
+  "order_index": 33,
+  "icon": "file-text",
+  "summary": "关注页帖子详情",
+  "preview_route": "follow/tea-welcome"
+}

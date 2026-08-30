@@ -1,0 +1,8 @@
+{
+  "route": "experience",
+  "name": "经验",
+  "nav_type": "stack",
+  "order_index": 23,
+  "icon": "lightbulb",
+  "summary": "经验与心得分享流"
+}

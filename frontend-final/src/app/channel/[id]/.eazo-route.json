@@ -1,0 +1,9 @@
+{
+  "route": "channel/[id]",
+  "name": "频道详情",
+  "nav_type": "stack",
+  "order_index": 24,
+  "icon": "file-text",
+  "summary": "频道内容详情：点赞/收藏/评论/投诉",
+  "preview_route": "channel/t1"
+}

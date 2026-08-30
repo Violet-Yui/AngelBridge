@@ -1,0 +1,9 @@
+{
+  "route": "bridge/confirm",
+  "name": "双方确认",
+  "nav_type": "stack",
+  "parent": "bridge/detail",
+  "order_index": 14,
+  "icon": "circle-check",
+  "summary": "双方确认搭桥与信息开放边界"
+}

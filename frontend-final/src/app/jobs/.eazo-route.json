@@ -1,0 +1,8 @@
+{
+  "route": "jobs",
+  "name": "找工作",
+  "nav_type": "stack",
+  "order_index": 21,
+  "icon": "briefcase",
+  "summary": "岗位与求职内容流"
+}

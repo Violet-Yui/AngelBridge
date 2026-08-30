@@ -1,0 +1,220 @@
+{
+  "common": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "loading": "Loading…",
+    "on": "On",
+    "off": "Off",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "userId": "User ID"
+  },
+  "language": {
+    "label": "Language",
+    "triggerLabel": "Language: {{language}}",
+    "followSystem": "System",
+    "followSystemWithLanguage": "System ({{language}})",
+    "enUS": "English",
+    "zhCN": "中文"
+  },
+  "tsq": {
+    "tabs": {
+      "home": "Bridge",
+      "messages": "Messages",
+      "create": "Create",
+      "bridge": "Pacts",
+      "me": "Me"
+    },
+    "nav": { "follow": "Following", "now": "Now" },
+    "home": {
+      "tree": "My Life Tree",
+      "growthGame": "Life tree vitality",
+      "growthGameHint": "Visit, exchange, and sow wishes to help your tree thrive",
+      "todayGain": "Today +12",
+      "sunlightCoins": "Sunlight coins",
+      "visitGain": "Visit +3",
+      "freshSprouts": "Fresh sprouts",
+      "exchangeSprout": "Exchange to sprout",
+      "wishSeeds": "Wish seeds",
+      "sowing": "Sowing",
+      "growthRecord": "Growth log",
+      "growth": "Growth",
+      "vsYesterday": "vs. yesterday",
+      "followedYou": "follow you",
+      "newGrowth": "new growth",
+      "todayStatus": "Today",
+      "visitorBubble": "A friend just dropped by~",
+      "leafBubble": "Life +5",
+      "own": "I Have",
+      "ownSub": "Resources to offer",
+      "wish": "I Wish",
+      "wishSub": "Resources I want",
+      "opp": "Opportunities",
+      "oppSub": "Found by AI",
+      "matchTitle": "Xiaotian matched for you",
+      "todoTitle": "To confirm",
+      "seeAll": "See all",
+      "alsoInterested": "also interested",
+      "todoEmpty": "All done — Xiaotian will keep watching for new chances 🌱",
+      "reject": "Decline",
+      "accept": "Accept",
+      "accepted": "Accepted — opening the pact to chat…",
+      "rejected": "Declined — Xiaotian will learn your taste",
+      "matchLabel": "Match"
+    },
+    "discover": {
+      "subtitle": "Find people worth knowing",
+      "openCard": "View their profile — connect or propose a swap",
+      "like": "Like"
+    },
+    "bridge": {
+      "title": "Pacts",
+      "subtitle": "Coop · Friend · Swap — all invites in one place",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "ongoing": "In progress",
+      "done": "Completed",
+      "rejected": "Declined",
+      "coop": "Coop",
+      "friend": "Friend",
+      "swap": "Swap",
+      "inviteSuffix": " invites",
+      "count": "",
+      "empty": "No invites here yet",
+      "mineOffer": "I offer",
+      "theirsOffer": "They offer",
+      "reject": "Decline",
+      "accept": "Accept",
+      "enterChat": "Open chat · finish the swap",
+      "schedule": "Schedule",
+      "archived": "Archived",
+      "toastAccept": "Accepted — arrange it in Messages",
+      "toastReject": "Invite declined",
+      "matchLabel": "Match"
+    },
+    "messages": {
+      "title": "Messages",
+      "subtitle": "Friends · Strangers · Xiaotian AI",
+      "friends": "Friends",
+      "strangers": "Strangers",
+      "unread": "unread",
+      "openAi": "Open chat with Xiaotian",
+      "open": "Open chat with {{name}}"
+    },
+    "chat": {
+      "back": "Back to messages",
+      "oneToOne": "1:1 chat",
+      "todayFlow": "Today · A conversation in motion",
+      "voice": "Voice",
+      "emoji": "Emoji",
+      "input": "Type a message",
+      "add": "Add content",
+      "send": "Send",
+      "bridgeTip": "Bridge note",
+      "accept": "Accept",
+      "reschedule": "Reschedule",
+      "accepted": "Bridge confirmed",
+      "rescheduled": "Reschedule in progress",
+      "acceptedReply": "I confirm this bridge plan — see you then.",
+      "rescheduleReply": "I'd like to adjust the time. Let's align again.",
+      "enterBridge": "Continue confirmation",
+      "openSchedule": "Open scheduling",
+      "justNow": "Just now",
+      "xiaotianName": "Xiaotian · AI Assistant",
+      "xiaotianStatus": "Your personal AI · always online",
+      "xiaotianBadge": "AI assistant",
+      "xiaotianHi": "Hi there, I'm Xiaotian 🌱 What can I help you find today?",
+      "xiaotianGreet": "I'm right here with you~"
+    },
+    "me": {
+      "title": "Me",
+      "resources": "My Resources",
+      "resourcesSub": "All I can exchange",
+      "needs": "My Needs",
+      "needsSub": "What I want",
+      "growth": "My Growth",
+      "growthSub": "Experience · vitality",
+      "level": "Life tree level",
+      "growthValue": "Growth · today",
+      "luck": "Luck · mood",
+      "toNext": "{{n}} to Lv.{{lv}}"
+    },
+    "create": {
+      "title": "Create",
+      "subtitle": "Post what you have or wish for — let resources flow",
+      "have": "I have · to offer",
+      "want": "I want · a wish",
+      "pickChannel": "Pick a channel",
+      "describeHave": "Describe what you can offer",
+      "describeWant": "Describe what you want",
+      "placeholderHave": "e.g. I have a spare film camera, happy to swap for a design course or service~",
+      "placeholderWant": "e.g. Looking for a long-term brand designer, can trade photography services.",
+      "publish": "Publish",
+      "empty": "Write something first~",
+      "published": "Published — Xiaotian will look for matches 🌱"
+    },
+    "pet": {
+      "title": "Xiaotian",
+      "collapse": "Collapse",
+      "note": "The more kindness you share, the better I grow. You finished 1 swap today — I'm happy!",
+      "luck": "Luck",
+      "match": "Matches",
+      "level": "Level",
+      "mood": "Mood",
+      "defaultBubble": "I found 3 new opportunities",
+      "smartLines": ["Would you like to find a meeting place?", "Want to book a private dining place again?", "Whatever happens, Xiaotian will always guard you."],
+      "dragLabel": "Drag Xiaotian; it docks to the nearest side when released",
+      "chatCta": "Talk to Xiaotian",
+      "wake": "Wake Xiaotian"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "code": "404",
+      "title": "Page not found",
+      "description": "The page you're looking for doesn't exist or may have been moved.",
+      "backHome": "Back to home"
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. You can try again or return to the home page.",
+      "tryAgain": "Try again",
+      "backHome": "Back to home"
+    }
+  },
+  "starter": {
+    "badge": "Eazo App Starter",
+    "title": "Build your next app with Eazo",
+    "subtitle": "You now have a clean foundation with auth, data access, and platform integrations ready for your product.",
+    "steps": {
+      "readDocs": {
+        "title": "Read the docs",
+        "desc": "Open AGENTS.md and README.md to understand the template architecture.",
+        "code": "AGENTS.md + README.md"
+      },
+      "replacePage": {
+        "title": "Replace this page",
+        "desc": "Move your product UI into src/components and keep page.tsx thin.",
+        "code": "src/app/page.tsx"
+      },
+      "firstFeature": {
+        "title": "Build your first feature",
+        "desc": "Add API routes under src/app/api and call them from typed helpers.",
+        "code": "src/app/api/*"
+      },
+      "translations": {
+        "title": "Add translations",
+        "desc": "Edit en-US / zh-CN strings in src/i18n/locales. LanguageSwitcher and I18nProvider in layout.tsx are already wired.",
+        "code": "src/i18n/locales/"
+      }
+    },
+    "nextCommand": {
+      "title": "Next command",
+      "desc": "Start developing and iterate in real time.",
+      "command": "bun dev"
+    }
+  }
+}

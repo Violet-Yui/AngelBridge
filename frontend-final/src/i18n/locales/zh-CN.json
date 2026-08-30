@@ -1,0 +1,220 @@
+{
+  "common": {
+    "signIn": "登录",
+    "signOut": "退出登录",
+    "loading": "加载中…",
+    "on": "开",
+    "off": "关",
+    "close": "关闭",
+    "save": "保存",
+    "cancel": "取消",
+    "edit": "编辑",
+    "delete": "删除",
+    "userId": "用户 ID"
+  },
+  "language": {
+    "label": "语言",
+    "triggerLabel": "语言：{{language}}",
+    "followSystem": "跟随系统",
+    "followSystemWithLanguage": "跟随系统（{{language}}）",
+    "enUS": "English",
+    "zhCN": "中文"
+  },
+  "tsq": {
+    "tabs": {
+      "home": "天使桥",
+      "messages": "消息",
+      "create": "创建",
+      "bridge": "桥约",
+      "me": "我"
+    },
+    "nav": { "follow": "关注", "now": "此刻" },
+    "home": {
+      "tree": "人生树",
+      "growthGame": "人生树生机任务",
+      "growthGameHint": "访问、交换、播种心愿，都会让树更有生命力",
+      "todayGain": "今日 +12",
+      "sunlightCoins": "阳光币",
+      "visitGain": "访问 +3",
+      "freshSprouts": "新鲜枝条",
+      "exchangeSprout": "交换抽芽",
+      "wishSeeds": "心愿种子",
+      "sowing": "播种中",
+      "growthRecord": "成长记录",
+      "growth": "成长分",
+      "vsYesterday": "比昨天",
+      "followedYou": "关注了你",
+      "newGrowth": "新成长",
+      "todayStatus": "今日状态",
+      "visitorBubble": "有一位好友来访啦～",
+      "leafBubble": "生命值 +5",
+      "own": "我的拥有",
+      "ownSub": "可置换的资源",
+      "wish": "我的心愿",
+      "wishSub": "想获得的资源",
+      "opp": "发现机会",
+      "oppSub": "AI 为你发现",
+      "matchTitle": "小天为你匹配到的",
+      "todoTitle": "待确认事项",
+      "seeAll": "查看全部",
+      "alsoInterested": "人也感兴趣",
+      "todoEmpty": "都处理完啦，小天会继续为你留意新机会 🌱",
+      "reject": "拒绝",
+      "accept": "接受",
+      "accepted": "已接受，正在进入桥约沟通～",
+      "rejected": "已婉拒，小天会更懂你的偏好",
+      "matchLabel": "匹配度"
+    },
+    "discover": {
+      "subtitle": "找到值得认识的人",
+      "openCard": "查看 TA 的资料，可发起连接或换物邀请",
+      "like": "点赞"
+    },
+    "bridge": {
+      "title": "桥约",
+      "subtitle": "合作 · 交友 · 换物，统一管理你收到与发起的邀请",
+      "pending": "待处理",
+      "accepted": "已接收",
+      "ongoing": "进行中",
+      "done": "已完成",
+      "rejected": "已拒绝",
+      "coop": "合作",
+      "friend": "交友",
+      "swap": "换物",
+      "inviteSuffix": "邀请",
+      "count": "条",
+      "empty": "这里还没有邀请",
+      "mineOffer": "我方提供",
+      "theirsOffer": "对方提供",
+      "reject": "拒绝",
+      "accept": "接受",
+      "enterChat": "进入消息 · 完成交换",
+      "schedule": "安排时间",
+      "archived": "已归档",
+      "toastAccept": "已接受，去消息里约定沟通吧～",
+      "toastReject": "已婉拒该邀请",
+      "matchLabel": "匹配度"
+    },
+    "messages": {
+      "title": "消息",
+      "subtitle": "好友 · 陌生人 · 小天 AI",
+      "friends": "好友消息",
+      "strangers": "陌生人消息",
+      "unread": "条未读",
+      "openAi": "打开与小天的对话",
+      "open": "打开与 {{name}} 的对话"
+    },
+    "chat": {
+      "back": "返回消息",
+      "oneToOne": "1v1 聊天",
+      "todayFlow": "今天 · 天使桥里的对话正在流动",
+      "voice": "语音",
+      "emoji": "表情",
+      "input": "输入消息",
+      "add": "添加内容",
+      "send": "发送",
+      "bridgeTip": "桥约提示",
+      "accept": "接受",
+      "reschedule": "改期",
+      "accepted": "已确认桥约",
+      "rescheduled": "已进入改期沟通",
+      "acceptedReply": "我确认这个桥约，按这个时间见～",
+      "rescheduleReply": "我想改一下时间，我们再对齐一下。",
+      "enterBridge": "继续双方确认",
+      "openSchedule": "打开改期安排",
+      "justNow": "刚刚",
+      "xiaotianName": "小天 · 智能助手",
+      "xiaotianStatus": "你的专属 AI · 随时在线",
+      "xiaotianBadge": "AI 助手",
+      "xiaotianHi": "你好呀，我是小天 🌱 今天想让我帮你找点什么？",
+      "xiaotianGreet": "我在这儿陪着你～"
+    },
+    "me": {
+      "title": "我",
+      "resources": "我的资源",
+      "resourcesSub": "可置换的总和",
+      "needs": "我的需求",
+      "needsSub": "想获得的资源",
+      "growth": "我的成长",
+      "growthSub": "经验值 · 生命力",
+      "level": "人生树等级",
+      "growthValue": "今日 +",
+      "luck": "好运包 · 心情",
+      "toNext": "距离 Lv.{{lv}} 还需 {{n}}"
+    },
+    "create": {
+      "title": "创建",
+      "subtitle": "发布你的拥有或心愿，让资源流动起来",
+      "have": "我拥有 · 可提供",
+      "want": "我想要 · 心愿",
+      "pickChannel": "选择频道",
+      "describeHave": "描述你可以提供的资源",
+      "describeWant": "描述你想获得的资源",
+      "placeholderHave": "例如：我有一台闲置胶片相机，想换设计相关的课程或服务～",
+      "placeholderWant": "例如：想找一位长期合作的品牌设计师，可用摄影服务交换。",
+      "publish": "发布",
+      "empty": "先写点内容吧～",
+      "published": "已发布，小天会为你寻找匹配 🌱"
+    },
+    "pet": {
+      "title": "灵宠小天",
+      "collapse": "收起",
+      "note": "主人释放的善意越多，我就长得越好。今天你完成了 1 次交换，我很开心～",
+      "luck": "好运包",
+      "match": "匹配项",
+      "level": "等级",
+      "mood": "心情",
+      "defaultBubble": "我发现 3 个新机会",
+      "smartLines": ["您是不是需要找一个场所开会了？", "您是不是想再约一次私房餐馆？", "不论如何，小天都会一直守护着您。"],
+      "dragLabel": "拖动灵宠小天，松手后自动贴边",
+      "chatCta": "和小天说",
+      "wake": "唤出小天"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "code": "404",
+      "title": "页面未找到",
+      "description": "你访问的页面不存在，或已被移动。",
+      "backHome": "返回首页"
+    },
+    "generic": {
+      "title": "出了点问题",
+      "description": "发生了意外错误。你可以重试，或返回首页继续。",
+      "tryAgain": "重试",
+      "backHome": "返回首页"
+    }
+  },
+  "starter": {
+    "badge": "Eazo 应用模板",
+    "title": "用 Eazo 构建你的下一个应用",
+    "subtitle": "你现在拥有干净的基础：认证、数据访问与平台能力已就绪，可直接开发产品功能。",
+    "steps": {
+      "readDocs": {
+        "title": "阅读文档",
+        "desc": "打开 AGENTS.md 与 README.md，了解模板架构与约定。",
+        "code": "AGENTS.md + README.md"
+      },
+      "replacePage": {
+        "title": "替换本页",
+        "desc": "将产品 UI 放到 src/components 下，并保持 page.tsx 为薄入口。",
+        "code": "src/app/page.tsx"
+      },
+      "firstFeature": {
+        "title": "开发第一个功能",
+        "desc": "在 src/app/api 添加接口，并通过 src/lib/api 中的类型化 helper 调用。",
+        "code": "src/app/api/*"
+      },
+      "translations": {
+        "title": "补充翻译",
+        "desc": "在 src/i18n/locales 编辑中英文文案；layout 已接入 LanguageSwitcher 与 I18nProvider。",
+        "code": "src/i18n/locales/"
+      }
+    },
+    "nextCommand": {
+      "title": "下一步命令",
+      "desc": "启动开发服务器，实时迭代你的产品。",
+      "command": "bun dev"
+    }
+  }
+}

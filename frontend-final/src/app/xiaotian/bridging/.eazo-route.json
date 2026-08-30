@@ -1,0 +1,9 @@
+{
+  "route": "xiaotian/bridging",
+  "name": "小天搭桥",
+  "nav_type": "stack",
+  "parent": "xiaotian/intent",
+  "order_index": 12,
+  "icon": "scan-search",
+  "summary": "小天双向匹配与候选桥展示"
+}

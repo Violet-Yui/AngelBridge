@@ -1,0 +1,9 @@
+{
+  "route": "login",
+  "name": "注册登录",
+  "nav_type": "stack",
+  "parent": "",
+  "order_index": 21,
+  "icon": "user",
+  "summary": "用户注册与登录"
+}

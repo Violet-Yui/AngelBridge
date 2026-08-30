@@ -6,12 +6,12 @@ import { demoScenarios } from "../src/demo/scenarios";
 const now = new Date("2026-08-26T12:00:00.000Z");
 
 describe("synthetic demo scenario catalog", () => {
-  it("contains three reusable scenarios with one viewer and three candidates", () => {
+  it("contains three reusable scenarios with one viewer and five candidates", () => {
     expect(demoScenarios).toHaveLength(3);
     expect(new Set(demoScenarios.map((scenario) => scenario.id)).size).toBe(3);
 
     for (const scenario of demoScenarios) {
-      expect(scenario.profiles).toHaveLength(4);
+      expect(scenario.profiles).toHaveLength(6);
       expect(
         scenario.profiles.some(
           (profile) => profile.personaId === scenario.viewerPersonaId,

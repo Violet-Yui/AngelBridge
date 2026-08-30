@@ -1,0 +1,10 @@
+{
+  "route": "messages/notifications/[type]",
+  "name": "通知条目",
+  "nav_type": "stack",
+  "parent": "messages",
+  "order_index": 32,
+  "icon": "bell",
+  "summary": "互动通知分类明细",
+  "preview_route": "messages/notifications/follows"
+}

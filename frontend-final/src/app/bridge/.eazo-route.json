@@ -1,0 +1,8 @@
+{
+  "route": "bridge",
+  "name": "桥约",
+  "nav_type": "tab",
+  "order_index": 4,
+  "icon": "heart-handshake",
+  "summary": "桥约：统一管理合作/交友/换物邀请"
+}

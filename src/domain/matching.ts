@@ -25,6 +25,8 @@ export type MatchEvaluation =
   | { eligible: true; result: RankedMatch }
   | { eligible: false; rejection: RejectedMatch };
 
+export const MAX_RECOMMENDATIONS = 3;
+
 const intersection = (left: string[], right: string[]) => {
   const rightSet = new Set(right.map((value) => value.trim().toLowerCase()));
   return left.filter((value) => rightSet.has(value.trim().toLowerCase()));
@@ -35,8 +37,8 @@ const pairUtility = (need: ValueNode, offer: ValueNode): number | null => {
     need.direction !== "need" ||
     offer.direction !== "offer" ||
     need.domain !== offer.domain ||
-    need.visibility === "private" ||
-    offer.visibility === "private"
+    need.visibility !== "match_only" ||
+    offer.visibility !== "match_only"
   ) {
     return null;
   }
@@ -80,11 +82,35 @@ const freshness = (nodes: ValueNode[], now: Date): number => {
   return 1 / (1 + ageInDays / 30);
 };
 
+const personalityAffinity = (
+  viewer: MatchingProfile,
+  candidate: MatchingProfile,
+): number => {
+  const personalityShared = intersection(
+    viewer.personalityTags,
+    candidate.personalityTags,
+  ).length;
+  const interestShared = intersection(
+    viewer.interestTags,
+    candidate.interestTags,
+  ).length;
+  const personalityFit = viewer.personalityTags.length && candidate.personalityTags.length
+    ? personalityShared / new Set([...viewer.personalityTags, ...candidate.personalityTags]).size
+    : 0;
+  const interestFit = viewer.interestTags.length && candidate.interestTags.length
+    ? interestShared / new Set([...viewer.interestTags, ...candidate.interestTags]).size
+    : 0;
+  return 0.9 + 0.06 * personalityFit + 0.04 * interestFit;
+};
+
 export const getHardGateReasons = (
   viewer: MatchingProfile,
   candidate: MatchingProfile,
 ): string[] => {
   const reasons: string[] = [];
+  const isFixturePair = [...viewer.nodes, ...candidate.nodes].every(
+    (node) => node.isSynthetic,
+  );
   if (
     intersection(viewer.acceptedExchangeModes, candidate.acceptedExchangeModes)
       .length === 0
@@ -92,22 +118,20 @@ export const getHardGateReasons = (
     reasons.push("双方接受的价值置换方式不一致");
   }
   if (
+    isFixturePair &&
     viewer.constraints.locations.length > 0 &&
     candidate.constraints.locations.length > 0 &&
-    intersection(viewer.constraints.locations, candidate.constraints.locations)
-      .length === 0
+    intersection(viewer.constraints.locations, candidate.constraints.locations).length === 0
   ) {
     reasons.push("地点约束不一致");
   }
   if (
+    isFixturePair &&
     viewer.constraints.availability.length > 0 &&
     candidate.constraints.availability.length > 0 &&
-    intersection(
-      viewer.constraints.availability,
-      candidate.constraints.availability,
-    ).length === 0
+    intersection(viewer.constraints.availability, candidate.constraints.availability).length === 0
   ) {
-    reasons.push("可用时间不一致");
+    reasons.push("时间约束不一致");
   }
   return reasons;
 };
@@ -133,33 +157,36 @@ export const evaluateMatch = (
     candidate.nodes.filter((node) => node.direction === "need"),
     viewer.nodes.filter((node) => node.direction === "offer"),
   );
+  const isFixturePair = [...viewer.nodes, ...candidate.nodes].every(
+    (node) => node.isSynthetic,
+  );
 
-  if (!viewerNeedsCandidateOffer || !candidateNeedsViewerOffer) {
+  if (
+    (!viewerNeedsCandidateOffer && !candidateNeedsViewerOffer) ||
+    (isFixturePair && (!viewerNeedsCandidateOffer || !candidateNeedsViewerOffer))
+  ) {
     return {
       eligible: false,
       rejection: {
         candidateId: candidate.personaId,
-        reasons: ["未形成双方都清晰受益的价值连接"],
+        reasons: ["未发现供需、条件或共同目标之间的价值连接"],
       },
     };
   }
 
-  const evidenceNodes = [
-    viewerNeedsCandidateOffer.need,
-    viewerNeedsCandidateOffer.offer,
-    candidateNeedsViewerOffer.need,
-    candidateNeedsViewerOffer.offer,
-  ];
+  const pairs = [viewerNeedsCandidateOffer, candidateNeedsViewerOffer]
+    .filter((pair): pair is ValuePair => Boolean(pair));
+  const evidenceNodes = pairs.flatMap((pair) => [pair.need, pair.offer]);
   const evidenceCompleteness =
     evidenceNodes.reduce((sum, node) => sum + node.evidenceCompleteness, 0) /
     evidenceNodes.length;
   const internalScore =
     Math.round(
-      viewerNeedsCandidateOffer.utility *
-        candidateNeedsViewerOffer.utility *
+      pairs.reduce((product, pair) => product * pair.utility, 1) ** (1 / pairs.length) *
         evidenceCompleteness *
         freshness(evidenceNodes, now) *
-        10_000,
+        personalityAffinity(viewer, candidate) *
+        (pairs.length === 2 ? 10_000 : 8_500),
     ) / 100;
 
   const sharedModes = intersection(
@@ -180,11 +207,31 @@ export const evaluateMatch = (
     viewerId: viewer.personaId,
     candidateId: candidate.personaId,
     status: "candidate",
-    valueToViewer: [
-      `${candidate.displayName}可提供「${viewerNeedsCandidateOffer.offer.title}」，回应你的「${viewerNeedsCandidateOffer.need.title}」`,
-    ],
-    valueToCandidate: [
-      `你可提供「${candidateNeedsViewerOffer.offer.title}」，回应对方的「${candidateNeedsViewerOffer.need.title}」`,
+    valueToViewer: viewerNeedsCandidateOffer
+      ? [`${candidate.displayName}可提供「${viewerNeedsCandidateOffer.offer.title}」，回应你的「${viewerNeedsCandidateOffer.need.title}」`]
+      : ["这次连接可为你带来对价、合作机会或目标推进"],
+    valueToCandidate: candidateNeedsViewerOffer
+      ? [`你可提供「${candidateNeedsViewerOffer.offer.title}」，回应对方的「${candidateNeedsViewerOffer.need.title}」`]
+      : ["这次连接可为对方带来对价、合作机会或目标推进"],
+    matchReasons: [
+      {
+        type: "value_to_you",
+        text: viewerNeedsCandidateOffer
+          ? `${candidate.displayName}的${viewerNeedsCandidateOffer.offer.title}回应了你的${viewerNeedsCandidateOffer.need.title}`
+          : "这次连接为你提供了明确的价值机会",
+        evidenceNodeIds: viewerNeedsCandidateOffer
+          ? [viewerNeedsCandidateOffer.need.id, viewerNeedsCandidateOffer.offer.id]
+          : evidenceNodes.map((node) => node.id),
+      },
+      {
+        type: "value_to_other",
+        text: candidateNeedsViewerOffer
+          ? `你的${candidateNeedsViewerOffer.offer.title}回应了对方的${candidateNeedsViewerOffer.need.title}`
+          : "对方也能从对价、合作或目标推进中受益",
+        evidenceNodeIds: candidateNeedsViewerOffer
+          ? [candidateNeedsViewerOffer.need.id, candidateNeedsViewerOffer.offer.id]
+          : evidenceNodes.map((node) => node.id),
+      },
     ],
     satisfiedConstraints: [
       `价值置换方式：${sharedModes.join("、")}`,
@@ -202,7 +249,7 @@ export const evaluateMatch = (
       summary: node.title,
     })),
     generatedAt: now.toISOString(),
-    isSynthetic: true,
+    isSynthetic: evidenceNodes.every((node) => node.isSynthetic),
     datasetVersion: evidenceNodes[0].datasetVersion,
   };
 
@@ -216,6 +263,7 @@ export const rankCandidates = (
   viewer: MatchingProfile,
   candidates: MatchingProfile[],
   now: Date,
+  limit = MAX_RECOMMENDATIONS,
 ): RankedMatch[] =>
   candidates
     .map((candidate) => evaluateMatch(viewer, candidate, now))
@@ -226,4 +274,5 @@ export const rankCandidates = (
       (left, right) =>
         right.internalScore - left.internalScore ||
         left.candidateId.localeCompare(right.candidateId),
-    );
+    )
+    .slice(0, limit);

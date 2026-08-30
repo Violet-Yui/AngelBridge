@@ -1,4 +1,5 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { once } from "node:events";
 import { createApiHandler } from "./api";
 
 const readBody = async (request: IncomingMessage): Promise<Buffer | undefined> => {
@@ -13,8 +14,24 @@ const readBody = async (request: IncomingMessage): Promise<Buffer | undefined> =
 const writeResponse = async (response: Response, target: ServerResponse) => {
   target.statusCode = response.status;
   response.headers.forEach((value, key) => target.setHeader(key, value));
-  const body = Buffer.from(await response.arrayBuffer());
-  target.end(body);
+  if (!response.body) {
+    target.end();
+    return;
+  }
+
+  const reader = response.body.getReader();
+  const cancel = () => void reader.cancel();
+  target.once("close", cancel);
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!target.write(Buffer.from(value))) await once(target, "drain");
+    }
+  } finally {
+    target.off("close", cancel);
+    if (!target.destroyed) target.end();
+  }
 };
 
 export const createLocalApiServer = (
@@ -22,6 +39,9 @@ export const createLocalApiServer = (
 ) => {
   return createServer(async (incoming, outgoing) => {
     try {
+      const abortController = new AbortController();
+      incoming.once("aborted", () => abortController.abort());
+      outgoing.once("close", () => abortController.abort());
       const body = await readBody(incoming);
       const headers = new Headers();
       for (const [name, value] of Object.entries(incoming.headers)) {
@@ -30,7 +50,12 @@ export const createLocalApiServer = (
       }
       const request = new Request(
         `http://${incoming.headers.host ?? "127.0.0.1"}${incoming.url ?? "/"}`,
-        { method: incoming.method, headers, body: body?.toString("utf8") },
+        {
+          method: incoming.method,
+          headers,
+          body: body ? new Uint8Array(body) : undefined,
+          signal: abortController.signal,
+        },
       );
       await writeResponse(await handle(request), outgoing);
     } catch (error) {

@@ -1,0 +1,9 @@
+{
+  "route": "discover",
+  "name": "找人",
+  "nav_type": "stack",
+  "parent": "",
+  "order_index": 1,
+  "icon": "users",
+  "summary": "找人内容流：双列手绘人物卡"
+}

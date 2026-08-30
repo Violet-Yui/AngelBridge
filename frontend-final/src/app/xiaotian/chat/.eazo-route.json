@@ -1,0 +1,9 @@
+{
+  "route": "xiaotian/chat",
+  "name": "和小天说",
+  "nav_type": "stack",
+  "parent": "messages",
+  "order_index": 10,
+  "icon": "bot",
+  "summary": "点击小天后进入的对话整理页"
+}

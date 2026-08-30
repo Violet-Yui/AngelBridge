@@ -28,6 +28,17 @@ export const submitConsent = (
   if (!record.partyIds.includes(actorId)) {
     throw new Error("actor is not a party to this match");
   }
+  // Repeating an already accepted invitation is safe and should be idempotent.
+  // This can happen when the other party confirms between the page load and
+  // the user's click; returning the existing record keeps the UI on the pact
+  // flow instead of surfacing a terminal-state error.
+  if (
+    record.state === "mutual_accepted" &&
+    decision === "accepted" &&
+    record.decisions[actorId] === "accepted"
+  ) {
+    return { ...record };
+  }
   if (record.state === "mutual_accepted" || record.state === "rejected") {
     throw new Error(`match is already terminal: ${record.state}`);
   }
